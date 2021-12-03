@@ -11,7 +11,7 @@ import { ProgressBarStyle } from './components/LoadingScreen';
 import ThemePrimaryColor from './components/ThemePrimaryColor';
 
 // ----------------------------------------------------------------------
-
+const test = 'a';
 export default function App() {
   return (
     <ThemeConfig>
