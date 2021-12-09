@@ -42,7 +42,8 @@ const HeroImgStyle = styled(motion.img)(({ theme }) => ({
   bottom: 0,
   zIndex: 8,
   width: '100%',
-  height: 'auto',
+  height: '100%',
+  maxWidth: '100%',
   margin: 'auto',
   position: 'absolute'
 }));
