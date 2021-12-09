@@ -83,8 +83,7 @@ export default function LandingHome() {
             </motion.div>
             <motion.div variants={varFadeInRight}>
               <Typography sx={{ color: 'grey.300' }} variant="h5">
-                The starting point for your next project based on easy-to-customize Material-UI ©
-                helps you build apps faster and better.
+                Lưu giữ hình ảnh cho những chuyến đi của bạn.
               </Typography>
             </motion.div>
             <motion.div variants={varFadeInRight}>
