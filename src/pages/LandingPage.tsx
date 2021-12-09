@@ -4,13 +4,8 @@ import { styled } from '@mui/material/styles';
 import Page from '../components/Page';
 import {
   LandingHero,
-  LandingMinimal,
-  LandingDarkMode,
-  LandingThemeColor,
-  LandingPricingPlans,
-  LandingAdvertisement,
-  LandingCleanInterfaces,
-  LandingHugePackElements
+  // LandingMinimal,
+  LandingPricingPlans
 } from '../components/_external-pages/landing';
 
 // ----------------------------------------------------------------------
@@ -32,13 +27,13 @@ export default function LandingPage() {
     <RootStyle title="The starting point for your next project | Minimal-UI" id="move_top">
       <LandingHero />
       <ContentStyle>
-        <LandingMinimal />
-        <LandingHugePackElements />
-        <LandingDarkMode />
-        <LandingThemeColor />
-        <LandingCleanInterfaces />
+        {/* <LandingMinimal /> */}
+        {/* <LandingHugePackElements /> */}
+        {/* <LandingDarkMode /> */}
+        {/* <LandingThemeColor /> */}
+        {/* <LandingCleanInterfaces /> */}
         <LandingPricingPlans />
-        <LandingAdvertisement />
+        {/* <LandingAdvertisement /> */}
       </ContentStyle>
     </RootStyle>
   );

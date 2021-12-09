@@ -1,47 +1,27 @@
-import { Icon } from '@iconify/react';
-import checkmarkFill from '@iconify/icons-eva/checkmark-fill';
-import chevronRightFill from '@iconify/icons-eva/chevron-right-fill';
 // material
 import { useTheme, styled, alpha } from '@mui/material/styles';
-import {
-  Box,
-  Grid,
-  Card,
-  Link,
-  Stack,
-  Button,
-  Divider,
-  Container,
-  Typography
-} from '@mui/material';
+import { Box, Grid, Card, Stack, Container, Typography } from '@mui/material';
 //
 import { varFadeIn, varFadeInUp, MotionInView, varFadeInDown } from '../../animate';
 
 // ----------------------------------------------------------------------
-
-const LICENSES = ['Standard', 'Standard Plus', 'Extended'];
-
+const STEP = [1, 2, 3];
+const TITLE = ['Nhập Mã', 'Xem Ảnh ', 'Tải Ảnh'];
+const DESCRIPTION = [
+  'Khi bạn vào trang chủ, sẽ có hiển thị ô nhập mã, bạn nhập mã code bạn có được vào ô và nhấn nút gửi .',
+  'Sau khi nhập mã, toàn bộ  ảnh của bạn sẽ hiển thị, bản có thể nhấn vào từng bức ảnh để xem ảnh với tỷ lệ đầy đủ',
+  'Bạn có thể lựa chọn tải từng tấm ảnh hoặc tải từng bức ảnh, ảnh của bạn sẽ đươc lưu vào máy của bạn.'
+];
 const PLANS = [...Array(3)].map((_, index) => ({
-  license: LICENSES[index],
-  commons: ['One end products', '12 months updates', '6 months of support'],
-  options: [
-    'JavaScript version',
-    'TypeScript version',
-    'Design Resources',
-    'Commercial applications'
-  ],
-  icons: [
-    '/static/home/ic_sketch.svg',
-    '/static/home/ic_figma.svg',
-    '/static/home/ic_js.svg',
-    '/static/home/ic_ts.svg'
-  ]
+  step: STEP[index],
+  title: TITLE[index],
+  description: DESCRIPTION[index]
 }));
 
 const RootStyle = styled('div')(({ theme }) => ({
-  paddingTop: theme.spacing(15),
+  paddingTop: theme.spacing(10),
   [theme.breakpoints.up('md')]: {
-    paddingBottom: theme.spacing(15)
+    paddingBottom: theme.spacing(5)
   }
 }));
 
@@ -49,10 +29,9 @@ const RootStyle = styled('div')(({ theme }) => ({
 
 type PlanCardProps = {
   plan: {
-    license: string;
-    commons: string[];
-    options: string[];
-    icons: string[];
+    step: number;
+    title: string;
+    description: string;
   };
   cardIndex: number;
 };
@@ -60,8 +39,7 @@ type PlanCardProps = {
 function PlanCard({ plan, cardIndex }: PlanCardProps) {
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
-
-  const { license, commons, options, icons } = plan;
+  const { step, title, description } = plan;
 
   return (
     <Card
@@ -83,94 +61,14 @@ function PlanCard({ plan, cardIndex }: PlanCardProps) {
     >
       <Stack spacing={5}>
         <div>
-          <Typography variant="overline" sx={{ mb: 2, color: 'text.disabled', display: 'block' }}>
-            LICENSE
+          <Typography variant="h4" sx={{ mb: 2, display: 'block' }}>
+            Bước {step}
           </Typography>
-          <Typography variant="h4">{license}</Typography>
+          <Typography variant="h3">{title}</Typography>
+          <Typography variant="h6" sx={{ mb: 2, display: 'block' }}>
+            {description}
+          </Typography>
         </div>
-
-        {cardIndex === 0 ? (
-          <Box component="img" src={icons[2]} sx={{ width: 40, height: 40 }} />
-        ) : (
-          <Stack direction="row" spacing={1}>
-            {icons.map((icon) => (
-              <Box key={icon} component="img" src={icon} sx={{ width: 40, height: 40 }} />
-            ))}
-          </Stack>
-        )}
-
-        <Stack spacing={2.5}>
-          {commons.map((option) => (
-            <Stack key={option} spacing={1.5} direction="row" alignItems="center">
-              <Box
-                component={Icon}
-                icon={checkmarkFill}
-                sx={{ color: 'primary.main', width: 20, height: 20 }}
-              />
-              <Typography variant="body2">{option}</Typography>
-            </Stack>
-          ))}
-
-          <Divider sx={{ borderStyle: 'dashed' }} />
-
-          {options.map((option, optionIndex) => {
-            const disabledLine =
-              (cardIndex === 0 && optionIndex === 1) ||
-              (cardIndex === 0 && optionIndex === 2) ||
-              (cardIndex === 0 && optionIndex === 3) ||
-              (cardIndex === 1 && optionIndex === 3);
-
-            return (
-              <Stack
-                spacing={1.5}
-                direction="row"
-                alignItems="center"
-                sx={{
-                  ...(disabledLine && { color: 'text.disabled' })
-                }}
-                key={option}
-              >
-                <Box
-                  component={Icon}
-                  icon={checkmarkFill}
-                  sx={{
-                    width: 20,
-                    height: 20,
-                    color: 'primary.main',
-                    ...(disabledLine && { color: 'text.disabled' })
-                  }}
-                />
-                <Typography variant="body2">{option}</Typography>
-              </Stack>
-            );
-          })}
-        </Stack>
-
-        <Stack direction="row" justifyContent="flex-end">
-          <Link
-            color="text.secondary"
-            underline="always"
-            target="_blank"
-            href="https://material-ui.com/store/license/#i-standard-license"
-            sx={{
-              typography: 'body2',
-              display: 'flex',
-              alignItems: 'center'
-            }}
-          >
-            Learn more <Icon icon={chevronRightFill} width={20} height={20} />
-          </Link>
-        </Stack>
-
-        <Button
-          size="large"
-          fullWidth
-          variant={cardIndex === 1 ? 'contained' : 'outlined'}
-          target="_blank"
-          href="https://material-ui.com/store/items/minimal-dashboard/"
-        >
-          Choose Plan
-        </Button>
       </Stack>
     </Card>
   );
@@ -184,57 +82,31 @@ export default function LandingPricingPlans() {
     <RootStyle>
       <Container maxWidth="lg">
         <Box sx={{ mb: 10, textAlign: 'center' }}>
-          <MotionInView variants={varFadeInUp}>
-            <Typography component="p" variant="overline" sx={{ mb: 2, color: 'text.secondary' }}>
-              pricing plans
-            </Typography>
-          </MotionInView>
           <MotionInView variants={varFadeInDown}>
-            <Typography variant="h2" sx={{ mb: 3 }}>
-              The right plan for your business
-            </Typography>
-          </MotionInView>
-          <MotionInView variants={varFadeInDown}>
-            <Typography
-              sx={{
-                color: isLight ? 'text.secondary' : 'text.primary'
-              }}
-            >
-              Choose the perfect plan for your needs. Always flexible to grow
+            <Typography variant="h3" sx={{ mb: 3 }}>
+              Tải ảnh đã chụp dể dàng trong 3 bước
             </Typography>
           </MotionInView>
         </Box>
 
         <Grid container spacing={5}>
           {PLANS.map((plan, index) => (
-            <Grid key={plan.license} item xs={12} md={4}>
+            <Grid key={plan.step} item xs={12} md={4}>
               <MotionInView variants={index === 1 ? varFadeInDown : varFadeInUp}>
                 <PlanCard plan={plan} cardIndex={index} />
               </MotionInView>
             </Grid>
           ))}
         </Grid>
-
         <MotionInView variants={varFadeIn}>
-          <Box sx={{ p: 5, mt: 10, textAlign: 'center' }}>
+          <Box sx={{ pt: 5, mt: 10, textAlign: 'center' }}>
             <MotionInView variants={varFadeInDown}>
-              <Typography variant="h3">Still have questions?</Typography>
-            </MotionInView>
-
-            <MotionInView variants={varFadeInDown}>
-              <Typography sx={{ mt: 3, mb: 5, color: 'text.secondary' }}>
-                Please describe your case to receive the most accurate advice.
+              <Typography paddingBottom="50px" variant="h4">
+                Bạn vẫn còn câu hỏi ?
               </Typography>
             </MotionInView>
-
-            <MotionInView variants={varFadeInUp}>
-              <Button
-                size="large"
-                variant="contained"
-                href="mailto:support@minimals.cc?subject=[Feedback] from Customer"
-              >
-                Contact us
-              </Button>
+            <MotionInView variants={varFadeInDown}>
+              <Typography variant="h3">Liên Hệ Với Chúng Tôi</Typography>
             </MotionInView>
           </Box>
         </MotionInView>

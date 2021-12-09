@@ -1,38 +1,166 @@
-// material
-import { Container, Typography } from '@mui/material';
-// hooks
-import useSettings from '../hooks/useSettings';
-// components
-import Page from '../components/Page';
+import Box from '@mui/material/Box';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+import AppPagination from '../components/AppPagination';
+import DownloadIcon from '@mui/icons-material/Download';
+import LinkIcon from '@mui/icons-material/Link';
+import { styled } from '@mui/material/styles';
+import { Typography, Button as MuiButton, ButtonGroup } from '@mui/material';
+import React, { useState } from 'react';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import SimpleReactLightbox from 'simple-react-lightbox';
+import { SRLWrapper } from 'simple-react-lightbox';
+const RootStyle = styled('div')(({ theme }) => ({
+  paddingTop: theme.spacing(15),
+  [theme.breakpoints.up('md')]: {
+    paddingBottom: theme.spacing(15)
+  }
+}));
 
-// ----------------------------------------------------------------------
+const Div = styled('div')(({ theme }) => ({
+  ...theme.typography.button,
+  backgroundColor: 'transparent',
+  color: '#000',
+  borderRadius: '20px',
+  padding: theme.spacing(1)
+}));
+
+const generateOrderNumber = () => Math.floor(100000 + Math.random() * 900000).toString();
 
 export default function PageOne() {
-  const { themeStretch } = useSettings();
+  const [isOpen, setIsOpen] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const theme = useTheme();
+  const mobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const [state, setState] = useState({ isOpen: false, photoIndex: 0, photoUrl: '' });
+  // const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const [activeStep, setActiveStep] = React.useState(0);
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleStepChange = (step: number) => {
+    setActiveStep(step);
+  };
+
+  const [id, setID] = useState(generateOrderNumber());
+  const maxSteps = images.length;
   return (
-    <Page title="Page One | Minimal-UI">
-      <Container maxWidth={themeStretch ? false : 'xl'}>
-        <Typography variant="h3" component="h1" paragraph>
-          Page One
-        </Typography>
-        <Typography gutterBottom>
-          Curabitur turpis. Vestibulum facilisis, purus nec pulvinar iaculis, ligula mi congue nunc,
-          vitae euismod ligula urna in dolor. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit
-          id, lorem. Phasellus blandit leo ut odio. Vestibulum ante ipsum primis in faucibus orci
-          luctus et ultrices posuere cubilia Curae; Fusce id purus. Aliquam lorem ante, dapibus in,
-          viverra quis, feugiat a, tellus. In consectetuer turpis ut velit. Aenean posuere, tortor
-          sed cursus feugiat, nunc augue blandit nunc, eu sollicitudin urna dolor sagittis lacus.
-          Vestibulum suscipit nulla quis orci. Nam commodo suscipit quam. Sed a libero.
-        </Typography>
-        <Typography>
-          Praesent ac sem eget est egestas volutpat. Phasellus viverra nulla ut metus varius
-          laoreet. Curabitur ullamcorper ultricies nisi. Ut non enim eleifend felis pretium feugiat.
-          Donec mi odio, faucibus at, scelerisque quis, convallis in, nisi. Fusce vel dui. Quisque
-          libero metus, condimentum nec, tempor a, commodo mollis, magna. In enim justo, rhoncus ut,
-          imperdiet a, venenatis vitae, justo. Cras dapibus.
-        </Typography>
-      </Container>
-    </Page>
+    <div style={{ alignItems: 'center', marginTop: '88px' }}>
+      <Typography gutterBottom variant="h2" align="center">
+        Hình ảnh mã đơn hàng #{id}
+      </Typography>
+      <ButtonGroup style={{ float: 'right', marginRight: '80px' }}>
+        <MuiButton size="large" startIcon={<DownloadIcon />}>
+          Tải Về
+        </MuiButton>
+        <MuiButton size="large" startIcon={<LinkIcon />}>
+          Chia Sẻ
+        </MuiButton>
+      </ButtonGroup>
+      <SimpleReactLightbox>
+        <Box sx={{ margin: '88px 60px' }}>
+          <SRLWrapper>
+            <ImageList variant="masonry" cols={mobile ? 2 : fullScreen ? 3 : 4} gap={6}>
+              {images.map((item) => (
+                <ImageListItem
+                  sx={{
+                    '& .MuiImageListItem-img': {
+                      maxWidth: '100%',
+                      height: 'auto',
+                      padding: '10px 10px',
+                      borderRadius: '30px'
+                    }
+                  }}
+                  key={item.img}
+                >
+                  <img
+                    src={item.img}
+                    srcSet={item.img}
+                    alt={item.title}
+                    loading="lazy"
+                    onClick={() => {
+                      let updateState = { ...state };
+                      updateState.isOpen = true;
+                      updateState.photoUrl = item.img;
+                      setState(updateState);
+                      handleClickOpen();
+                    }}
+                  />
+                </ImageListItem>
+              ))}
+            </ImageList>
+          </SRLWrapper>
+          <AppPagination />
+        </Box>
+      </SimpleReactLightbox>
+    </div>
   );
 }
+
+const images = [
+  {
+    img: 'http://wiki-travel.com.vn/Uploads/picture/hieuhieu-193223023247-phan-biet-snorkeling-va-diving.jpg',
+    title: 'Bed'
+  },
+  {
+    img: 'http://wiki-travel.com.vn/Uploads/picture/hieuhieu-193323023318-Snorkeling.jpg',
+    title: 'Books'
+  },
+  {
+    img: 'http://wiki-travel.com.vn/Uploads/picture/hieuhieu-193323023336-Diving.jpg',
+    title: 'Sink'
+  },
+  {
+    img: 'http://wiki-travel.com.vn/Uploads/picture/hieuhieu-193423023413-cac-buoc-can-chuan-bi-doi-voi-nguoi-khong-biet-boi.jpg',
+    title: 'Kitchen'
+  },
+  {
+    img: 'http://wiki-travel.com.vn/Uploads/picture/hieuhieu-193423023452-nhung-luu-y-truoc-khi-lan-bien.jpg',
+    title: 'Blinds'
+  },
+  {
+    img: 'http://wiki-travel.com.vn/Uploads/picture/hieuhieu-193523023518-phai-dam-bao-suc-khoe.jpg',
+    title: 'Chairs'
+  },
+  {
+    img: 'http://wiki-travel.com.vn/Uploads/picture/hieuhieu-193523023545-thoi-diem-nen-di-lan-bien.jpg',
+    title: 'Laptop'
+  },
+  {
+    img: 'https://toplist.vn/images/800px/con-dao-166396.jpg',
+    title: 'Doors'
+  },
+  {
+    img: 'https://toplist.vn/images/800px/phu-quoc-166397.jpg',
+    title: 'Coffee'
+  },
+  {
+    img: 'https://toplist.vn/images/800px/nha-trang-166398.jpg',
+    title: 'Storage'
+  },
+  {
+    img: 'https://toplist.vn/images/800px/cu-lao-cham-166400.jpg',
+    title: 'Candle'
+  },
+  {
+    img: 'https://toplist.vn/images/800px/vinh-vinh-hy-166401.jpg',
+    title: 'Coffee table'
+  }
+];
