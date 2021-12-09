@@ -47,24 +47,42 @@ const HeroImgStyle = styled(motion.img)(({ theme }) => ({
   position: 'absolute'
 }));
 
+const Backdrop = styled('div')(() => ({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  width: '100%',
+  height: '100%',
+  backdropFilter: 'blur(5px)',
+  zIndex: 10
+}));
+
 // ----------------------------------------------------------------------
 
 export default function LandingHome() {
   return (
     <>
       <RootStyle initial="initial" animate="animate" variants={varWrapEnter}>
+        <Backdrop />
         <HeroImgStyle alt="hero" src="/static/home/background.png" variants={varFadeInUp} />
-
         <Container maxWidth="lg">
           <ContentStyle>
             <motion.div variants={varFadeInRight}>
-              <Typography sx={{ fontSize: '80px', fontWeight: 'bold', color: 'common.white' }}>
+              <Typography
+                sx={{
+                  fontSize: '80px',
+                  fontWeight: 'bold',
+                  color: 'common.white',
+                  lineHeight: '5rem'
+                }}
+                component="h1"
+              >
                 PhuQuoc <br />
                 Photo
               </Typography>
             </motion.div>
             <motion.div variants={varFadeInRight}>
-              <Typography sx={{ color: 'common.white', fontWeight: 'bold' }}>
+              <Typography sx={{ color: 'grey.300' }} variant="h5">
                 The starting point for your next project based on easy-to-customize Material-UI ©
                 helps you build apps faster and better.
               </Typography>
