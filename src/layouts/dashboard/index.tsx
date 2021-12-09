@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 // hooks
 import useCollapseDrawer from '../../hooks/useCollapseDrawer';
-import PageOne from '../../pages/PageOne';
+import PageGallery from '../../pages/PageGallery';
 //
 import DashboardNavbar from './DashboardNavbar';
 // import DashboardSidebar from './DashboardSidebar';
@@ -43,7 +43,7 @@ export default function DashboardLayout() {
   return (
     <RootStyle>
       <DashboardNavbar />
-      <PageOne />
+      <PageGallery />
     </RootStyle>
   );
 }

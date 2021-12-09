@@ -1,7 +1,7 @@
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, AppBar, Toolbar, Container, Button } from '@mui/material';
+import { Box, AppBar, Toolbar, Container, Link } from '@mui/material';
 // hooks
 import useOffSetTop from '../../hooks/useOffSetTop';
 // components
@@ -98,14 +98,13 @@ export default function MainNavbar() {
           <MHidden width="mdUp">
             <MenuMobile isOffset={isOffset} isHome={isHome} navConfig={navConfig} />
           </MHidden> */}
-          <Button
-            size="large"
-            variant="contained"
-            target="_blank"
+          <Link
+            color="black"
+            variant="h5"
             href="https://material-ui.com/store/items/minimal-dashboard/"
           >
             Hướng Dẫn
-          </Button>
+          </Link>
         </Container>
       </ToolbarStyle>
 

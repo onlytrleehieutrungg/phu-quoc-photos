@@ -49,7 +49,7 @@ const HeroImgStyle = styled(motion.img)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function LandingHero() {
+export default function LandingHome() {
   return (
     <>
       <RootStyle initial="initial" animate="animate" variants={varWrapEnter}>

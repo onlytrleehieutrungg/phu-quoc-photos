@@ -3,9 +3,9 @@ import { styled } from '@mui/material/styles';
 // components
 import Page from '../components/Page';
 import {
-  LandingHero,
+  LandingHome,
   // LandingMinimal,
-  LandingPricingPlans
+  LandingGuideLine
 } from '../components/_external-pages/landing';
 
 // ----------------------------------------------------------------------
@@ -25,15 +25,10 @@ const ContentStyle = styled('div')(({ theme }) => ({
 export default function LandingPage() {
   return (
     <RootStyle title="The starting point for your next project | Minimal-UI" id="move_top">
-      <LandingHero />
+      <LandingHome />
       <ContentStyle>
+        <LandingGuideLine />
         {/* <LandingMinimal /> */}
-        {/* <LandingHugePackElements /> */}
-        {/* <LandingDarkMode /> */}
-        {/* <LandingThemeColor /> */}
-        {/* <LandingCleanInterfaces /> */}
-        <LandingPricingPlans />
-        {/* <LandingAdvertisement /> */}
       </ContentStyle>
     </RootStyle>
   );

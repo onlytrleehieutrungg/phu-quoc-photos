@@ -74,7 +74,7 @@ function PlanCard({ plan, cardIndex }: PlanCardProps) {
   );
 }
 
-export default function LandingPricingPlans() {
+export default function LandingGuideLine() {
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
 

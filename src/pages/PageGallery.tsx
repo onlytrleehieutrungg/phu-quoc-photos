@@ -1,16 +1,16 @@
 import Box from '@mui/material/Box';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
-import AppPagination from '../components/AppPagination';
 import DownloadIcon from '@mui/icons-material/Download';
 import LinkIcon from '@mui/icons-material/Link';
 import { styled } from '@mui/material/styles';
-import { Typography, Button as MuiButton, ButtonGroup } from '@mui/material';
+import { Typography, Button as MuiButton, ButtonGroup, Stack } from '@mui/material';
 import React, { useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import SimpleReactLightbox from 'simple-react-lightbox';
 import { SRLWrapper } from 'simple-react-lightbox';
+import Pagination from '@mui/material/Pagination';
 const RootStyle = styled('div')(({ theme }) => ({
   paddingTop: theme.spacing(15),
   [theme.breakpoints.up('md')]: {
@@ -28,7 +28,7 @@ const Div = styled('div')(({ theme }) => ({
 
 const generateOrderNumber = () => Math.floor(100000 + Math.random() * 900000).toString();
 
-export default function PageOne() {
+export default function PageGallery() {
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
@@ -107,7 +107,18 @@ export default function PageOne() {
               ))}
             </ImageList>
           </SRLWrapper>
-          <AppPagination />
+          <Stack spacing={5}>
+            <Pagination
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                margin: '20px 0'
+              }}
+              count={10}
+              variant="outlined"
+              shape="rounded"
+            />
+          </Stack>
         </Box>
       </SimpleReactLightbox>
     </div>
