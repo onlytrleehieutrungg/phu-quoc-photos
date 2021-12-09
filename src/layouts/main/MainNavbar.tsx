@@ -1,21 +1,20 @@
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, Button, AppBar, Toolbar, Container } from '@mui/material';
+import { Box, AppBar, Toolbar, Container, Link } from '@mui/material';
 // hooks
 import useOffSetTop from '../../hooks/useOffSetTop';
 // components
 import Logo from '../../components/Logo';
-import Label from '../../components/Label';
-import { MHidden } from '../../components/@material-extend';
-//
-import MenuDesktop from './MenuDesktop';
-import MenuMobile from './MenuMobile';
-import navConfig from './MenuConfig';
-
+// import { MHidden } from '../../components/@material-extend';
+// //
+// import MenuDesktop from './MenuDesktop';
+// import MenuMobile from './MenuMobile';
+// import navConfig from './MenuConfig';
+import * as React from 'react';
 // ----------------------------------------------------------------------
 
-const APP_BAR_MOBILE = 64;
+const APP_BAR_MOBILE = 50;
 const APP_BAR_DESKTOP = 88;
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
@@ -91,26 +90,21 @@ export default function MainNavbar() {
           <RouterLink to="/">
             <Logo />
           </RouterLink>
-          <Label color="info" sx={{ ml: 1 }}>
-            Simple Ts v2.6.0
-          </Label>
           <Box sx={{ flexGrow: 1 }} />
 
-          <MHidden width="mdDown">
+          {/* <MHidden width="mdDown">
             <MenuDesktop isOffset={isOffset} isHome={isHome} navConfig={navConfig} />
           </MHidden>
-
-          <Button
-            variant="contained"
-            target="_blank"
-            href="https://material-ui.com/store/items/minimal-dashboard/"
-          >
-            Purchase Now
-          </Button>
-
           <MHidden width="mdUp">
             <MenuMobile isOffset={isOffset} isHome={isHome} navConfig={navConfig} />
-          </MHidden>
+          </MHidden> */}
+          <Link
+            color="black"
+            variant="h5"
+            href="https://material-ui.com/store/items/minimal-dashboard/"
+          >
+            Hướng Dẫn
+          </Link>
         </Container>
       </ToolbarStyle>
 
