@@ -8,17 +8,19 @@ import {
   Typography,
   Button as MuiButton,
   ButtonGroup,
-  Stack,
+  // Stack,
   ImageListItemBar,
   IconButton
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import SimpleReactLightbox from 'simple-react-lightbox';
 import { SRLWrapper } from 'simple-react-lightbox';
-import Pagination from '@mui/material/Pagination';
+// import Pagination from '@mui/material/Pagination';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import axios from 'axios';
+
 const Root = styled('div')(({ theme }) => ({
   margin: '88px 60px',
   [theme.breakpoints.down('md')]: {
@@ -45,6 +47,23 @@ export default function PageGallery() {
   const [state, setState] = useState({ isOpen: false, photoIndex: 0, photoUrl: '' });
   // const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
+  useEffect(() => {
+    axios
+      .get(
+        'https://api-sale.reso.vn/api/v1/order-medias?order-code=' + localStorage.getItem('Code')
+      )
+      .then((res) => {
+        console.log(res);
+        setListEvent(res.data);
+        console.log('success with listEvent');
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log('error');
+      });
+  }, []);
+  const [listEvent, setListEvent] = React.useState(images);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -69,10 +88,11 @@ export default function PageGallery() {
 
   const [id, setID] = useState(generateOrderNumber());
   // const maxSteps = images.length;
+
   return (
-    <div style={{ alignItems: 'center', marginTop: '88px' }}>
+    <div style={{ marginTop: '88px', textAlign: 'center' }}>
       <Typography gutterBottom variant="h2" align="center">
-        Hình ảnh mã đơn hàng #{id}
+        Hình ảnh mã đơn hàng #{localStorage.getItem('Code')}
       </Typography>
       <ButtonGroup style={{ float: 'right', marginRight: '80px' }}>
         <MuiButton size="large" startIcon={<DownloadIcon />}>
@@ -87,7 +107,7 @@ export default function PageGallery() {
           <Box>
             <SRLWrapper>
               <ImageList variant="masonry" cols={mobile ? 2 : fullScreen ? 3 : 4} gap={6}>
-                {images.map((item) => (
+                {listEvent.map((item) => (
                   <ImageListItem
                     sx={{
                       '& .MuiImageListItem-img': {
@@ -97,17 +117,17 @@ export default function PageGallery() {
                         borderRadius: '30px'
                       }
                     }}
-                    key={item.img}
+                    key={item.pic_url}
                   >
                     <img
-                      src={item.img}
-                      srcSet={item.img}
+                      src={item.pic_url}
+                      srcSet={item.pic_url}
                       alt={item.title}
                       loading="lazy"
                       onClick={() => {
                         let updateState = { ...state };
                         updateState.isOpen = true;
-                        updateState.photoUrl = item.img;
+                        updateState.photoUrl = item.pic_url;
                         setState(updateState);
                         handleClickOpen();
                       }}
@@ -128,7 +148,7 @@ export default function PageGallery() {
                 ))}
               </ImageList>
             </SRLWrapper>
-            <Stack spacing={5}>
+            {/* <Stack spacing={5}>
               <Pagination
                 style={{
                   display: 'flex',
@@ -139,7 +159,7 @@ export default function PageGallery() {
                 variant="outlined"
                 shape="rounded"
               />
-            </Stack>
+            </Stack> */}
           </Box>
         </Root>
       </SimpleReactLightbox>
@@ -147,53 +167,4 @@ export default function PageGallery() {
   );
 }
 
-const images = [
-  {
-    img: 'http://wiki-travel.com.vn/Uploads/picture/hieuhieu-193223023247-phan-biet-snorkeling-va-diving.jpg',
-    title: 'Bed'
-  },
-  {
-    img: 'http://wiki-travel.com.vn/Uploads/picture/hieuhieu-193323023318-Snorkeling.jpg',
-    title: 'Books'
-  },
-  {
-    img: 'http://wiki-travel.com.vn/Uploads/picture/hieuhieu-193323023336-Diving.jpg',
-    title: 'Sink'
-  },
-  {
-    img: 'http://wiki-travel.com.vn/Uploads/picture/hieuhieu-193423023413-cac-buoc-can-chuan-bi-doi-voi-nguoi-khong-biet-boi.jpg',
-    title: 'Kitchen'
-  },
-  {
-    img: 'http://wiki-travel.com.vn/Uploads/picture/hieuhieu-193423023452-nhung-luu-y-truoc-khi-lan-bien.jpg',
-    title: 'Blinds'
-  },
-  {
-    img: 'http://wiki-travel.com.vn/Uploads/picture/hieuhieu-193523023518-phai-dam-bao-suc-khoe.jpg',
-    title: 'Chairs'
-  },
-  {
-    img: 'http://wiki-travel.com.vn/Uploads/picture/hieuhieu-193523023545-thoi-diem-nen-di-lan-bien.jpg',
-    title: 'Laptop'
-  },
-  {
-    img: 'https://toplist.vn/images/800px/con-dao-166396.jpg',
-    title: 'Doors'
-  },
-  {
-    img: 'https://toplist.vn/images/800px/phu-quoc-166397.jpg',
-    title: 'Coffee'
-  },
-  {
-    img: 'https://toplist.vn/images/800px/nha-trang-166398.jpg',
-    title: 'Storage'
-  },
-  {
-    img: 'https://toplist.vn/images/800px/cu-lao-cham-166400.jpg',
-    title: 'Candle'
-  },
-  {
-    img: 'https://toplist.vn/images/800px/vinh-vinh-hy-166401.jpg',
-    title: 'Coffee table'
-  }
-];
+const images: any[] = [];

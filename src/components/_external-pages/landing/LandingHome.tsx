@@ -6,6 +6,8 @@ import { Button, Box, Input, Container, Typography, Stack, styled } from '@mui/m
 import { PATH_DASHBOARD } from '../../../routes/paths';
 //
 import { varFadeInUp, varFadeInRight, varWrapEnter } from '../../animate';
+//
+import { useState } from 'react';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(motion.div)(({ theme }) => ({
@@ -61,6 +63,10 @@ const Backdrop = styled('div')(() => ({
 // ----------------------------------------------------------------------
 
 export default function LandingHome() {
+  const [code, setCode] = useState('');
+  const handle = () => {
+    localStorage.setItem('Code', code);
+  };
   return (
     <>
       <RootStyle initial="initial" animate="animate" variants={varWrapEnter}>
@@ -112,6 +118,8 @@ export default function LandingHome() {
                   }}
                   id="epg-value"
                   placeholder="Nhập mã code vào đây"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
                   disableUnderline
                 />
                 <Button
@@ -129,6 +137,7 @@ export default function LandingHome() {
                   variant="contained"
                   component={RouterLink}
                   to={PATH_DASHBOARD.root}
+                  onClick={handle}
                 >
                   Gửi Mã
                 </Button>

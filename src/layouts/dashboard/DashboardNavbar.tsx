@@ -7,7 +7,6 @@ import useOffSetTop from '../../hooks/useOffSetTop';
 // components
 import Logo from '../../components/Logo';
 import Label from '../../components/Label';
-
 // ----------------------------------------------------------------------
 
 const APP_BAR_MOBILE = 64;
@@ -91,6 +90,9 @@ export default function MainNavbar() {
           </Label>
           <Box sx={{ flexGrow: 1 }} />
         </Container>
+        <RouterLink style={{ color: 'black', textDecoration: 'none', marginRight: '85px' }} to="/">
+          Home
+        </RouterLink>
       </ToolbarStyle>
       {isOffset && <ToolbarShadowStyle />}
     </AppBar>
