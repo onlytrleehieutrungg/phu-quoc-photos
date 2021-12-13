@@ -8,7 +8,7 @@ import {
   Typography,
   Button as MuiButton,
   ButtonGroup,
-  // Stack,
+  Stack,
   ImageListItemBar,
   IconButton
 } from '@mui/material';
@@ -17,9 +17,10 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import SimpleReactLightbox from 'simple-react-lightbox';
 import { SRLWrapper } from 'simple-react-lightbox';
-// import Pagination from '@mui/material/Pagination';
+import Pagination from '@mui/material/Pagination';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import axios from 'axios';
+import queryString from 'query-string';
 
 const Root = styled('div')(({ theme }) => ({
   margin: '88px 60px',
@@ -47,22 +48,45 @@ export default function PageGallery() {
   const [state, setState] = useState({ isOpen: false, photoIndex: 0, photoUrl: '' });
   // const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
+  const [page, setPage] = React.useState(1);
+
+  const [filters, setFilters] = useState({
+    page: 1,
+    size: 12
+  });
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+    setFilters({
+      ...filters,
+      page: value
+    });
+    console.log(filters);
+  };
+
   useEffect(() => {
+    // convert filters to page=1&size=10
+    const paramsString = queryString.stringify(filters);
     axios
-      .get(
-        'https://api-sale.reso.vn/api/v1/order-medias?order-code=' + localStorage.getItem('Code')
-      )
+      .get(`https://api-sale.reso.vn/api/v1/order-medias?order-code=order1&${paramsString}`)
       .then((res) => {
         console.log(res);
-        setListEvent(res.data);
+        const { data, metadata } = res.data;
+        setListEvent(data);
+        setMetaData(metadata);
         console.log('success with listEvent');
       })
       .catch((err) => {
         console.log(err);
         console.log('error');
       });
-  }, []);
+  }, [filters]);
   const [listEvent, setListEvent] = React.useState(images);
+  const [metaData, setMetaData] = useState({
+    page: 1,
+    size: 1,
+    total: 1
+  });
+  const totalPages = Math.ceil(metaData.total / metaData.size);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -87,7 +111,6 @@ export default function PageGallery() {
   };
 
   const [id, setID] = useState(generateOrderNumber());
-  // const maxSteps = images.length;
 
   return (
     <div style={{ marginTop: '88px', textAlign: 'center' }}>
@@ -104,65 +127,69 @@ export default function PageGallery() {
       </ButtonGroup>
       <SimpleReactLightbox>
         <Root>
-          <Box>
-            <SRLWrapper>
-              <ImageList variant="masonry" cols={mobile ? 2 : fullScreen ? 3 : 4} gap={6}>
-                {listEvent.map((item) => (
-                  <ImageListItem
-                    sx={{
-                      '& .MuiImageListItem-img': {
-                        maxWidth: '100%',
-                        height: 'auto',
-                        padding: '10px 10px',
-                        borderRadius: '30px'
-                      }
-                    }}
-                    key={item.pic_url}
-                  >
-                    <img
-                      src={item.pic_url}
-                      srcSet={item.pic_url}
-                      alt={item.title}
-                      loading="lazy"
-                      onClick={() => {
-                        let updateState = { ...state };
-                        updateState.isOpen = true;
-                        updateState.photoUrl = item.pic_url;
-                        setState(updateState);
-                        handleClickOpen();
+          <Stack spacing={5}>
+            <Box>
+              <SRLWrapper>
+                <ImageList variant="masonry" cols={mobile ? 2 : fullScreen ? 3 : 4} gap={10}>
+                  {listEvent.map((item) => (
+                    <ImageListItem
+                      sx={{
+                        '& .MuiImageListItem-img': {
+                          maxWidth: '100%',
+                          height: 'auto',
+                          padding: '10px 10px',
+                          borderRadius: '30px'
+                        }
                       }}
-                    />
-                    <ImageListItemBar
-                      title={item.title}
-                      actionIcon={
-                        <IconButton
-                          sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                          aria-label={`info about ${item.title}`}
-                        >
-                          <CloudDownloadIcon />
-                        </IconButton>
-                      }
-                      sx={{ margin: '0px 10px 10px', borderRadius: '30px' }}
-                    />
-                  </ImageListItem>
-                ))}
-              </ImageList>
-            </SRLWrapper>
-            {/* <Stack spacing={5}>
-              <Pagination
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  margin: '20px 0'
-                }}
-                count={10}
-                variant="outlined"
-                shape="rounded"
-              />
-            </Stack> */}
-          </Box>
+                      key={item.pic_url}
+                    >
+                      <img
+                        src={item.pic_url}
+                        srcSet={item.pic_url}
+                        alt={item.title}
+                        loading="lazy"
+                        onClick={() => {
+                          let updateState = { ...state };
+                          updateState.isOpen = true;
+                          updateState.photoUrl = item.pic_url;
+                          setState(updateState);
+                          handleClickOpen();
+                        }}
+                      />
+                      <ImageListItemBar
+                        title={item.title}
+                        actionIcon={
+                          <IconButton
+                            sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                            aria-label={`info about ${item.title}`}
+                          >
+                            <CloudDownloadIcon />
+                          </IconButton>
+                        }
+                        sx={{ margin: '0px 10px 10px', borderRadius: '30px' }}
+                      />
+                    </ImageListItem>
+                  ))}
+                </ImageList>
+              </SRLWrapper>
+            </Box>
+          </Stack>
         </Root>
       </SimpleReactLightbox>
+      <Stack spacing={5}>
+        <Pagination
+          style={{
+            display: 'flex',
+            justifyContent: 'center',
+            margin: '20px 0'
+          }}
+          count={totalPages}
+          page={page}
+          onChange={handleChange}
+          variant="outlined"
+          shape="rounded"
+        />
+      </Stack>
     </div>
   );
 }
