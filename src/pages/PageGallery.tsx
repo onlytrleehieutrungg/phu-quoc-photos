@@ -4,6 +4,7 @@ import ImageListItem from '@mui/material/ImageListItem';
 import DownloadIcon from '@mui/icons-material/Download';
 import LinkIcon from '@mui/icons-material/Link';
 import { styled } from '@mui/material/styles';
+import { makeStyles } from '@mui/styles';
 import {
   Typography,
   Button as MuiButton,
@@ -24,23 +25,38 @@ import queryString from 'query-string';
 import Skeleton from '@mui/material/Skeleton';
 
 const Root = styled('div')(({ theme }) => ({
-  margin: '88px 60px',
+  margin: '10px 60px',
   [theme.breakpoints.down('md')]: {
     margin: '88px 10px'
   }
 }));
 
-const Div = styled('div')(({ theme }) => ({
-  ...theme.typography.button,
-  backgroundColor: 'transparent',
-  color: '#000',
-  borderRadius: '20px',
-  padding: theme.spacing(1)
-}));
+const useStyles = makeStyles({
+  root: {
+    transition: '0.5s',
+    '&:hover': {
+      zIndex: 1,
+      transform: 'scale(1.25)',
+      borderRadius: '24px',
+      backgroundColor: 'rgba(0,0,0,0.2)',
+      boxShadow: '0 10px 15px rgba(0,0,0,0.4)',
+      cursor: 'zoom-in'
+    }
+  }
+});
+
+// const Div = styled('div')(({ theme }) => ({
+//   ...theme.typography.button,
+//   backgroundColor: 'transparent',
+//   color: '#000',
+//   borderRadius: '20px',
+//   padding: theme.spacing(1)
+// }));
 
 const generateOrderNumber = () => Math.floor(100000 + Math.random() * 900000).toString();
 
 export default function PageGallery() {
+  const classes = useStyles();
   const [isOpen, setIsOpen] = useState(false);
   const [open, setOpen] = React.useState(false);
   const theme = useTheme();
@@ -138,24 +154,32 @@ export default function PageGallery() {
           <div>{'Hình ảnh mã đơn hàng #' + localStorage.getItem('Code')} </div>
         )}
       </Typography>
-      {loading ? (
-        <Skeleton variant="rectangular" />
-      ) : (
-        <ButtonGroup style={{ float: 'right', marginRight: '80px' }}>
-          <MuiButton size="large" startIcon={<DownloadIcon />}>
-            Tải Về
-          </MuiButton>
-          <MuiButton size="large" startIcon={<LinkIcon />}>
-            Chia Sẻ
-          </MuiButton>
-        </ButtonGroup>
-      )}
+
       <SimpleReactLightbox>
         <Root>
-          <Stack spacing={5}>
+          <Stack spacing={1}>
+            {loading ? (
+              <Skeleton variant="rectangular" />
+            ) : (
+              <ButtonGroup
+                style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '10px' }}
+              >
+                <MuiButton size="large" startIcon={<DownloadIcon />}>
+                  Tải Về
+                </MuiButton>
+                <MuiButton size="large" startIcon={<LinkIcon />}>
+                  Chia Sẻ
+                </MuiButton>
+              </ButtonGroup>
+            )}
             <Box>
               <SRLWrapper>
-                <ImageList variant="masonry" cols={mobile ? 2 : fullScreen ? 3 : 4} gap={10}>
+                <ImageList
+                  variant="masonry"
+                  cols={mobile ? 2 : fullScreen ? 3 : 4}
+                  gap={1}
+                  sx={{ overflow: 'visible' }}
+                >
                   {listEvent.map((item) => (
                     <ImageListItem
                       sx={{
@@ -163,9 +187,11 @@ export default function PageGallery() {
                           maxWidth: '100%',
                           height: 'auto',
                           padding: '10px 10px',
-                          borderRadius: '30px'
+                          // margin: '10px 10px 0px 0px',
+                          borderRadius: '24px'
                         }
                       }}
+                      className={classes.root}
                       key={item.pic_url}
                     >
                       {loadimg ? (
@@ -185,7 +211,8 @@ export default function PageGallery() {
                         />
                       )}
                       <ImageListItemBar
-                        title={item.title}
+                        title={item.timestamp.substring(0, 19)}
+                        style={{}}
                         actionIcon={
                           <IconButton
                             sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
@@ -194,7 +221,7 @@ export default function PageGallery() {
                             <CloudDownloadIcon />
                           </IconButton>
                         }
-                        sx={{ margin: '0px 10px 10px', borderRadius: '30px' }}
+                        sx={{ margin: '0px 10px 10px', borderRadius: '14px' }}
                       />
                     </ImageListItem>
                   ))}
@@ -204,7 +231,7 @@ export default function PageGallery() {
           </Stack>
         </Root>
       </SimpleReactLightbox>
-      <Stack spacing={5}>
+      <Stack spacing={1}>
         <Pagination
           style={{
             display: 'flex',
@@ -216,6 +243,7 @@ export default function PageGallery() {
           onChange={handleChange}
           variant="outlined"
           shape="rounded"
+          size="large"
         />
       </Stack>
     </div>
