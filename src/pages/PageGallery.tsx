@@ -32,14 +32,20 @@ const Root = styled('div')(({ theme }) => ({
 }));
 
 const useStyles = makeStyles({
-  root: {
-    transition: '0.5s',
+  wrap: {
+    overflow: 'hidden',
+    borderRadius: '24px'
+  },
+  item: {
+    transition: '0.6s',
+    position: 'relative',
     '&:hover': {
       zIndex: 1,
-      transform: 'scale(1.25)',
+      transform: 'scale(1.4)',
       borderRadius: '24px',
       backgroundColor: 'rgba(0,0,0,0.2)',
       boxShadow: '0 10px 15px rgba(0,0,0,0.4)',
+      padding: '10px 10px',
       cursor: 'zoom-in'
     }
   }
@@ -182,47 +188,63 @@ export default function PageGallery() {
                 >
                   {listEvent.map((item) => (
                     <ImageListItem
-                      sx={{
-                        '& .MuiImageListItem-img': {
-                          maxWidth: '100%',
-                          height: 'auto',
-                          padding: '10px 10px',
-                          // margin: '10px 10px 0px 0px',
-                          borderRadius: '24px'
-                        }
-                      }}
-                      className={classes.root}
+                      // sx={{
+                      //   '& .MuiImageListItem-img': {
+                      //     maxWidth: '100%',
+                      //     height: 'auto',
+                      //     padding: '10px 10px',
+                      //     // margin: '10px 10px 0px 0px',
+                      //     borderRadius: '24px'
+                      //   }
+                      // }}
+                      className={classes.wrap}
                       key={item.pic_url}
                     >
-                      {loadimg ? (
-                        <Skeleton variant="rectangular" width={300} height={150} />
-                      ) : (
-                        <img
-                          src={item.pic_url}
-                          alt={item.title}
-                          loading="lazy"
-                          onClick={() => {
-                            let updateState = { ...state };
-                            updateState.isOpen = true;
-                            updateState.photoUrl = item.pic_url;
-                            setState(updateState);
-                            handleClickOpen();
-                          }}
+                      <div>
+                        {loadimg ? (
+                          <Skeleton variant="rectangular" width={300} height={150} />
+                        ) : (
+                          <img
+                            src={item.pic_url}
+                            alt={item.title}
+                            loading="lazy"
+                            style={{
+                              maxWidth: '100%',
+                              height: 'auto',
+                              padding: '10px 10px',
+                              // margin: '10px 10px 0px 0px',
+                              borderRadius: '24px'
+                            }}
+                            onClick={() => {
+                              let updateState = { ...state };
+                              updateState.isOpen = true;
+                              updateState.photoUrl = item.pic_url;
+                              setState(updateState);
+                              handleClickOpen();
+                            }}
+                            className={classes.item}
+                            // onMouseOver={(e) => {
+                            //   setIsOpen(true);
+                            // }}
+                            // onMouseOut={(e) => {
+                            //   setIsOpen(false);
+                            // }}
+                          />
+                        )}
+                        <ImageListItemBar
+                          title={item.timestamp.substring(0, 19)}
+                          style={{ zIndex: 1 }}
+                          actionIcon={
+                            <IconButton
+                              sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                              aria-label={`info about ${item.title}`}
+                            >
+                              <CloudDownloadIcon />
+                            </IconButton>
+                          }
+                          sx={{ margin: '0px 10px 10px', borderRadius: '14px' }}
                         />
-                      )}
-                      <ImageListItemBar
-                        title={item.timestamp.substring(0, 19)}
-                        style={{}}
-                        actionIcon={
-                          <IconButton
-                            sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                            aria-label={`info about ${item.title}`}
-                          >
-                            <CloudDownloadIcon />
-                          </IconButton>
-                        }
-                        sx={{ margin: '0px 10px 10px', borderRadius: '14px' }}
-                      />
+                      </div>
                     </ImageListItem>
                   ))}
                 </ImageList>
