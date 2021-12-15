@@ -89,10 +89,10 @@ export default function MainNavbar() {
             Phu Quoc Photo
           </Label>
           <Box sx={{ flexGrow: 1 }} />
+          <RouterLink style={{ color: 'black', textDecoration: 'none' }} to="/">
+            Home
+          </RouterLink>
         </Container>
-        <RouterLink style={{ color: 'black', textDecoration: 'none', marginRight: '85px' }} to="/">
-          Home
-        </RouterLink>
       </ToolbarStyle>
       {isOffset && <ToolbarShadowStyle />}
     </AppBar>
