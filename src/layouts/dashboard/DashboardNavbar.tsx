@@ -7,7 +7,6 @@ import useOffSetTop from '../../hooks/useOffSetTop';
 // components
 import Logo from '../../components/Logo';
 import Label from '../../components/Label';
-
 // ----------------------------------------------------------------------
 
 const APP_BAR_MOBILE = 64;
@@ -90,6 +89,9 @@ export default function MainNavbar() {
             Phu Quoc Photo
           </Label>
           <Box sx={{ flexGrow: 1 }} />
+          <RouterLink style={{ color: 'black', textDecoration: 'none' }} to="/">
+            Home
+          </RouterLink>
         </Container>
       </ToolbarStyle>
       {isOffset && <ToolbarShadowStyle />}

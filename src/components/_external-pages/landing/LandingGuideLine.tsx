@@ -61,11 +61,11 @@ function PlanCard({ plan, cardIndex }: PlanCardProps) {
     >
       <Stack spacing={5}>
         <div>
-          <Typography variant="h4" sx={{ mb: 2, display: 'block' }}>
+          <Typography variant="h6" sx={{ mb: 2, display: 'block' }}>
             Bước {step}
           </Typography>
           <Typography variant="h3">{title}</Typography>
-          <Typography variant="h6" sx={{ mb: 2, display: 'block' }}>
+          <Typography variant="body1" sx={{ mb: 2, display: 'block' }}>
             {description}
           </Typography>
         </div>
@@ -79,7 +79,7 @@ export default function LandingGuideLine() {
   const isLight = theme.palette.mode === 'light';
 
   return (
-    <RootStyle>
+    <RootStyle id="GuideLine">
       <Container maxWidth="lg">
         <Box sx={{ mb: 10, textAlign: 'center' }}>
           <MotionInView variants={varFadeInDown}>

@@ -1,11 +1,16 @@
 import { motion } from 'framer-motion';
-import { Link as RouterLink } from 'react-router-dom';
+// import { Link as RouterLink } from 'react-router-dom';
 // material
 import { Button, Box, Input, Container, Typography, Stack, styled } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 //
 import { varFadeInUp, varFadeInRight, varWrapEnter } from '../../animate';
+//
+import { useState } from 'react';
+import { createSearchParams, useNavigate } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(motion.div)(({ theme }) => ({
@@ -42,7 +47,8 @@ const HeroImgStyle = styled(motion.img)(({ theme }) => ({
   bottom: 0,
   zIndex: 8,
   width: '100%',
-  height: 'auto',
+  height: '100%',
+  maxWidth: '100%',
   margin: 'auto',
   position: 'absolute'
 }));
@@ -60,6 +66,25 @@ const Backdrop = styled('div')(() => ({
 // ----------------------------------------------------------------------
 
 export default function LandingHome() {
+  const theme = useTheme();
+  const mobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const mediumScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const [code, setCode] = useState('');
+  const handle = () => {
+    localStorage.setItem('Code', code);
+  };
+  const [orderId, setOrderId] = useState('');
+  const navigate = useNavigate();
+
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    navigate({
+      pathname: PATH_DASHBOARD.root,
+      search: `?${createSearchParams({
+        orderId: orderId
+      })}`
+    });
+  }
   return (
     <>
       <RootStyle initial="initial" animate="animate" variants={varWrapEnter}>
@@ -87,51 +112,62 @@ export default function LandingHome() {
               </Typography>
             </motion.div>
             <motion.div variants={varFadeInRight}>
-              <Box
-                style={{
-                  flex: 1,
-                  color: 'common.white',
-                  border: 'none',
-                  background: 'white',
-                  borderRadius: '40px',
-                  height: '80px',
-                  minWidth: '400px',
-                  maxWidth: '100%',
-                  display: 'flex'
-                }}
-              >
-                <Input
+              <form onSubmit={handleSubmit} style={{}}>
+                <Box
                   style={{
                     flex: 1,
+                    color: 'common.white',
                     border: 'none',
-                    height: '80px',
-                    minWidth: '160px',
-                    width: '300px',
-                    marginLeft: '16px'
-                  }}
-                  id="epg-value"
-                  placeholder="Nhập mã code vào đây"
-                  disableUnderline
-                />
-                <Button
-                  style={{
-                    border: 'none',
+                    background: 'white',
                     borderRadius: '40px',
-                    height: '48px',
-                    minWidth: '80px',
-                    width: '104px',
-                    marginTop: '16px',
-                    marginBottom: '16px',
-                    marginLeft: 'auto',
-                    marginRight: '16px'
+                    height: '80px',
+                    minWidth: '400px',
+                    maxWidth: '100%',
+                    display: 'flex'
                   }}
-                  variant="contained"
-                  component={RouterLink}
-                  to={PATH_DASHBOARD.root}
                 >
-                  Gửi Mã
-                </Button>
-              </Box>
+                  {/* <input defaultValue={user ?? undefined} type="text" name="user" /> */}
+                  <Input
+                    style={{
+                      flex: 1,
+                      border: 'none',
+                      height: '80px',
+                      minWidth: '160px',
+                      width: '300px',
+                      marginLeft: '16px'
+                    }}
+                    value={orderId}
+                    // onChange={(orderID) => setOrderId(orderID)}
+                    placeholder="Nhập mã code vào đây"
+                    // value={code}
+                    onChange={(e) => setOrderId(e.target.value)}
+                    disableUnderline
+                  />
+
+                  <Button
+                    style={{
+                      border: 'none',
+                      borderRadius: '40px',
+                      height: '48px',
+                      minWidth: '80px',
+                      width: '104px',
+                      marginTop: '16px',
+                      marginBottom: '16px',
+                      marginLeft: 'auto',
+                      marginRight: '16px'
+                    }}
+                    variant="contained"
+                    type="submit"
+                    // component={RouterLink}
+                    // to={PATH_DASHBOARD.root}
+                    // onClick={() => {
+                    //   navigate(`/${PATH_DASHBOARD.root}/${code}`);
+                    // }}
+                  >
+                    Gửi Mã
+                  </Button>
+                </Box>
+              </form>
             </motion.div>
           </ContentStyle>
         </Container>

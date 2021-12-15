@@ -98,11 +98,7 @@ export default function MainNavbar() {
           <MHidden width="mdUp">
             <MenuMobile isOffset={isOffset} isHome={isHome} navConfig={navConfig} />
           </MHidden> */}
-          <Link
-            color="black"
-            variant="h5"
-            href="https://material-ui.com/store/items/minimal-dashboard/"
-          >
+          <Link color="black" variant="h5" href="#GuideLine">
             Hướng Dẫn
           </Link>
         </Container>
