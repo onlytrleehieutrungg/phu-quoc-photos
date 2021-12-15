@@ -92,7 +92,7 @@ export default function PageGallery() {
     // convert filters to page=1&size=10
     const paramsString = queryString.stringify(filters);
     axios
-      .get(`https://api-sale.reso.vn/api/v1/order-medias?order-code=order1&${paramsString}`)
+      .get(`https://api-sale.reso.vn/api/v1/order-medias?order-code=${orderId}&${paramsString}`)
       .then((res) => {
         console.log(res);
         const { data, metadata } = res.data;
@@ -151,12 +151,16 @@ export default function PageGallery() {
 
   const [id, setID] = useState(generateOrderNumber());
 
+  const url = new URL(window.location.href);
+
+  let params = new URLSearchParams(url.search);
+
+  let orderId = params.get('orderId');
+
   return (
     <div style={{ marginTop: '88px', textAlign: 'center' }}>
       <Typography gutterBottom variant="h2" align="center">
-        <div style={{ padding: '4rem 0' }}>
-          {'Hình ảnh mã đơn hàng #' + localStorage.getItem('Code')}{' '}
-        </div>
+        <div style={{ padding: '4rem 0' }}>{'Hình ảnh mã đơn hàng #' + orderId}</div>
       </Typography>
 
       <SimpleReactLightbox>
