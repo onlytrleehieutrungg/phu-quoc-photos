@@ -25,7 +25,7 @@ import queryString from 'query-string';
 import Skeleton from '@mui/material/Skeleton';
 
 const Root = styled('div')(({ theme }) => ({
-  margin: '10px 60px',
+  margin: '10px 24px',
   [theme.breakpoints.down('md')]: {
     margin: '88px 10px'
   }
@@ -67,9 +67,10 @@ export default function PageGallery() {
   const theme = useTheme();
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const largeScreen = useMediaQuery(theme.breakpoints.down('lg'));
   const [state, setState] = useState({ isOpen: false, photoIndex: 0, photoUrl: '' });
   const [loading, setLoading] = useState(true);
-  const [loadimg, setLoadimg] = useState(true);
+  // const [loadimg, setLoadimg] = useState(true);
   // const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
   const [page, setPage] = React.useState(1);
@@ -109,15 +110,15 @@ export default function PageGallery() {
     setTimeout(() => {
       //api
       setLoading(false);
-    }, 1000);
+    }, 2000);
   }, []);
 
-  useEffect(() => {
-    setTimeout(() => {
-      //api
-      setLoadimg(false);
-    }, 1000);
-  }, []);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     //api
+  //     setLoadimg(false);
+  //   }, 1000);
+  // }, []);
   const [listEvent, setListEvent] = React.useState(images);
   const [metaData, setMetaData] = useState({
     page: 1,
@@ -153,17 +154,15 @@ export default function PageGallery() {
   return (
     <div style={{ marginTop: '88px', textAlign: 'center' }}>
       <Typography gutterBottom variant="h2" align="center">
-        {loading ? (
-          <Skeleton variant="text" />
-        ) : (
-          <div>{'Hình ảnh mã đơn hàng #' + localStorage.getItem('Code')} </div>
-        )}
+        <div style={{ padding: '4rem 0' }}>
+          {'Hình ảnh mã đơn hàng #' + localStorage.getItem('Code')}{' '}
+        </div>
       </Typography>
 
       <SimpleReactLightbox>
         <Root>
           <Stack spacing={1}>
-            {loading ? (
+            {/* {loading ? (
               <Skeleton variant="rectangular" />
             ) : (
               <ButtonGroup
@@ -176,7 +175,22 @@ export default function PageGallery() {
                   Chia Sẻ
                 </MuiButton>
               </ButtonGroup>
-            )}
+            )} */}
+            <ButtonGroup
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                marginRight: '10px',
+                marginBottom: '10px'
+              }}
+            >
+              <MuiButton size="large" startIcon={<DownloadIcon />}>
+                Tải Về
+              </MuiButton>
+              <MuiButton size="large" startIcon={<LinkIcon />}>
+                Chia Sẻ
+              </MuiButton>
+            </ButtonGroup>
             <Box>
               <SRLWrapper>
                 <ImageList
@@ -200,49 +214,50 @@ export default function PageGallery() {
                       key={item.pic_url}
                     >
                       <div>
-                        {loadimg ? (
-                          <Skeleton variant="rectangular" width={300} height={150} />
-                        ) : (
-                          <img
-                            src={item.pic_url}
-                            alt={item.title}
-                            loading="lazy"
-                            style={{
-                              maxWidth: '100%',
-                              height: 'auto',
-                              // padding: '10px 10px',
-                              // margin: '10px 10px 0px 0px',
-                              borderRadius: '24px'
-                            }}
-                            onClick={() => {
-                              let updateState = { ...state };
-                              updateState.isOpen = true;
-                              updateState.photoUrl = item.pic_url;
-                              setState(updateState);
-                              handleClickOpen();
-                            }}
-                            className={classes.item}
-                            // onMouseOver={(e) => {
-                            //   setIsOpen(true);
-                            // }}
-                            // onMouseOut={(e) => {
-                            //   setIsOpen(false);
-                            // }}
+                        {loading ? (
+                          <Skeleton
+                            animation="wave"
+                            variant="rectangular"
+                            width={mobile ? 200 : largeScreen ? 220 : 350}
+                            height={mobile ? 200 : largeScreen ? 250 : 400}
                           />
+                        ) : (
+                          <>
+                            <img
+                              src={item.pic_url}
+                              alt={item.title}
+                              loading="lazy"
+                              style={{
+                                maxWidth: '100%',
+                                height: 'auto',
+                                // padding: '10px 10px',
+                                // margin: '10px 10px 0px 0px',
+                                borderRadius: '24px'
+                              }}
+                              onClick={() => {
+                                let updateState = { ...state };
+                                updateState.isOpen = true;
+                                updateState.photoUrl = item.pic_url;
+                                setState(updateState);
+                                handleClickOpen();
+                              }}
+                              className={classes.item}
+                            />
+                            <ImageListItemBar
+                              title={item.timestamp.substring(0, 19)}
+                              style={{ zIndex: 1 }}
+                              actionIcon={
+                                <IconButton
+                                  sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                                  aria-label={`info about ${item.title}`}
+                                >
+                                  <CloudDownloadIcon />
+                                </IconButton>
+                              }
+                              sx={{ borderRadius: '24px' }}
+                            />
+                          </>
                         )}
-                        <ImageListItemBar
-                          title={item.timestamp.substring(0, 19)}
-                          style={{ zIndex: 1 }}
-                          actionIcon={
-                            <IconButton
-                              sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                              aria-label={`info about ${item.title}`}
-                            >
-                              <CloudDownloadIcon />
-                            </IconButton>
-                          }
-                          sx={{ margin: '0px 10px 10px', borderRadius: '14px' }}
-                        />
                       </div>
                     </ImageListItem>
                   ))}
