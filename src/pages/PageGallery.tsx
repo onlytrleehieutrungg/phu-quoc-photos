@@ -34,19 +34,18 @@ const Root = styled('div')(({ theme }) => ({
 const useStyles = makeStyles({
   wrap: {
     overflow: 'hidden',
-    borderRadius: '24px'
+    borderRadius: '24px',
+    margin: '10px 10px'
   },
   item: {
-    transition: '0.6s',
+    transition: '0.3s',
     position: 'relative',
+    borderRadius: '24px',
+    backgroundColor: '#ccc',
+    cursor: 'zoom-in',
     '&:hover': {
       zIndex: 1,
-      transform: 'scale(1.4)',
-      borderRadius: '24px',
-      backgroundColor: 'rgba(0,0,0,0.2)',
-      boxShadow: '0 10px 15px rgba(0,0,0,0.4)',
-      padding: '10px 10px',
-      cursor: 'zoom-in'
+      transform: 'scale(1.2)'
     }
   }
 });
@@ -211,7 +210,7 @@ export default function PageGallery() {
                             style={{
                               maxWidth: '100%',
                               height: 'auto',
-                              padding: '10px 10px',
+                              // padding: '10px 10px',
                               // margin: '10px 10px 0px 0px',
                               borderRadius: '24px'
                             }}
