@@ -81,7 +81,7 @@ export default function LandingHome() {
     navigate({
       pathname: PATH_DASHBOARD.root,
       search: `?${createSearchParams({
-        orderId: orderId
+        'ma-don-hang': orderId
       })}`
     });
   }
@@ -107,12 +107,12 @@ export default function LandingHome() {
               </Typography>
             </motion.div>
             <motion.div variants={varFadeInRight}>
-              <Typography sx={{ color: 'grey.300' }} variant="h5">
+              <Typography sx={{ color: 'grey.300' }} variant="caption">
                 Lưu giữ hình ảnh cho những chuyến đi của bạn.
               </Typography>
             </motion.div>
             <motion.div variants={varFadeInRight}>
-              <form onSubmit={handleSubmit} style={{}}>
+              <form onSubmit={handleSubmit}>
                 <Box
                   style={{
                     flex: 1,
@@ -142,6 +142,7 @@ export default function LandingHome() {
                     // value={code}
                     onChange={(e) => setOrderId(e.target.value)}
                     disableUnderline
+                    required
                   />
 
                   <Button

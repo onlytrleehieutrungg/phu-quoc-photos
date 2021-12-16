@@ -1,8 +1,9 @@
 import Box from '@mui/material/Box';
+import Page from '../components/Page';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
 import DownloadIcon from '@mui/icons-material/Download';
-import LinkIcon from '@mui/icons-material/Link';
+// import LinkIcon from '@mui/icons-material/Link';
 import { styled } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import {
@@ -23,11 +24,23 @@ import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import axios from 'axios';
 import queryString from 'query-string';
 import Skeleton from '@mui/material/Skeleton';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import TwitterIcon from '@mui/icons-material/Twitter';
 
 const Root = styled('div')(({ theme }) => ({
   margin: '10px 24px',
   [theme.breakpoints.down('md')]: {
     margin: '88px 10px'
+  }
+}));
+
+const Head = styled('div')(({ theme }) => ({
+  padding: '60px 0',
+  [theme.breakpoints.down('md')]: {
+    padding: '30px 0'
+  },
+  [theme.breakpoints.down('sm')]: {
+    padding: '10px 0'
   }
 }));
 
@@ -155,18 +168,27 @@ export default function PageGallery() {
 
   let params = new URLSearchParams(url.search);
 
-  let orderId = params.get('orderId');
+  let orderId = params.get('ma-don-hang');
 
   return (
-    <div style={{ marginTop: '88px', textAlign: 'center' }}>
-      <Typography gutterBottom variant="h2" align="center">
-        <div style={{ padding: '4rem 0' }}>{'Hình ảnh mã đơn hàng #' + orderId}</div>
-      </Typography>
+    <Page title="Kho Ảnh">
+      <div style={{ marginTop: '88px', textAlign: 'center' }}>
+        <Typography gutterBottom variant="h2" align="center">
+          <Head>
+            <div>{'Hình ảnh mã đơn hàng #' + orderId}</div>
+            <MuiButton size="large" startIcon={<FacebookIcon />}>
+              Facebook
+            </MuiButton>
+            <MuiButton size="large" startIcon={<TwitterIcon />}>
+              Twitter
+            </MuiButton>
+          </Head>
+        </Typography>
 
-      <SimpleReactLightbox>
-        <Root>
-          <Stack spacing={1}>
-            {/* {loading ? (
+        <SimpleReactLightbox>
+          <Root>
+            <Stack spacing={1}>
+              {/* {loading ? (
               <Skeleton variant="rectangular" />
             ) : (
               <ButtonGroup
@@ -180,113 +202,125 @@ export default function PageGallery() {
                 </MuiButton>
               </ButtonGroup>
             )} */}
-            <ButtonGroup
-              style={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                marginRight: '10px',
-                marginBottom: '10px'
-              }}
-            >
-              <MuiButton size="large" startIcon={<DownloadIcon />}>
-                Tải Về
-              </MuiButton>
-              <MuiButton size="large" startIcon={<LinkIcon />}>
+              <ButtonGroup
+                style={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  marginRight: '10px',
+                  marginBottom: '10px'
+                }}
+              >
+                <MuiButton size="large" startIcon={<DownloadIcon />}>
+                  Tải Về
+                </MuiButton>
+                {/* <MuiButton size="large" startIcon={<LinkIcon />}>
                 Chia Sẻ
-              </MuiButton>
-            </ButtonGroup>
-            <Box>
-              <SRLWrapper>
-                <ImageList
-                  variant="masonry"
-                  cols={mobile ? 2 : fullScreen ? 3 : 4}
-                  gap={1}
-                  sx={{ overflow: 'visible' }}
-                >
-                  {listEvent.map((item) => (
-                    <ImageListItem
-                      // sx={{
-                      //   '& .MuiImageListItem-img': {
-                      //     maxWidth: '100%',
-                      //     height: 'auto',
-                      //     padding: '10px 10px',
-                      //     // margin: '10px 10px 0px 0px',
-                      //     borderRadius: '24px'
-                      //   }
-                      // }}
-                      className={classes.wrap}
-                      key={item.pic_url}
-                    >
-                      <div>
-                        {loading ? (
-                          <Skeleton
-                            animation="wave"
-                            variant="rectangular"
-                            width={mobile ? 200 : largeScreen ? 220 : 350}
-                            height={mobile ? 200 : largeScreen ? 250 : 400}
-                          />
-                        ) : (
-                          <>
-                            <img
-                              src={item.pic_url}
-                              alt={item.title}
-                              loading="lazy"
-                              style={{
-                                maxWidth: '100%',
-                                height: 'auto',
-                                // padding: '10px 10px',
-                                // margin: '10px 10px 0px 0px',
-                                borderRadius: '24px'
+              </MuiButton> */}
+              </ButtonGroup>
+              <Box>
+                <SRLWrapper>
+                  <ImageList
+                    variant="masonry"
+                    cols={mobile ? 2 : fullScreen ? 3 : 4}
+                    gap={1}
+                    sx={{ overflow: 'visible' }}
+                  >
+                    {listEvent.map((item) => (
+                      <ImageListItem
+                        // sx={{
+                        //   '& .MuiImageListItem-img': {
+                        //     maxWidth: '100%',
+                        //     height: 'auto',
+                        //     padding: '10px 10px',
+                        //     // margin: '10px 10px 0px 0px',
+                        //     borderRadius: '24px'
+                        //   }
+                        // }}
+                        className={classes.wrap}
+                        key={item.pic_url}
+                      >
+                        <div>
+                          {loading ? (
+                            <Skeleton
+                              animation="wave"
+                              variant="rectangular"
+                              sx={{
+                                width: {
+                                  xs: 150, // theme.breakpoints.up('xs')
+                                  sm: 180, // theme.breakpoints.up('sm')
+                                  md: 200, // theme.breakpoints.up('md')
+                                  xl: 340 // theme.breakpoints.up('xl')
+                                },
+                                height: {
+                                  xs: 200,
+                                  md: 250,
+                                  xl: 350
+                                }
                               }}
-                              onClick={() => {
-                                let updateState = { ...state };
-                                updateState.isOpen = true;
-                                updateState.photoUrl = item.pic_url;
-                                setState(updateState);
-                                handleClickOpen();
-                              }}
-                              className={classes.item}
                             />
-                            <ImageListItemBar
-                              title={item.timestamp.substring(0, 19)}
-                              style={{ zIndex: 1 }}
-                              actionIcon={
-                                <IconButton
-                                  sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                                  aria-label={`info about ${item.title}`}
-                                >
-                                  <CloudDownloadIcon />
-                                </IconButton>
-                              }
-                              sx={{ borderRadius: '24px' }}
-                            />
-                          </>
-                        )}
-                      </div>
-                    </ImageListItem>
-                  ))}
-                </ImageList>
-              </SRLWrapper>
-            </Box>
-          </Stack>
-        </Root>
-      </SimpleReactLightbox>
-      <Stack spacing={1}>
-        <Pagination
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            margin: '20px 0'
-          }}
-          count={totalPages}
-          page={page}
-          onChange={handleChange}
-          variant="outlined"
-          shape="rounded"
-          size="large"
-        />
-      </Stack>
-    </div>
+                          ) : (
+                            <>
+                              <img
+                                src={item.pic_url}
+                                alt={item.title}
+                                loading="lazy"
+                                style={{
+                                  maxWidth: '100%',
+                                  height: 'auto',
+                                  // padding: '10px 10px',
+                                  // margin: '10px 10px 0px 0px',
+                                  borderRadius: '24px'
+                                }}
+                                onClick={() => {
+                                  let updateState = { ...state };
+                                  updateState.isOpen = true;
+                                  updateState.photoUrl = item.pic_url;
+                                  setState(updateState);
+                                  handleClickOpen();
+                                }}
+                                className={classes.item}
+                              />
+                              <ImageListItemBar
+                                title={item.timestamp.substring(0, 19)}
+                                style={{ zIndex: 1 }}
+                                actionIcon={
+                                  <IconButton
+                                    sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                                    aria-label={`info about ${item.title}`}
+                                  >
+                                    <CloudDownloadIcon />
+                                  </IconButton>
+                                }
+                                sx={{ borderRadius: '24px' }}
+                              />
+                            </>
+                          )}
+                        </div>
+                      </ImageListItem>
+                    ))}
+                  </ImageList>
+                </SRLWrapper>
+              </Box>
+            </Stack>
+          </Root>
+        </SimpleReactLightbox>
+        <Stack spacing={1}>
+          <Pagination
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              margin: '20px 0'
+            }}
+            count={totalPages}
+            page={page}
+            onChange={handleChange}
+            variant="outlined"
+            shape="rounded"
+            size="large"
+          />
+        </Stack>
+      </div>
+    </Page>
   );
 }
 
