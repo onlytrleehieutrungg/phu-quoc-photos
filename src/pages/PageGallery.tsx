@@ -26,7 +26,7 @@ import queryString from 'query-string';
 import Skeleton from '@mui/material/Skeleton';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
-// import Chip from '@mui/material/Chip';
+import Chip from '@mui/material/Chip';
 
 const Root = styled('div')(({ theme }) => ({
   margin: '10px 24px',
@@ -49,7 +49,8 @@ const useStyles = makeStyles({
   wrap: {
     overflow: 'hidden',
     borderRadius: '24px',
-    margin: '10px 10px'
+    margin: '10px 10px',
+    position: 'relative'
   },
   imgThumb: {
     '& span': {
@@ -221,12 +222,15 @@ export default function PageGallery() {
         <Typography gutterBottom variant="h2" align="center">
           <Head>
             <div>{'Hình ảnh mã đơn hàng #' + orderId}</div>
-            <MuiButton size="large" startIcon={<FacebookIcon />}>
-              Facebook
-            </MuiButton>
-            <MuiButton size="large" startIcon={<TwitterIcon />}>
-              Twitter
-            </MuiButton>
+            <Typography variant="caption" sx={{ display: 'flex', justifyContent: 'center' }}>
+              Chia sẻ
+            </Typography>
+            <IconButton sx={{ color: 'blue' }}>
+              <FacebookIcon />
+            </IconButton>
+            <IconButton sx={{ color: 'blue' }}>
+              <TwitterIcon />
+            </IconButton>
           </Head>
         </Typography>
 
@@ -270,7 +274,7 @@ export default function PageGallery() {
                     gap={1}
                     sx={{ overflow: 'visible' }}
                   >
-                    {listEvent.reverse().map((item) => (
+                    {listEvent.map((item) => (
                       <ImageListItem
                         // sx={{
                         //   '& .MuiImageListItem-img': {
@@ -285,12 +289,22 @@ export default function PageGallery() {
                         key={item.pic_url}
                       >
                         <div>
-                          {/* <div style={{ position: 'absolute', zIndex: 2 }}>
-                            <Stack direction="row" spacing={1}>
-                              <Chip label="abc" color="primary" />
-                              <Chip label="xyz" color="primary" />
-                            </Stack>
-                          </div> */}
+                          <span>
+                            <div style={{ position: 'absolute', zIndex: 2, paddingTop: '6px' }}>
+                              <Stack direction={mobile ? 'column' : 'row'} spacing={1}>
+                                <Chip
+                                  label="abc"
+                                  size="small"
+                                  sx={{ backgroundColor: 'rgba(255, 255, 255, 0.54)' }}
+                                />
+                                <Chip
+                                  label="xyz"
+                                  size="small"
+                                  sx={{ backgroundColor: 'rgba(255, 255, 255, 0.54)' }}
+                                />
+                              </Stack>
+                            </div>
+                          </span>
                           {loading ? (
                             <Skeleton
                               animation="wave"
@@ -313,7 +327,7 @@ export default function PageGallery() {
                             <div className={classes.imgThumb}>
                               <img
                                 src={item.pic_url}
-                                alt={`${item.title} ${item.order_id}`}
+                                alt={`${item.title} ${item.timestamp}`}
                                 loading="lazy"
                                 style={{
                                   maxWidth: '100%',

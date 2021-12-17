@@ -5,6 +5,7 @@ import { Box, Grid, Card, Stack, Container, Typography } from '@mui/material';
 import { varFadeIn, varFadeInUp, MotionInView, varFadeInDown } from '../../animate';
 
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 // ----------------------------------------------------------------------
 const STEP = [1, 2, 3];
@@ -79,23 +80,24 @@ function PlanCard({ plan, cardIndex }: PlanCardProps) {
 export default function LandingGuideLine() {
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
+  const mobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
     <RootStyle id="GuideLine">
       <Container maxWidth="lg">
-        <Box sx={{ mb: 10, textAlign: 'center' }}>
+        <Box sx={{ mb: { xs: 1, md: 10 }, textAlign: 'center' }}>
           <MotionInView variants={varFadeInDown}>
             <Typography variant="h3" sx={{ mb: 3, mt: -8 }}>
               {/* Khám phá thêm */}
               <KeyboardDoubleArrowDownIcon sx={{ fontSize: 40, marginLeft: 5 }} />
             </Typography>
-            <Typography variant="h3" sx={{ mb: 3 }}>
+            <Typography variant="h3" sx={{ mb: 1 }}>
               Tải ảnh đã chụp dể dàng trong 3 bước
             </Typography>
           </MotionInView>
         </Box>
 
-        <Grid container spacing={5}>
+        <Grid container spacing={mobile ? 2 : 5}>
           {PLANS.map((plan, index) => (
             <Grid key={plan.step} item xs={12} md={4}>
               <MotionInView variants={index === 1 ? varFadeInDown : varFadeInUp}>

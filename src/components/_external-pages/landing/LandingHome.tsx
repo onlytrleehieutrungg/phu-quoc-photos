@@ -91,7 +91,12 @@ export default function LandingHome() {
   }
   return (
     <>
-      <RootStyle initial="initial" animate="animate" variants={varWrapEnter}>
+      <RootStyle
+        initial="initial"
+        animate="animate"
+        variants={varWrapEnter}
+        sx={{ height: { xs: '90vh', md: '100vh' } }}
+      >
         <Backdrop />
         <HeroImgStyle alt="hero" src="/static/home/background.png" variants={varFadeInUp} />
         <Container maxWidth="lg">
@@ -103,16 +108,24 @@ export default function LandingHome() {
                   fontWeight: 'bold',
                   color: 'common.white',
                   lineHeight: '0.5rem',
-                  marginTop: '50px'
+                  marginTop: { xs: '100px', md: '0' },
+                  marginLeft: { md: '100px', lg: '10px' }
                 }}
                 component="h1"
                 variant={mobile ? 'h3' : mediumScreen ? 'h2' : 'h1'}
               >
-                Phu Quoc Photo
+                PhuQuoc Photos
               </Typography>
             </motion.div>
             <motion.div variants={varFadeInRight}>
-              <Typography sx={{ color: 'grey.300', fontSize: '20px' }} variant="caption">
+              <Typography
+                sx={{
+                  color: 'grey.300',
+                  fontSize: '20px',
+                  marginLeft: { md: '100px', lg: '10px' }
+                }}
+                variant="caption"
+              >
                 Lưu giữ hình ảnh cho những chuyến đi của bạn.
               </Typography>
             </motion.div>
@@ -128,7 +141,8 @@ export default function LandingHome() {
                     height: '80px',
                     minWidth: '100px',
                     maxWidth: '100%',
-                    display: 'flex'
+                    display: 'flex',
+                    marginLeft: { md: '100px', lg: '10px' }
                   }}
                 >
                   {/* <input defaultValue={user ?? undefined} type="text" name="user" /> */}
