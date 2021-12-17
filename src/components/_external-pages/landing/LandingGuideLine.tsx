@@ -4,6 +4,8 @@ import { Box, Grid, Card, Stack, Container, Typography } from '@mui/material';
 //
 import { varFadeIn, varFadeInUp, MotionInView, varFadeInDown } from '../../animate';
 
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+
 // ----------------------------------------------------------------------
 const STEP = [1, 2, 3];
 const TITLE = ['Nhập Mã', 'Xem Ảnh ', 'Tải Ảnh'];
@@ -83,6 +85,10 @@ export default function LandingGuideLine() {
       <Container maxWidth="lg">
         <Box sx={{ mb: 10, textAlign: 'center' }}>
           <MotionInView variants={varFadeInDown}>
+            <Typography variant="h3" sx={{ mb: 3, mt: -8 }}>
+              {/* Khám phá thêm */}
+              <KeyboardDoubleArrowDownIcon sx={{ fontSize: 40, marginLeft: 5 }} />
+            </Typography>
             <Typography variant="h3" sx={{ mb: 3 }}>
               Tải ảnh đã chụp dể dàng trong 3 bước
             </Typography>

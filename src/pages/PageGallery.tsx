@@ -26,6 +26,7 @@ import queryString from 'query-string';
 import Skeleton from '@mui/material/Skeleton';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
+import Chip from '@mui/material/Chip';
 
 const Root = styled('div')(({ theme }) => ({
   margin: '10px 24px',
@@ -87,6 +88,15 @@ function download(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
     link.click();
   });
 }
+
+const options = {
+  caption: {
+    captionColor: '#a6cfa5',
+    captionFontFamily: 'Raleway, sans-serif',
+    captionFontWeight: '300',
+    captionTextTransform: 'uppercase'
+  }
+};
 
 // const Div = styled('div')(({ theme }) => ({
 //   ...theme.typography.button,
@@ -253,14 +263,14 @@ export default function PageGallery() {
               </MuiButton> */}
               </ButtonGroup>
               <Box>
-                <SRLWrapper>
+                <SRLWrapper options={options}>
                   <ImageList
                     variant="masonry"
                     cols={mobile ? 2 : fullScreen ? 3 : 4}
                     gap={1}
                     sx={{ overflow: 'visible' }}
                   >
-                    {listEvent.map((item) => (
+                    {listEvent.reverse().map((item) => (
                       <ImageListItem
                         // sx={{
                         //   '& .MuiImageListItem-img': {
@@ -275,6 +285,12 @@ export default function PageGallery() {
                         key={item.pic_url}
                       >
                         <div>
+                          <div style={{ position: 'relative', zIndex: 2 }}>
+                            <Stack direction="row" spacing={1}>
+                              <Chip label="abc" color="primary" />
+                              <Chip label="xyz" color="primary" />
+                            </Stack>
+                          </div>
                           {loading ? (
                             <Skeleton
                               animation="wave"
@@ -297,7 +313,7 @@ export default function PageGallery() {
                             <div className={classes.imgThumb}>
                               <img
                                 src={item.pic_url}
-                                alt={item.title}
+                                alt={`${item.title} ${item.order_id}`}
                                 loading="lazy"
                                 style={{
                                   maxWidth: '100%',
@@ -318,14 +334,14 @@ export default function PageGallery() {
                               <span>
                                 <ImageListItemBar
                                   title={item.timestamp.substring(0, 19)}
-                                  style={{ zIndex: 1 }}
+                                  style={{ zIndex: 2 }}
                                   actionIcon={
                                     <IconButton
                                       sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
                                       aria-label={`info about ${item.title}`}
                                       href={item.pic_url}
                                       download={item.pic_url}
-                                      target="_self"
+                                      target="_blank"
                                       // onClick={() => download(item.pic_url)}
                                     >
                                       <CloudDownloadIcon />
