@@ -100,11 +100,11 @@ export default function LandingGuideLine() {
         </Grid>
         <MotionInView variants={varFadeIn}>
           <Box sx={{ pt: 5, mt: 10, textAlign: 'center' }}>
-            <MotionInView variants={varFadeInDown}>
+            {/* <MotionInView variants={varFadeInDown}>
               <Typography paddingBottom="50px" variant="h4">
                 Bạn vẫn còn câu hỏi ?
               </Typography>
-            </MotionInView>
+            </MotionInView> */}
             <MotionInView variants={varFadeInDown}>
               <Typography variant="h3">Liên Hệ Với Chúng Tôi</Typography>
             </MotionInView>
