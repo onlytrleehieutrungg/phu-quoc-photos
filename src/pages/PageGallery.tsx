@@ -26,7 +26,7 @@ import queryString from 'query-string';
 import Skeleton from '@mui/material/Skeleton';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import Chip from '@mui/material/Chip';
+// import Chip from '@mui/material/Chip';
 
 const Root = styled('div')(({ theme }) => ({
   margin: '10px 24px',
@@ -285,12 +285,12 @@ export default function PageGallery() {
                         key={item.pic_url}
                       >
                         <div>
-                          <div style={{ position: 'relative', zIndex: 2 }}>
+                          {/* <div style={{ position: 'absolute', zIndex: 2 }}>
                             <Stack direction="row" spacing={1}>
                               <Chip label="abc" color="primary" />
                               <Chip label="xyz" color="primary" />
                             </Stack>
-                          </div>
+                          </div> */}
                           {loading ? (
                             <Skeleton
                               animation="wave"
