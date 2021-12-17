@@ -50,6 +50,16 @@ const useStyles = makeStyles({
     borderRadius: '24px',
     margin: '10px 10px'
   },
+  imgThumb: {
+    '& span': {
+      display: 'none'
+    },
+    '&:hover': {
+      '& span': {
+        display: 'block'
+      }
+    }
+  },
   item: {
     transition: '0.3s',
     position: 'relative',
@@ -62,6 +72,21 @@ const useStyles = makeStyles({
     }
   }
 });
+
+function download(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
+  axios({
+    method: 'GET',
+    responseType: 'blob',
+    url: `${e}`
+  }).then((response) => {
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'image.jpg');
+    document.body.appendChild(link);
+    link.click();
+  });
+}
 
 // const Div = styled('div')(({ theme }) => ({
 //   ...theme.typography.button,
@@ -133,6 +158,16 @@ export default function PageGallery() {
   //   }, 1000);
   // }, []);
   const [listEvent, setListEvent] = React.useState(images);
+
+  // const [urlDownload, setUrlDownload] = React.useState('');
+  // const download = (e: any) => {
+  //   var element = document.createElement('a');
+  //   var file = new Blob([`${e}`], { type: 'image/*' });
+  //   element.href = URL.createObjectURL(file);
+  //   element.download = 'image.jpg';
+  //   element.click();
+  // };
+
   const [metaData, setMetaData] = useState({
     page: 1,
     size: 1,
@@ -259,7 +294,7 @@ export default function PageGallery() {
                               }}
                             />
                           ) : (
-                            <>
+                            <div className={classes.imgThumb}>
                               <img
                                 src={item.pic_url}
                                 alt={item.title}
@@ -280,20 +315,26 @@ export default function PageGallery() {
                                 }}
                                 className={classes.item}
                               />
-                              <ImageListItemBar
-                                title={item.timestamp.substring(0, 19)}
-                                style={{ zIndex: 1 }}
-                                actionIcon={
-                                  <IconButton
-                                    sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                                    aria-label={`info about ${item.title}`}
-                                  >
-                                    <CloudDownloadIcon />
-                                  </IconButton>
-                                }
-                                sx={{ borderRadius: '24px' }}
-                              />
-                            </>
+                              <span>
+                                <ImageListItemBar
+                                  title={item.timestamp.substring(0, 19)}
+                                  style={{ zIndex: 1 }}
+                                  actionIcon={
+                                    <IconButton
+                                      sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                                      aria-label={`info about ${item.title}`}
+                                      href={item.pic_url}
+                                      download={item.pic_url}
+                                      target="_self"
+                                      // onClick={() => download(item.pic_url)}
+                                    >
+                                      <CloudDownloadIcon />
+                                    </IconButton>
+                                  }
+                                  sx={{ borderRadius: '24px' }}
+                                />
+                              </span>
+                            </div>
                           )}
                         </div>
                       </ImageListItem>
