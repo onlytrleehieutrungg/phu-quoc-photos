@@ -295,7 +295,12 @@ export default function PageGallery() {
                                 <Chip
                                   label="abc"
                                   size="small"
-                                  sx={{ backgroundColor: 'rgba(255, 255, 255, 0.54)' }}
+                                  sx={{
+                                    backgroundColor: 'rgba(255, 255, 255, 0.54)',
+                                    '& .MuiChip-label': {
+                                      overflow: 'visible'
+                                    }
+                                  }}
                                 />
                                 <Chip
                                   label="xyz"
