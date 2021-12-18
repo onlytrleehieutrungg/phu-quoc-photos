@@ -50,7 +50,15 @@ const useStyles = makeStyles({
     overflow: 'hidden',
     borderRadius: '24px',
     margin: '10px 10px',
-    position: 'relative'
+    position: 'relative',
+    '& p': {
+      display: 'none'
+    },
+    '&:hover': {
+      '& p': {
+        display: 'block'
+      }
+    }
   },
   imgThumb: {
     '& span': {
@@ -87,6 +95,7 @@ function download(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
     link.setAttribute('download', 'image.jpg');
     document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
   });
 }
 
@@ -289,7 +298,7 @@ export default function PageGallery() {
                         key={item.pic_url}
                       >
                         <div>
-                          <span>
+                          <p>
                             <div style={{ position: 'absolute', zIndex: 2, paddingTop: '6px' }}>
                               <Stack direction={mobile ? 'column' : 'row'} spacing={1}>
                                 <Chip
@@ -305,11 +314,16 @@ export default function PageGallery() {
                                 <Chip
                                   label="xyz"
                                   size="small"
-                                  sx={{ backgroundColor: 'rgba(255, 255, 255, 0.54)' }}
+                                  sx={{
+                                    backgroundColor: 'rgba(255, 255, 255, 0.54)',
+                                    '& .MuiChip-label': {
+                                      overflow: 'visible'
+                                    }
+                                  }}
                                 />
                               </Stack>
                             </div>
-                          </span>
+                          </p>
                           {loading ? (
                             <Skeleton
                               animation="wave"
@@ -359,9 +373,9 @@ export default function PageGallery() {
                                       sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
                                       aria-label={`info about ${item.title}`}
                                       href={item.pic_url}
-                                      download={item.pic_url}
+                                      download
                                       target="_blank"
-                                      // onClick={() => download(item.pic_url)}
+                                      onClick={() => download(item.pic_url)}
                                     >
                                       <CloudDownloadIcon />
                                     </IconButton>
