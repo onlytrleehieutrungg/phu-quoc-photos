@@ -27,6 +27,7 @@ import Skeleton from '@mui/material/Skeleton';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
 
 const Root = styled('div')(({ theme }) => ({
   margin: '10px 24px',
@@ -171,6 +172,16 @@ export default function PageGallery() {
     }, 2000);
   }, []);
 
+  function downloadAll() {
+    // eslint-disable-next-line no-lone-blocks
+    {
+      // eslint-disable-next-line array-callback-return
+      listEvent.map((item) => {
+        download(item.pic_url);
+      });
+    }
+  }
+
   // useEffect(() => {
   //   setTimeout(() => {
   //     //api
@@ -231,11 +242,26 @@ export default function PageGallery() {
         <Typography gutterBottom variant="h2" align="center">
           <Head>
             <div>{'Hình ảnh mã đơn hàng #' + orderId}</div>
-            <Typography variant="caption" sx={{ display: 'flex', justifyContent: 'center' }}>
+            {/* <Typography variant="caption" sx={{ display: 'flex', justifyContent: 'center' }}>
               Chia sẻ
-            </Typography>
-            <IconButton sx={{ color: 'blue' }}>
-              <FacebookIcon />
+            </Typography> */}
+            <Divider>
+              <Chip label="Chia sẻ" />
+            </Divider>
+            <IconButton
+              sx={{ color: 'blue' }}
+              className="fb-share-button"
+              data-href="https://developers.facebook.com/docs/plugins/"
+              data-layout="button"
+              data-size="large"
+            >
+              <a
+                target="_blank"
+                href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse"
+                className="fb-xfbml-parse-ignore"
+              >
+                <FacebookIcon />
+              </a>
             </IconButton>
             <IconButton sx={{ color: 'blue' }}>
               <TwitterIcon />
@@ -268,7 +294,7 @@ export default function PageGallery() {
                   marginBottom: '10px'
                 }}
               >
-                <MuiButton size="large" startIcon={<DownloadIcon />}>
+                <MuiButton size="large" startIcon={<DownloadIcon />} onClick={() => downloadAll()}>
                   Tải Về
                 </MuiButton>
                 {/* <MuiButton size="large" startIcon={<LinkIcon />}>
