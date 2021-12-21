@@ -86,7 +86,7 @@ export default function MainNavbar() {
             <Logo />
           </RouterLink>
           <Label color="info" sx={{ ml: 1 }}>
-            Phu Quoc Photo
+            PhuQuoc Photos
           </Label>
           <Box sx={{ flexGrow: 1 }} />
           <RouterLink style={{ color: 'black', textDecoration: 'none' }} to="/">
