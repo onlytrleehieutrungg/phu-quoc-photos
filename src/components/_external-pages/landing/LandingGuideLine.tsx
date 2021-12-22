@@ -89,7 +89,7 @@ export default function LandingGuideLine() {
           <MotionInView variants={varFadeInDown}>
             <Typography variant="h3" sx={{ mb: 3, mt: -8 }}>
               {/* Khám phá thêm */}
-              <KeyboardDoubleArrowDownIcon sx={{ fontSize: 40, marginLeft: 5 }} />
+              <KeyboardDoubleArrowDownIcon sx={{ fontSize: 40, left: 4, right: 4 }} />
             </Typography>
             <Typography variant="h3" sx={{ mb: 1 }}>
               Tải ảnh đã chụp dể dàng trong 3 bước

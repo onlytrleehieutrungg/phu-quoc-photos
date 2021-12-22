@@ -29,9 +29,10 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import Chip from '@mui/material/Chip';
 import Divider from '@mui/material/Divider';
+import { FacebookShareButton } from 'react-share';
 
 const Root = styled('div')(({ theme }) => ({
-  margin: '10px 24px',
+  margin: '10px 24px 10px',
   [theme.breakpoints.down('md')]: {
     margin: '88px 10px'
   }
@@ -130,6 +131,7 @@ export default function PageGallery() {
   const largeScreen = useMediaQuery(theme.breakpoints.down('lg'));
   const [state, setState] = useState({ isOpen: false, photoIndex: 0, photoUrl: '' });
   const [loading, setLoading] = useState(true);
+  const [loadingButton, setLoadingButton] = useState(true);
   // const [loadimg, setLoadimg] = useState(true);
   // const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -170,7 +172,14 @@ export default function PageGallery() {
     setTimeout(() => {
       //api
       setLoading(false);
-    }, 2000);
+    }, 1500);
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      //api
+      setLoadingButton(false);
+    }, 3000);
   }, []);
 
   function downloadAll() {
@@ -240,7 +249,7 @@ export default function PageGallery() {
   return (
     <Page title="Kho Ảnh">
       <div style={{ marginTop: '88px', textAlign: 'center' }}>
-        <Typography gutterBottom variant="h2" align="center">
+        <Typography gutterBottom variant="h2" position="absolute" left="5px" right="5px">
           <Head>
             <div>{'Hình ảnh mã đơn hàng #' + orderId}</div>
             {/* <Typography variant="caption" sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -249,15 +258,11 @@ export default function PageGallery() {
             <Divider>
               <Chip label="Chia sẻ" />
             </Divider>
-            <IconButton>
-              {/* https://www.facebook.com/sharer/sharer.php?u=${window.location.href} */}
-              <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=https://stg.phuquocphoto.com/kho-anh?ma-don-hang=order1`}
-                target="_blank"
-                rel="noreferrer"
-              >
+            {/* https://www.facebook.com/sharer/sharer.php?u=${window.location.href} */}
+            <IconButton sx={{ color: 'blue' }}>
+              <FacebookShareButton url={`${window.location.href}`} quote={undefined}>
                 <FacebookIcon />
-              </a>
+              </FacebookShareButton>
             </IconButton>
             <IconButton sx={{ color: 'blue' }}>
               <TwitterIcon />
@@ -267,7 +272,7 @@ export default function PageGallery() {
 
         <SimpleReactLightbox>
           <Root>
-            <Stack spacing={1}>
+            <Stack spacing={1} sx={{ paddingTop: { xs: '200px', sm: '300px' } }}>
               {/* {loading ? (
               <Skeleton variant="rectangular" />
             ) : (
@@ -282,21 +287,29 @@ export default function PageGallery() {
                 </MuiButton>
               </ButtonGroup>
             )} */}
-              <ButtonGroup
-                style={{
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  marginRight: '10px',
-                  marginBottom: '10px'
-                }}
-              >
-                <MuiButton size="large" startIcon={<DownloadIcon />} onClick={() => downloadAll()}>
-                  Tải Về
-                </MuiButton>
-                {/* <MuiButton size="large" startIcon={<LinkIcon />}>
+              {loadingButton ? (
+                ''
+              ) : (
+                <ButtonGroup
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    marginRight: '10px',
+                    marginBottom: '10px'
+                  }}
+                >
+                  <MuiButton
+                    size="large"
+                    startIcon={<DownloadIcon />}
+                    onClick={() => downloadAll()}
+                  >
+                    Tải Về
+                  </MuiButton>
+                  {/* <MuiButton size="large" startIcon={<LinkIcon />}>
                 Chia Sẻ
               </MuiButton> */}
-              </ButtonGroup>
+                </ButtonGroup>
+              )}
               <Box>
                 <SRLWrapper options={options}>
                   <ImageList
@@ -375,7 +388,8 @@ export default function PageGallery() {
                                   height: 'auto',
                                   // padding: '10px 10px',
                                   // margin: '10px 10px 0px 0px',
-                                  borderRadius: '24px'
+                                  borderRadius: '24px',
+                                  backgroundColor: 'black'
                                 }}
                                 onClick={() => {
                                   let updateState = { ...state };
@@ -416,21 +430,25 @@ export default function PageGallery() {
             </Stack>
           </Root>
         </SimpleReactLightbox>
-        <Stack spacing={1}>
-          <Pagination
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              margin: '20px 0'
-            }}
-            count={totalPages}
-            page={page}
-            onChange={handleChange}
-            variant="outlined"
-            shape="rounded"
-            size="large"
-          />
-        </Stack>
+        {loadingButton ? (
+          ''
+        ) : (
+          <Stack spacing={1}>
+            <Pagination
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                margin: '20px 0'
+              }}
+              count={totalPages}
+              page={page}
+              onChange={handleChange}
+              variant="outlined"
+              shape="rounded"
+              size="large"
+            />
+          </Stack>
+        )}
       </div>
     </Page>
   );

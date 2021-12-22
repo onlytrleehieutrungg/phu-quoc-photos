@@ -126,6 +126,7 @@
     "react-router-dom": "^6.0.0-beta.4",
     "react-scripts": "4.0.1",
     "react-scroll": "^1.8.4",
+    "react-share": "^4.4.0",
     "react-slick": "^0.28.0",
     "react-spring": "^9.2.4",
     "redux": "^4.1.1",
