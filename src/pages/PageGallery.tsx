@@ -252,7 +252,7 @@ export default function PageGallery() {
             <IconButton>
               {/* https://www.facebook.com/sharer/sharer.php?u=${window.location.href} */}
               <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=https://stg.phuquocphoto.com/kho-anh?ma-don-hang=order1`}
+                href={`https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`}
                 target="_blank"
                 rel="noreferrer"
               >
