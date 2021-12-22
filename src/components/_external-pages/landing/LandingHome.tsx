@@ -104,7 +104,7 @@ export default function LandingHome() {
             <motion.div variants={varFadeInRight}>
               <Typography
                 sx={{
-                  fontSize: { xs: '40px', md: '60px' },
+                  fontSize: { xs: '30px', md: '60px' },
                   fontWeight: 'bold',
                   color: 'common.white',
                   lineHeight: '0.5rem',
