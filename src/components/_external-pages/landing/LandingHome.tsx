@@ -24,6 +24,10 @@ const RootStyle = styled(motion.div)(({ theme }) => ({
     display: 'flex',
     position: 'fixed',
     alignItems: 'center'
+  },
+  [theme.breakpoints.down('md')]: {
+    width: '100%',
+    backgroundColor: theme.palette.grey[400]
   }
 }));
 
@@ -87,7 +91,12 @@ export default function LandingHome() {
   }
   return (
     <>
-      <RootStyle initial="initial" animate="animate" variants={varWrapEnter}>
+      <RootStyle
+        initial="initial"
+        animate="animate"
+        variants={varWrapEnter}
+        sx={{ height: { xs: '90vh', md: '100vh' } }}
+      >
         <Backdrop />
         <HeroImgStyle alt="hero" src="/static/home/background.png" variants={varFadeInUp} />
         <Container maxWidth="lg">
@@ -95,46 +104,56 @@ export default function LandingHome() {
             <motion.div variants={varFadeInRight}>
               <Typography
                 sx={{
-                  fontSize: '80px',
+                  fontSize: { xs: '40px', md: '60px' },
                   fontWeight: 'bold',
                   color: 'common.white',
-                  lineHeight: '5rem'
+                  lineHeight: '0.5rem',
+                  marginTop: { xs: '100px', md: '0' },
+                  marginLeft: { md: '100px', lg: '10px' }
                 }}
                 component="h1"
+                variant={mobile ? 'h3' : mediumScreen ? 'h2' : 'h1'}
               >
-                PhuQuoc <br />
-                Photo
+                PhuQuoc Photos
               </Typography>
             </motion.div>
             <motion.div variants={varFadeInRight}>
-              <Typography sx={{ color: 'grey.300' }} variant="caption">
+              <Typography
+                sx={{
+                  color: 'grey.300',
+                  fontSize: '20px',
+                  marginLeft: { md: '100px', lg: '10px' }
+                }}
+                variant="caption"
+              >
                 Lưu giữ hình ảnh cho những chuyến đi của bạn.
               </Typography>
             </motion.div>
             <motion.div variants={varFadeInRight}>
               <form onSubmit={handleSubmit}>
                 <Box
-                  style={{
+                  sx={{
                     flex: 1,
                     color: 'common.white',
                     border: 'none',
                     background: 'white',
                     borderRadius: '40px',
                     height: '80px',
-                    minWidth: '400px',
+                    minWidth: '100px',
                     maxWidth: '100%',
-                    display: 'flex'
+                    display: 'flex',
+                    marginLeft: { md: '100px', lg: '10px' }
                   }}
                 >
                   {/* <input defaultValue={user ?? undefined} type="text" name="user" /> */}
                   <Input
-                    style={{
+                    sx={{
                       flex: 1,
                       border: 'none',
                       height: '80px',
                       minWidth: '160px',
                       width: '300px',
-                      marginLeft: '16px'
+                      marginLeft: { xs: '20px', md: '40px' }
                     }}
                     value={orderId}
                     // onChange={(orderID) => setOrderId(orderID)}
@@ -146,7 +165,7 @@ export default function LandingHome() {
                   />
 
                   <Button
-                    style={{
+                    sx={{
                       border: 'none',
                       borderRadius: '40px',
                       height: '48px',
@@ -155,7 +174,7 @@ export default function LandingHome() {
                       marginTop: '16px',
                       marginBottom: '16px',
                       marginLeft: 'auto',
-                      marginRight: '16px'
+                      marginRight: { xs: '20px', md: '40px' }
                     }}
                     variant="contained"
                     type="submit"
@@ -173,7 +192,7 @@ export default function LandingHome() {
           </ContentStyle>
         </Container>
       </RootStyle>
-      <Box sx={{ height: { md: '100vh' } }} />
+      <Box sx={{ height: { md: '90vh' } }} />
     </>
   );
 }

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-has-content */
 import Box from '@mui/material/Box';
 import Page from '../components/Page';
 import ImageList from '@mui/material/ImageList';
@@ -26,6 +27,8 @@ import queryString from 'query-string';
 import Skeleton from '@mui/material/Skeleton';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
+import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
 
 const Root = styled('div')(({ theme }) => ({
   margin: '10px 24px',
@@ -48,7 +51,16 @@ const useStyles = makeStyles({
   wrap: {
     overflow: 'hidden',
     borderRadius: '24px',
-    margin: '10px 10px'
+    margin: '10px 10px',
+    position: 'relative',
+    '& p': {
+      display: 'none'
+    },
+    '&:hover': {
+      '& p': {
+        display: 'block'
+      }
+    }
   },
   imgThumb: {
     '& span': {
@@ -85,8 +97,18 @@ function download(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
     link.setAttribute('download', 'image.jpg');
     document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
   });
 }
+
+const options = {
+  caption: {
+    captionColor: '#a6cfa5',
+    captionFontFamily: 'Raleway, sans-serif',
+    captionFontWeight: '300',
+    captionTextTransform: 'uppercase'
+  }
+};
 
 // const Div = styled('div')(({ theme }) => ({
 //   ...theme.typography.button,
@@ -151,6 +173,16 @@ export default function PageGallery() {
     }, 2000);
   }, []);
 
+  function downloadAll() {
+    // eslint-disable-next-line no-lone-blocks
+    {
+      // eslint-disable-next-line array-callback-return
+      listEvent.map((item) => {
+        download(item.pic_url);
+      });
+    }
+  }
+
   // useEffect(() => {
   //   setTimeout(() => {
   //     //api
@@ -211,12 +243,25 @@ export default function PageGallery() {
         <Typography gutterBottom variant="h2" align="center">
           <Head>
             <div>{'Hình ảnh mã đơn hàng #' + orderId}</div>
-            <MuiButton size="large" startIcon={<FacebookIcon />}>
-              Facebook
-            </MuiButton>
-            <MuiButton size="large" startIcon={<TwitterIcon />}>
-              Twitter
-            </MuiButton>
+            {/* <Typography variant="caption" sx={{ display: 'flex', justifyContent: 'center' }}>
+              Chia sẻ
+            </Typography> */}
+            <Divider>
+              <Chip label="Chia sẻ" />
+            </Divider>
+            <IconButton>
+              {/* https://www.facebook.com/sharer/sharer.php?u=${window.location.href} */}
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=https://stg.phuquocphoto.com/kho-anh?ma-don-hang=order1`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <FacebookIcon />
+              </a>
+            </IconButton>
+            <IconButton sx={{ color: 'blue' }}>
+              <TwitterIcon />
+            </IconButton>
           </Head>
         </Typography>
 
@@ -245,7 +290,7 @@ export default function PageGallery() {
                   marginBottom: '10px'
                 }}
               >
-                <MuiButton size="large" startIcon={<DownloadIcon />}>
+                <MuiButton size="large" startIcon={<DownloadIcon />} onClick={() => downloadAll()}>
                   Tải Về
                 </MuiButton>
                 {/* <MuiButton size="large" startIcon={<LinkIcon />}>
@@ -253,7 +298,7 @@ export default function PageGallery() {
               </MuiButton> */}
               </ButtonGroup>
               <Box>
-                <SRLWrapper>
+                <SRLWrapper options={options}>
                   <ImageList
                     variant="masonry"
                     cols={mobile ? 2 : fullScreen ? 3 : 4}
@@ -275,6 +320,32 @@ export default function PageGallery() {
                         key={item.pic_url}
                       >
                         <div>
+                          <p>
+                            <div style={{ position: 'absolute', zIndex: 2, paddingTop: '6px' }}>
+                              <Stack direction={mobile ? 'column' : 'row'} spacing={1}>
+                                <Chip
+                                  label="abc"
+                                  size="small"
+                                  sx={{
+                                    backgroundColor: 'rgba(255, 255, 255, 0.54)',
+                                    '& .MuiChip-label': {
+                                      overflow: 'visible'
+                                    }
+                                  }}
+                                />
+                                <Chip
+                                  label="xyz"
+                                  size="small"
+                                  sx={{
+                                    backgroundColor: 'rgba(255, 255, 255, 0.54)',
+                                    '& .MuiChip-label': {
+                                      overflow: 'visible'
+                                    }
+                                  }}
+                                />
+                              </Stack>
+                            </div>
+                          </p>
                           {loading ? (
                             <Skeleton
                               animation="wave"
@@ -297,7 +368,7 @@ export default function PageGallery() {
                             <div className={classes.imgThumb}>
                               <img
                                 src={item.pic_url}
-                                alt={item.title}
+                                alt={`${item.title} ${item.timestamp}`}
                                 loading="lazy"
                                 style={{
                                   maxWidth: '100%',
@@ -318,15 +389,15 @@ export default function PageGallery() {
                               <span>
                                 <ImageListItemBar
                                   title={item.timestamp.substring(0, 19)}
-                                  style={{ zIndex: 1 }}
+                                  style={{ zIndex: 2 }}
                                   actionIcon={
                                     <IconButton
                                       sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
                                       aria-label={`info about ${item.title}`}
                                       href={item.pic_url}
-                                      download={item.pic_url}
-                                      target="_self"
-                                      // onClick={() => download(item.pic_url)}
+                                      download
+                                      target="_blank"
+                                      onClick={() => download(item.pic_url)}
                                     >
                                       <CloudDownloadIcon />
                                     </IconButton>
