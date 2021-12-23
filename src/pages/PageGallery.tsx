@@ -191,12 +191,6 @@ export default function PageGallery() {
     }
   }
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     //api
-  //     setLoadimg(false);
-  //   }, 1000);
-  // }, []);
   const [listEvent, setListEvent] = React.useState(images);
 
   const [listError, setListError] = React.useState('');
@@ -228,24 +222,6 @@ export default function PageGallery() {
 
   const handleClickOpen = () => {
     setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const [activeStep, setActiveStep] = React.useState(0);
-
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleStepChange = (step: number) => {
-    setActiveStep(step);
   };
 
   const [id, setID] = useState(generateOrderNumber());
@@ -285,20 +261,6 @@ export default function PageGallery() {
         <SimpleReactLightbox>
           <Root>
             <Stack spacing={1} sx={{ paddingTop: { xs: '220px', sm: '300px' } }}>
-              {/* {loading ? (
-              <Skeleton variant="rectangular" />
-            ) : (
-              <ButtonGroup
-                style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '10px' }}
-              >
-                <MuiButton size="large" startIcon={<DownloadIcon />}>
-                  Tải Về
-                </MuiButton>
-                <MuiButton size="large" startIcon={<LinkIcon />}>
-                  Chia Sẻ
-                </MuiButton>
-              </ButtonGroup>
-            )} */}
               {loadingButton ? (
                 ''
               ) : listEmpty ? (
@@ -328,7 +290,7 @@ export default function PageGallery() {
                 <SRLWrapper options={options}>
                   <ImageList
                     variant="masonry"
-                    cols={mobile ? 1 : fullScreen ? 3 : 4}
+                    cols={mobile ? 2 : fullScreen ? 3 : 4}
                     gap={1}
                     sx={{ overflow: 'visible' }}
                   >
@@ -347,32 +309,6 @@ export default function PageGallery() {
                         key={item.pic_url}
                       >
                         <div>
-                          {/* <p>
-                            <div style={{ position: 'absolute', zIndex: 2, paddingTop: '6px' }}>
-                              <Stack direction={mobile ? 'column' : 'row'} spacing={1}>
-                                <Chip
-                                  label="abc"
-                                  size="small"
-                                  sx={{
-                                    backgroundColor: 'rgba(255, 255, 255, 0.54)',
-                                    '& .MuiChip-label': {
-                                      overflow: 'visible'
-                                    }
-                                  }}
-                                />
-                                <Chip
-                                  label="xyz"
-                                  size="small"
-                                  sx={{
-                                    backgroundColor: 'rgba(255, 255, 255, 0.54)',
-                                    '& .MuiChip-label': {
-                                      overflow: 'visible'
-                                    }
-                                  }}
-                                />
-                              </Stack>
-                            </div>
-                          </p> */}
                           {loading ? (
                             <Skeleton
                               animation="wave"

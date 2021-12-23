@@ -13,7 +13,7 @@ const TITLE = ['Nhập Mã', 'Xem Ảnh ', 'Tải Ảnh'];
 const DESCRIPTION = [
   'Khi bạn vào trang chủ, sẽ có hiển thị ô nhập mã, bạn nhập mã code bạn có được vào ô và nhấn nút gửi .',
   'Sau khi nhập mã, toàn bộ  ảnh của bạn sẽ hiển thị, bản có thể nhấn vào từng bức ảnh để xem ảnh với tỷ lệ đầy đủ',
-  'Bạn có thể lựa chọn tải từng tấm ảnh hoặc tải từng bức ảnh, ảnh của bạn sẽ đươc lưu vào máy của bạn.'
+  'Bạn có thể lựa chọn tải từng tấm ảnh hoặc tải toàn bộ ảnh, ảnh của bạn sẽ đươc lưu vào máy của bạn.'
 ];
 const PLANS = [...Array(3)].map((_, index) => ({
   step: STEP[index],
