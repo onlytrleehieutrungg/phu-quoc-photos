@@ -33,7 +33,7 @@ const RootStyle = styled(motion.div)(({ theme }) => ({
 
 const ContentStyle = styled((props) => <Stack spacing={5} {...props} />)(({ theme }) => ({
   zIndex: 10,
-  maxWidth: 720,
+  maxWidth: '100%',
   margin: 'auto',
   textAlign: 'center',
   position: 'relative',
@@ -41,7 +41,7 @@ const ContentStyle = styled((props) => <Stack spacing={5} {...props} />)(({ them
   paddingBottom: theme.spacing(5),
   [theme.breakpoints.up('md')]: {
     margin: 'unset',
-    textAlign: 'left'
+    textAlign: 'center'
   }
 }));
 
@@ -95,7 +95,7 @@ export default function LandingHome() {
         initial="initial"
         animate="animate"
         variants={varWrapEnter}
-        sx={{ height: { xs: '90vh', md: '100vh' } }}
+        sx={{ height: { xs: '60vh', sm: '70vh', md: '100vh' } }}
       >
         <Backdrop />
         <HeroImgStyle alt="hero" src="/static/home/background.png" variants={varFadeInUp} />
@@ -108,8 +108,8 @@ export default function LandingHome() {
                   fontWeight: 'bold',
                   color: 'common.white',
                   lineHeight: '0.5rem',
-                  marginTop: { xs: '100px', md: '0' },
-                  marginLeft: { md: '100px', lg: '10px' }
+                  marginTop: { xs: '100px', md: '0' }
+                  // marginLeft: { md: '100px', lg: '10px' }
                 }}
                 component="h1"
                 variant={mobile ? 'h3' : mediumScreen ? 'h2' : 'h1'}
@@ -121,8 +121,8 @@ export default function LandingHome() {
               <Typography
                 sx={{
                   color: 'grey.300',
-                  fontSize: '20px',
-                  marginLeft: { md: '100px', lg: '10px' }
+                  fontSize: '20px'
+                  // marginLeft: { md: '100px', lg: '10px' }
                 }}
                 variant="caption"
               >
@@ -130,7 +130,7 @@ export default function LandingHome() {
               </Typography>
             </motion.div>
             <motion.div variants={varFadeInRight}>
-              <form onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit} style={{ display: 'flex', justifyContent: 'center' }}>
                 <Box
                   sx={{
                     flex: 1,
@@ -140,9 +140,8 @@ export default function LandingHome() {
                     borderRadius: '40px',
                     height: '80px',
                     minWidth: '100px',
-                    maxWidth: '100%',
-                    display: 'flex',
-                    marginLeft: { md: '100px', lg: '10px' }
+                    maxWidth: { sm: '80%', md: '60%' },
+                    display: 'flex'
                   }}
                 >
                   {/* <input defaultValue={user ?? undefined} type="text" name="user" /> */}
