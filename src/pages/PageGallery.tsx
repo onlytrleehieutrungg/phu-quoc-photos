@@ -306,7 +306,7 @@ export default function PageGallery() {
                         //   }
                         // }}
                         className={classes.wrap}
-                        key={item.pic_url}
+                        key={item.id}
                       >
                         <div>
                           {loading ? (

@@ -5,13 +5,14 @@ import { Button, Box, Input, Container, Typography, Stack, styled } from '@mui/m
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 //
-import { varFadeInUp, varFadeInRight, varWrapEnter } from '../../animate';
+import { varFadeInRight, varWrapEnter } from '../../animate';
 //
 import { useState } from 'react';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ArrowRightAlt from '@mui/icons-material/ArrowRightAlt';
+import BackgroundSlider from 'react-background-slider';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(motion.div)(({ theme }) => ({
@@ -97,8 +98,32 @@ export default function LandingHome() {
         variants={varWrapEnter}
         sx={{ height: { xs: '65vh', sm: '70vh', md: '100vh' } }}
       >
-        <Backdrop />
-        <HeroImgStyle alt="hero" src="/static/home/background.png" variants={varFadeInUp} />
+        {/* <Backdrop />
+        <HeroImgStyle alt="hero" src="/static/home/background.png" variants={varFadeInUp} /> */}
+        <div
+          style={{
+            top: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 8,
+            width: '100%',
+            height: '100%',
+            maxWidth: '100%',
+            margin: 'auto',
+            position: 'absolute'
+          }}
+        >
+          <BackgroundSlider
+            images={[
+              '/static/home/background.png',
+              '/static/home/background1.png',
+              '/static/home/background2.png',
+              '/static/home/background3.png'
+            ]}
+            duration={5}
+            transition={2}
+          />
+        </div>
         <Container
           maxWidth="lg"
           sx={{
