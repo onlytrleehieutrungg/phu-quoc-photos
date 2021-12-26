@@ -29,11 +29,15 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import Chip from '@mui/material/Chip';
 import Divider from '@mui/material/Divider';
+import { FacebookShareButton, TwitterShareButton } from 'react-share';
 
 const Root = styled('div')(({ theme }) => ({
-  margin: '10px 24px',
+  margin: '10px 24px 10px',
   [theme.breakpoints.down('md')]: {
     margin: '88px 10px'
+  },
+  [theme.breakpoints.down('sm')]: {
+    margin: '88px 0'
   }
 }));
 
@@ -50,16 +54,11 @@ const Head = styled('div')(({ theme }) => ({
 const useStyles = makeStyles({
   wrap: {
     overflow: 'hidden',
-    borderRadius: '24px',
+    borderRadius: '12px',
     margin: '10px 10px',
     position: 'relative',
-    '& p': {
-      display: 'none'
-    },
     '&:hover': {
-      '& p': {
-        display: 'block'
-      }
+      boxShadow: '0 25px 40px rgba(0, 0, 0, 0.7)'
     }
   },
   imgThumb: {
@@ -75,7 +74,7 @@ const useStyles = makeStyles({
   item: {
     transition: '0.3s',
     position: 'relative',
-    borderRadius: '24px',
+    borderRadius: '12px',
     backgroundColor: '#ccc',
     cursor: 'zoom-in',
     '&:hover': {
@@ -130,6 +129,7 @@ export default function PageGallery() {
   const largeScreen = useMediaQuery(theme.breakpoints.down('lg'));
   const [state, setState] = useState({ isOpen: false, photoIndex: 0, photoUrl: '' });
   const [loading, setLoading] = useState(true);
+  const [loadingButton, setLoadingButton] = useState(true);
   // const [loadimg, setLoadimg] = useState(true);
   // const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
@@ -161,6 +161,7 @@ export default function PageGallery() {
         console.log('success with listEvent');
       })
       .catch((err) => {
+        setListError(err);
         console.log(err);
         console.log('error');
       });
@@ -170,7 +171,14 @@ export default function PageGallery() {
     setTimeout(() => {
       //api
       setLoading(false);
-    }, 2000);
+    }, 1500);
+  }, []);
+
+  useEffect(() => {
+    setTimeout(() => {
+      //api
+      setLoadingButton(false);
+    }, 3000);
   }, []);
 
   function downloadAll() {
@@ -183,13 +191,18 @@ export default function PageGallery() {
     }
   }
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     //api
-  //     setLoadimg(false);
-  //   }, 1000);
-  // }, []);
   const [listEvent, setListEvent] = React.useState(images);
+
+  const [listError, setListError] = React.useState('');
+  const [listEmpty, setListEmpty] = React.useState(false);
+
+  useEffect(() => {
+    if (listError !== '') {
+      setListEmpty(true);
+    } else {
+      setListEmpty(false);
+    }
+  }, [listError]);
 
   // const [urlDownload, setUrlDownload] = React.useState('');
   // const download = (e: any) => {
@@ -211,24 +224,6 @@ export default function PageGallery() {
     setOpen(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const [activeStep, setActiveStep] = React.useState(0);
-
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleStepChange = (step: number) => {
-    setActiveStep(step);
-  };
-
   const [id, setID] = useState(generateOrderNumber());
 
   const url = new URL(window.location.href);
@@ -240,7 +235,7 @@ export default function PageGallery() {
   return (
     <Page title="Kho Ảnh">
       <div style={{ marginTop: '88px', textAlign: 'center' }}>
-        <Typography gutterBottom variant="h2" align="center">
+        <Typography gutterBottom variant="h2" position="absolute" left="5px" right="5px">
           <Head>
             <div>{'Hình ảnh mã đơn hàng #' + orderId}</div>
             {/* <Typography variant="caption" sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -249,54 +244,48 @@ export default function PageGallery() {
             <Divider>
               <Chip label="Chia sẻ" />
             </Divider>
-            <IconButton>
-              {/* https://www.facebook.com/sharer/sharer.php?u=${window.location.href} */}
-              <a
-                href={`https://www.facebook.com/sharer/sharer.php?u=https://stg.phuquocphoto.com/kho-anh?ma-don-hang=order1`}
-                target="_blank"
-                rel="noreferrer"
-              >
+            {/* https://www.facebook.com/sharer/sharer.php?u=${window.location.href} */}
+            <IconButton sx={{ color: 'blue' }}>
+              <FacebookShareButton url={`${window.location.href}`} quote={undefined}>
                 <FacebookIcon />
-              </a>
+              </FacebookShareButton>
             </IconButton>
             <IconButton sx={{ color: 'blue' }}>
-              <TwitterIcon />
+              <TwitterShareButton url={`${window.location.href}`}>
+                <TwitterIcon />
+              </TwitterShareButton>
             </IconButton>
           </Head>
         </Typography>
 
         <SimpleReactLightbox>
           <Root>
-            <Stack spacing={1}>
-              {/* {loading ? (
-              <Skeleton variant="rectangular" />
-            ) : (
-              <ButtonGroup
-                style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '10px' }}
-              >
-                <MuiButton size="large" startIcon={<DownloadIcon />}>
-                  Tải Về
-                </MuiButton>
-                <MuiButton size="large" startIcon={<LinkIcon />}>
-                  Chia Sẻ
-                </MuiButton>
-              </ButtonGroup>
-            )} */}
-              <ButtonGroup
-                style={{
-                  display: 'flex',
-                  justifyContent: 'flex-end',
-                  marginRight: '10px',
-                  marginBottom: '10px'
-                }}
-              >
-                <MuiButton size="large" startIcon={<DownloadIcon />} onClick={() => downloadAll()}>
-                  Tải Về
-                </MuiButton>
-                {/* <MuiButton size="large" startIcon={<LinkIcon />}>
+            <Stack spacing={1} sx={{ paddingTop: { xs: '220px', sm: '300px' } }}>
+              {loadingButton ? (
+                ''
+              ) : listEmpty ? (
+                <h3>Không tìm thấy dữ liệu</h3>
+              ) : (
+                <ButtonGroup
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    marginRight: '10px',
+                    marginBottom: '10px'
+                  }}
+                >
+                  <MuiButton
+                    size="large"
+                    startIcon={<DownloadIcon />}
+                    onClick={() => downloadAll()}
+                  >
+                    Tải Về
+                  </MuiButton>
+                  {/* <MuiButton size="large" startIcon={<LinkIcon />}>
                 Chia Sẻ
               </MuiButton> */}
-              </ButtonGroup>
+                </ButtonGroup>
+              )}
               <Box>
                 <SRLWrapper options={options}>
                   <ImageList
@@ -317,35 +306,9 @@ export default function PageGallery() {
                         //   }
                         // }}
                         className={classes.wrap}
-                        key={item.pic_url}
+                        key={item.id}
                       >
                         <div>
-                          <p>
-                            <div style={{ position: 'absolute', zIndex: 2, paddingTop: '6px' }}>
-                              <Stack direction={mobile ? 'column' : 'row'} spacing={1}>
-                                <Chip
-                                  label="abc"
-                                  size="small"
-                                  sx={{
-                                    backgroundColor: 'rgba(255, 255, 255, 0.54)',
-                                    '& .MuiChip-label': {
-                                      overflow: 'visible'
-                                    }
-                                  }}
-                                />
-                                <Chip
-                                  label="xyz"
-                                  size="small"
-                                  sx={{
-                                    backgroundColor: 'rgba(255, 255, 255, 0.54)',
-                                    '& .MuiChip-label': {
-                                      overflow: 'visible'
-                                    }
-                                  }}
-                                />
-                              </Stack>
-                            </div>
-                          </p>
                           {loading ? (
                             <Skeleton
                               animation="wave"
@@ -375,7 +338,8 @@ export default function PageGallery() {
                                   height: 'auto',
                                   // padding: '10px 10px',
                                   // margin: '10px 10px 0px 0px',
-                                  borderRadius: '24px'
+                                  borderRadius: '12px',
+                                  backgroundColor: 'black'
                                 }}
                                 onClick={() => {
                                   let updateState = { ...state };
@@ -388,7 +352,38 @@ export default function PageGallery() {
                               />
                               <span>
                                 <ImageListItemBar
-                                  title={item.timestamp.substring(0, 19)}
+                                  title={
+                                    <>
+                                      <Stack direction="row" spacing={1}>
+                                        <Chip
+                                          label="abc"
+                                          variant="outlined"
+                                          clickable
+                                          size="small"
+                                          sx={{
+                                            color: 'rgb(255, 255, 255)',
+                                            marginRight: '2px',
+                                            '& .MuiChip-label': {
+                                              overflow: 'visible'
+                                            }
+                                          }}
+                                        />
+                                        <Chip
+                                          label="abc"
+                                          variant="outlined"
+                                          clickable
+                                          size="small"
+                                          sx={{
+                                            color: 'rgb(255, 255, 255)',
+                                            marginRight: '2px',
+                                            '& .MuiChip-label': {
+                                              overflow: 'visible'
+                                            }
+                                          }}
+                                        />
+                                      </Stack>
+                                    </>
+                                  }
                                   style={{ zIndex: 2 }}
                                   actionIcon={
                                     <IconButton
@@ -402,7 +397,10 @@ export default function PageGallery() {
                                       <CloudDownloadIcon />
                                     </IconButton>
                                   }
-                                  sx={{ borderRadius: '24px' }}
+                                  sx={{
+                                    borderRadius: '12px',
+                                    background: 'linear-gradient(0, #000, transparent);'
+                                  }}
                                 />
                               </span>
                             </div>
@@ -416,21 +414,27 @@ export default function PageGallery() {
             </Stack>
           </Root>
         </SimpleReactLightbox>
-        <Stack spacing={1}>
-          <Pagination
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              margin: '20px 0'
-            }}
-            count={totalPages}
-            page={page}
-            onChange={handleChange}
-            variant="outlined"
-            shape="rounded"
-            size="large"
-          />
-        </Stack>
+        {loadingButton ? (
+          ''
+        ) : listEmpty ? (
+          ''
+        ) : (
+          <Stack spacing={1}>
+            <Pagination
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                margin: '20px 0'
+              }}
+              count={totalPages}
+              page={page}
+              onChange={handleChange}
+              variant="outlined"
+              shape="rounded"
+              size="large"
+            />
+          </Stack>
+        )}
       </div>
     </Page>
   );
