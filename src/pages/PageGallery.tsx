@@ -29,12 +29,15 @@ import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import Chip from '@mui/material/Chip';
 import Divider from '@mui/material/Divider';
-import { FacebookShareButton } from 'react-share';
+import { FacebookShareButton, TwitterShareButton } from 'react-share';
 
 const Root = styled('div')(({ theme }) => ({
   margin: '10px 24px 10px',
   [theme.breakpoints.down('md')]: {
     margin: '88px 10px'
+  },
+  [theme.breakpoints.down('sm')]: {
+    margin: '88px 0'
   }
 }));
 
@@ -51,16 +54,11 @@ const Head = styled('div')(({ theme }) => ({
 const useStyles = makeStyles({
   wrap: {
     overflow: 'hidden',
-    borderRadius: '24px',
+    borderRadius: '12px',
     margin: '10px 10px',
     position: 'relative',
-    '& p': {
-      display: 'none'
-    },
     '&:hover': {
-      '& p': {
-        display: 'block'
-      }
+      boxShadow: '0 25px 40px rgba(0, 0, 0, 0.7)'
     }
   },
   imgThumb: {
@@ -76,7 +74,7 @@ const useStyles = makeStyles({
   item: {
     transition: '0.3s',
     position: 'relative',
-    borderRadius: '24px',
+    borderRadius: '12px',
     backgroundColor: '#ccc',
     cursor: 'zoom-in',
     '&:hover': {
@@ -163,6 +161,7 @@ export default function PageGallery() {
         console.log('success with listEvent');
       })
       .catch((err) => {
+        setListError(err);
         console.log(err);
         console.log('error');
       });
@@ -192,13 +191,18 @@ export default function PageGallery() {
     }
   }
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     //api
-  //     setLoadimg(false);
-  //   }, 1000);
-  // }, []);
   const [listEvent, setListEvent] = React.useState(images);
+
+  const [listError, setListError] = React.useState('');
+  const [listEmpty, setListEmpty] = React.useState(false);
+
+  useEffect(() => {
+    if (listError !== '') {
+      setListEmpty(true);
+    } else {
+      setListEmpty(false);
+    }
+  }, [listError]);
 
   // const [urlDownload, setUrlDownload] = React.useState('');
   // const download = (e: any) => {
@@ -218,24 +222,6 @@ export default function PageGallery() {
 
   const handleClickOpen = () => {
     setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const [activeStep, setActiveStep] = React.useState(0);
-
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleStepChange = (step: number) => {
-    setActiveStep(step);
   };
 
   const [id, setID] = useState(generateOrderNumber());
@@ -265,30 +251,20 @@ export default function PageGallery() {
               </FacebookShareButton>
             </IconButton>
             <IconButton sx={{ color: 'blue' }}>
-              <TwitterIcon />
+              <TwitterShareButton url={`${window.location.href}`}>
+                <TwitterIcon />
+              </TwitterShareButton>
             </IconButton>
           </Head>
         </Typography>
 
         <SimpleReactLightbox>
           <Root>
-            <Stack spacing={1} sx={{ paddingTop: { xs: '200px', sm: '300px' } }}>
-              {/* {loading ? (
-              <Skeleton variant="rectangular" />
-            ) : (
-              <ButtonGroup
-                style={{ display: 'flex', justifyContent: 'flex-end', marginRight: '10px' }}
-              >
-                <MuiButton size="large" startIcon={<DownloadIcon />}>
-                  Tải Về
-                </MuiButton>
-                <MuiButton size="large" startIcon={<LinkIcon />}>
-                  Chia Sẻ
-                </MuiButton>
-              </ButtonGroup>
-            )} */}
+            <Stack spacing={1} sx={{ paddingTop: { xs: '220px', sm: '300px' } }}>
               {loadingButton ? (
                 ''
+              ) : listEmpty ? (
+                <h3>Không tìm thấy dữ liệu</h3>
               ) : (
                 <ButtonGroup
                   style={{
@@ -330,35 +306,9 @@ export default function PageGallery() {
                         //   }
                         // }}
                         className={classes.wrap}
-                        key={item.pic_url}
+                        key={item.id}
                       >
                         <div>
-                          <p>
-                            <div style={{ position: 'absolute', zIndex: 2, paddingTop: '6px' }}>
-                              <Stack direction={mobile ? 'column' : 'row'} spacing={1}>
-                                <Chip
-                                  label="abc"
-                                  size="small"
-                                  sx={{
-                                    backgroundColor: 'rgba(255, 255, 255, 0.54)',
-                                    '& .MuiChip-label': {
-                                      overflow: 'visible'
-                                    }
-                                  }}
-                                />
-                                <Chip
-                                  label="xyz"
-                                  size="small"
-                                  sx={{
-                                    backgroundColor: 'rgba(255, 255, 255, 0.54)',
-                                    '& .MuiChip-label': {
-                                      overflow: 'visible'
-                                    }
-                                  }}
-                                />
-                              </Stack>
-                            </div>
-                          </p>
                           {loading ? (
                             <Skeleton
                               animation="wave"
@@ -388,7 +338,7 @@ export default function PageGallery() {
                                   height: 'auto',
                                   // padding: '10px 10px',
                                   // margin: '10px 10px 0px 0px',
-                                  borderRadius: '24px',
+                                  borderRadius: '12px',
                                   backgroundColor: 'black'
                                 }}
                                 onClick={() => {
@@ -402,7 +352,38 @@ export default function PageGallery() {
                               />
                               <span>
                                 <ImageListItemBar
-                                  title={item.timestamp.substring(0, 19)}
+                                  title={
+                                    <>
+                                      <Stack direction="row" spacing={1}>
+                                        <Chip
+                                          label="abc"
+                                          variant="outlined"
+                                          clickable
+                                          size="small"
+                                          sx={{
+                                            color: 'rgb(255, 255, 255)',
+                                            marginRight: '2px',
+                                            '& .MuiChip-label': {
+                                              overflow: 'visible'
+                                            }
+                                          }}
+                                        />
+                                        <Chip
+                                          label="abc"
+                                          variant="outlined"
+                                          clickable
+                                          size="small"
+                                          sx={{
+                                            color: 'rgb(255, 255, 255)',
+                                            marginRight: '2px',
+                                            '& .MuiChip-label': {
+                                              overflow: 'visible'
+                                            }
+                                          }}
+                                        />
+                                      </Stack>
+                                    </>
+                                  }
                                   style={{ zIndex: 2 }}
                                   actionIcon={
                                     <IconButton
@@ -416,7 +397,10 @@ export default function PageGallery() {
                                       <CloudDownloadIcon />
                                     </IconButton>
                                   }
-                                  sx={{ borderRadius: '24px' }}
+                                  sx={{
+                                    borderRadius: '12px',
+                                    background: 'linear-gradient(0, #000, transparent);'
+                                  }}
                                 />
                               </span>
                             </div>
@@ -431,6 +415,8 @@ export default function PageGallery() {
           </Root>
         </SimpleReactLightbox>
         {loadingButton ? (
+          ''
+        ) : listEmpty ? (
           ''
         ) : (
           <Stack spacing={1}>

@@ -5,12 +5,14 @@ import { Button, Box, Input, Container, Typography, Stack, styled } from '@mui/m
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 //
-import { varFadeInUp, varFadeInRight, varWrapEnter } from '../../animate';
+import { varFadeInRight, varWrapEnter } from '../../animate';
 //
 import { useState } from 'react';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import ArrowRightAlt from '@mui/icons-material/ArrowRightAlt';
+import BackgroundSlider from 'react-background-slider';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(motion.div)(({ theme }) => ({
@@ -33,15 +35,14 @@ const RootStyle = styled(motion.div)(({ theme }) => ({
 
 const ContentStyle = styled((props) => <Stack spacing={5} {...props} />)(({ theme }) => ({
   zIndex: 10,
-  maxWidth: 720,
+  width: '100%',
+  maxWidth: '100%',
   margin: 'auto',
   textAlign: 'center',
   position: 'relative',
-  paddingTop: theme.spacing(5),
-  paddingBottom: theme.spacing(5),
   [theme.breakpoints.up('md')]: {
     margin: 'unset',
-    textAlign: 'left'
+    textAlign: 'center'
   }
 }));
 
@@ -95,11 +96,44 @@ export default function LandingHome() {
         initial="initial"
         animate="animate"
         variants={varWrapEnter}
-        sx={{ height: { xs: '90vh', md: '100vh' } }}
+        sx={{ height: { xs: '65vh', sm: '70vh', md: '100vh' } }}
       >
-        <Backdrop />
-        <HeroImgStyle alt="hero" src="/static/home/background.png" variants={varFadeInUp} />
-        <Container maxWidth="lg">
+        {/* <Backdrop />
+        <HeroImgStyle alt="hero" src="/static/home/background.png" variants={varFadeInUp} /> */}
+        <div
+          style={{
+            top: 0,
+            right: 0,
+            bottom: 0,
+            zIndex: 8,
+            width: '100%',
+            height: '100%',
+            maxWidth: '100%',
+            margin: 'auto',
+            position: 'absolute'
+          }}
+        >
+          <BackgroundSlider
+            images={[
+              '/static/home/background.png',
+              '/static/home/background1.png',
+              '/static/home/background2.png',
+              '/static/home/background3.png'
+            ]}
+            duration={5}
+            transition={2}
+          />
+        </div>
+        <Container
+          maxWidth="lg"
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%',
+            padding: '40px 24px'
+          }}
+        >
           <ContentStyle>
             <motion.div variants={varFadeInRight}>
               <Typography
@@ -107,9 +141,7 @@ export default function LandingHome() {
                   fontSize: { xs: '30px', md: '60px' },
                   fontWeight: 'bold',
                   color: 'common.white',
-                  lineHeight: '0.5rem',
-                  marginTop: { xs: '100px', md: '0' },
-                  marginLeft: { md: '100px', lg: '10px' }
+                  lineHeight: '0.5rem'
                 }}
                 component="h1"
                 variant={mobile ? 'h3' : mediumScreen ? 'h2' : 'h1'}
@@ -121,8 +153,8 @@ export default function LandingHome() {
               <Typography
                 sx={{
                   color: 'grey.300',
-                  fontSize: '20px',
-                  marginLeft: { md: '100px', lg: '10px' }
+                  fontSize: '20px'
+                  // marginLeft: { md: '100px', lg: '10px' }
                 }}
                 variant="caption"
               >
@@ -140,9 +172,11 @@ export default function LandingHome() {
                     borderRadius: '40px',
                     height: '80px',
                     minWidth: '100px',
-                    maxWidth: '100%',
+                    width: '100%',
                     display: 'flex',
-                    marginLeft: { md: '100px', lg: '10px' }
+                    justifyContent: 'center',
+                    maxWidth: '700px',
+                    margin: '0 auto'
                   }}
                 >
                   {/* <input defaultValue={user ?? undefined} type="text" name="user" /> */}
@@ -152,7 +186,7 @@ export default function LandingHome() {
                       border: 'none',
                       height: '80px',
                       minWidth: '160px',
-                      width: '300px',
+                      width: '100%',
                       marginLeft: { xs: '20px', md: '40px' }
                     }}
                     value={orderId}
@@ -170,12 +204,12 @@ export default function LandingHome() {
                       borderRadius: '40px',
                       height: '48px',
                       minWidth: '80px',
-                      width: '104px',
                       marginTop: '16px',
                       marginBottom: '16px',
                       marginLeft: 'auto',
                       marginRight: { xs: '20px', md: '40px' }
                     }}
+                    endIcon={<ArrowRightAlt />}
                     variant="contained"
                     type="submit"
                     // component={RouterLink}
