@@ -11,7 +11,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 const STEP = [1, 2, 3];
 const TITLE = ['Nhập Mã', 'Xem Ảnh ', 'Tải Ảnh'];
 const DESCRIPTION = [
-  'Khi bạn vào trang chủ, sẽ có hiển thị ô nhập mã, bạn nhập mã code bạn có được vào ô và nhấn nút gửi .',
+  'Khi bạn vào trang chủ, sẽ có hiển thị ô nhập mã, bạn nhập mã code bạn có được vào ô và nhấn nút gửi.',
   'Sau khi nhập mã, toàn bộ  ảnh của bạn sẽ hiển thị, bản có thể nhấn vào từng bức ảnh để xem ảnh với tỷ lệ đầy đủ',
   'Bạn có thể lựa chọn tải từng tấm ảnh hoặc tải toàn bộ ảnh, ảnh của bạn sẽ đươc lưu vào máy của bạn.'
 ];
@@ -68,7 +68,7 @@ function PlanCard({ plan, cardIndex }: PlanCardProps) {
             Bước {step}
           </Typography>
           <Typography variant="h3">{title}</Typography>
-          <Typography variant="body1" sx={{ mb: 2, display: 'block' }}>
+          <Typography variant="body2" sx={{ mb: 2, display: 'block', opacity: 0.6 }}>
             {description}
           </Typography>
         </div>
@@ -101,7 +101,7 @@ export default function LandingGuideLine() {
 
         <Grid container spacing={mobile ? 2 : 5}>
           {PLANS.map((plan, index) => (
-            <Grid key={plan.step} item xs={12} md={4}>
+            <Grid key={plan.step} item xs={12} md={4} style={{ textAlign: 'center' }}>
               <MotionInView variants={index === 1 ? varFadeInDown : varFadeInUp}>
                 <PlanCard plan={plan} cardIndex={index} />
               </MotionInView>

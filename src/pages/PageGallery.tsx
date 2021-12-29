@@ -38,14 +38,15 @@ const Root = styled('div')(({ theme }) => ({
   margin: '10px 24px 10px',
   display: 'flex',
   [theme.breakpoints.down('md')]: {
-    margin: '88px 10px'
+    margin: '10px 10px'
   },
   [theme.breakpoints.down('sm')]: {
-    margin: '88px 0'
+    margin: '2px 0'
   }
 }));
 
 const Head = styled('div')(({ theme }) => ({
+  height: '100vh',
   [theme.breakpoints.down('md')]: {
     padding: '30px 0'
   },
@@ -447,7 +448,10 @@ export default function PageGallery() {
                   zIndex: mobile ? 10 : 8,
                   bottom: '3%',
                   justifyContent: 'center',
-                  left: mobile ? '47%' : fullScreen ? '48%' : '50%',
+                  marginLeft: 'auto',
+                  marginRight: 'auto',
+                  right: 0,
+                  left: 0,
                   fontSize: 100
                 }}
               />
@@ -462,7 +466,9 @@ export default function PageGallery() {
                     zIndex: mobile ? 10 : 8,
                     bottom: '3%',
                     justifyContent: 'center',
-                    left: mobile ? '40%' : fullScreen ? '45%' : '48%'
+                    textAlign: 'center',
+                    left: 0,
+                    right: 0
                   }}
                 >
                   Xem Ảnh
@@ -471,9 +477,22 @@ export default function PageGallery() {
             </div>
           </div>
         </Head>
-        <SimpleReactLightbox>
-          <Root>
-            <Stack spacing={1} sx={{ paddingTop: { xs: '450px', sm: '700px' } }}>
+        {/* <div
+          style={{
+            display: 'flex',
+            backgroundColor: 'red',
+            height: mobile ? '720px' : '800px',
+            width: '100%',
+            right: 0,
+            top: 0
+          }}
+        ></div> */}
+        <Root>
+          <SimpleReactLightbox>
+            <Stack
+              spacing={1}
+              // sx={{ marginTop: { xs: '460px', sm: '480px', md: '620px', lg: '750px' } }}
+            >
               {loadingButton ? (
                 ''
               ) : listEmpty ? (
@@ -626,8 +645,8 @@ export default function PageGallery() {
                 </SRLWrapper>
               </Box>
             </Stack>
-          </Root>
-        </SimpleReactLightbox>
+          </SimpleReactLightbox>
+        </Root>
         {loadingButton ? (
           ''
         ) : listEmpty ? (
