@@ -98,7 +98,7 @@ export default function MainNavbar() {
           <MHidden width="mdUp">
             <MenuMobile isOffset={isOffset} isHome={isHome} navConfig={navConfig} />
           </MHidden> */}
-          <Link color="black" variant="h5" href="#GuideLine">
+          <Link color="black" variant="h5" href="#GuideLine" style={{ textDecoration: 'none' }}>
             Hướng Dẫn
           </Link>
         </Container>

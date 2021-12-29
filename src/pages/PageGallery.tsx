@@ -13,12 +13,14 @@ import {
   ButtonGroup,
   Stack,
   ImageListItemBar,
-  IconButton
+  IconButton,
+  Link
 } from '@mui/material';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import SimpleReactLightbox from 'simple-react-lightbox';
+import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import { SRLWrapper } from 'simple-react-lightbox';
 import Pagination from '@mui/material/Pagination';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
@@ -27,12 +29,14 @@ import queryString from 'query-string';
 import Skeleton from '@mui/material/Skeleton';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import Chip from '@mui/material/Chip';
-import Divider from '@mui/material/Divider';
 import { FacebookShareButton, TwitterShareButton } from 'react-share';
+import Chip from '@mui/material/Chip';
+
+// import Divider from '@mui/material/Divider';
 
 const Root = styled('div')(({ theme }) => ({
   margin: '10px 24px 10px',
+  display: 'flex',
   [theme.breakpoints.down('md')]: {
     margin: '88px 10px'
   },
@@ -42,7 +46,6 @@ const Root = styled('div')(({ theme }) => ({
 }));
 
 const Head = styled('div')(({ theme }) => ({
-  padding: '60px 0',
   [theme.breakpoints.down('md')]: {
     padding: '30px 0'
   },
@@ -80,6 +83,22 @@ const useStyles = makeStyles({
     '&:hover': {
       zIndex: 1,
       transform: 'scale(1.2)'
+    }
+  },
+  animatedItem: {
+    animation: `$myEffect`,
+    animationDuration: '2s',
+    animationDelay: '1s',
+    animationFillMode: 'backwards',
+    animationIterationCount: 'infinite',
+    animationDirection: 'alternateReverse'
+  },
+  '@keyframes myEffect': {
+    from: {
+      top: '83%'
+    },
+    to: {
+      top: '88%'
     }
   }
 });
@@ -132,13 +151,17 @@ export default function PageGallery() {
   const [loadingButton, setLoadingButton] = useState(true);
   // const [loadimg, setLoadimg] = useState(true);
   // const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
-
   const [page, setPage] = React.useState(1);
-
+  const scrollToRef = (ref: any) => window.scrollTo(0, 650);
+  const myRef = useRef(null);
+  const executeScroll = () => scrollToRef(myRef);
+  console.log('adssadsadasd' + myRef);
   const [filters, setFilters] = useState({
     page: 1,
     size: 12
   });
+  const FONT_PRIMARY = 'Be Vietnam Pro'; // Google Font
+  // const FONT_SECONDARY = 'CircularStd, sans-serif'; // Local Font
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
     setFilters({
@@ -234,33 +257,223 @@ export default function PageGallery() {
 
   return (
     <Page title="Kho Ảnh">
-      <div style={{ marginTop: '88px', textAlign: 'center' }}>
-        <Typography gutterBottom variant="h2" position="absolute" left="5px" right="5px">
-          <Head>
-            <div>{'Hình ảnh mã đơn hàng #' + orderId}</div>
-            {/* <Typography variant="caption" sx={{ display: 'flex', justifyContent: 'center' }}>
-              Chia sẻ
-            </Typography> */}
-            <Divider>
-              <Chip label="Chia sẻ" />
-            </Divider>
-            {/* https://www.facebook.com/sharer/sharer.php?u=${window.location.href} */}
-            <IconButton sx={{ color: 'blue' }}>
-              <FacebookShareButton url={`${window.location.href}`} quote={undefined}>
-                <FacebookIcon />
-              </FacebookShareButton>
-            </IconButton>
-            <IconButton sx={{ color: 'blue' }}>
-              <TwitterShareButton url={`${window.location.href}`}>
-                <TwitterIcon />
-              </TwitterShareButton>
-            </IconButton>
-          </Head>
-        </Typography>
+      <div>
+        <Head>
+          {' '}
+          <div
+            style={{
+              backgroundColor: 'white',
+              zIndex: mobile ? 9 : 0,
+              opacity: 0.8,
+              transform: 'translate3d(0px, 0px, 0px)',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: 'cover',
+              position: 'absolute',
+              right: 0,
+              top: 0,
+              width: '100%',
+              height: '100%'
+            }}
+          ></div>
+          <div
+            style={{
+              backgroundColor: '#cccccc',
+              backgroundImage: `url("https://livefromearth.media/assets/img/inspiration-in.jpg")`,
+              transform: 'translate3d(0px, 0px, 0px)',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              backgroundSize: 'cover',
+              position: 'absolute',
+              // zIndex: mobile ? 0 : 8,
+              right: 0,
+              top: 0,
+              width: mobile ? '100%' : '75%',
+              height: '100%'
+            }}
+          ></div>
+          <div style={{ zIndex: mobile ? 10 : 8 }}>
+            <div
+              style={{
+                fontFamily: FONT_PRIMARY,
+                display: 'inline-block'
+              }}
+            >
+              <span
+                style={{
+                  position: 'absolute',
+                  zIndex: mobile ? 10 : 8,
+                  top: mobile ? '38%' : '30%',
+                  display: 'inline-block',
+                  textRendering: 'optimizeLegibility',
+                  textTransform: 'uppercase',
+                  fontSize: mobile ? '12px' : '15px',
+                  letterSpacing: '2px',
+                  marginLeft: mobile ? '25%' : fullScreen ? '20%' : '16%'
+                }}
+              >
+                PhuQuoc Photos
+              </span>
 
+              <span
+                style={{
+                  position: 'absolute',
+                  fontWeight: 100,
+                  top: mobile ? '39.5%' : '32%',
+                  boxSizing: 'inherit',
+                  lineHeight: 1.2,
+                  visibility: 'inherit',
+                  marginLeft: mobile ? '9%' : '9%',
+                  content: '',
+                  left: 0,
+                  display: 'inline-block',
+                  marginTop: '-1px',
+                  width: mobile ? '50px' : fullScreen ? '60px' : '70px',
+                  height: '2px',
+                  background: 'black',
+                  color: '#000',
+                  fontSize: '18px',
+                  zIndex: mobile ? 10 : 8,
+                  textRendering: 'optimizeLegibility'
+                }}
+              ></span>
+            </div>
+            <div
+              style={{
+                fontFamily: FONT_PRIMARY,
+                display: 'block'
+              }}
+            >
+              <Typography
+                variant="h1"
+                align="center"
+                style={{
+                  position: 'absolute',
+                  fontSize: mobile ? '48px' : '88px',
+                  marginLeft: '9%',
+                  bottom: '2%',
+                  height: '100%',
+                  display: 'flex',
+                  zIndex: mobile ? 10 : 8,
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'flex-start',
+                  overflow: 'hidden'
+                }}
+              >
+                Chào Bạn
+              </Typography>
+            </div>
+            <div
+              style={{
+                fontFamily: FONT_PRIMARY,
+                display: 'block'
+              }}
+            >
+              {' '}
+              <span
+                style={{
+                  position: 'absolute',
+                  height: '100%',
+                  top: mobile ? '8%' : '13%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  zIndex: mobile ? 10 : 8,
+                  boxSizing: 'inherit',
+                  marginLeft: '9%',
+                  fontSize: '16px',
+                  textRendering: 'optimizeLegibility'
+                }}
+              >
+                Đây Là Hình Ảnh Từ Chuyến Đi Của Bạn
+              </span>
+              <div>
+                <div
+                  style={{
+                    fontFamily: FONT_PRIMARY,
+                    display: 'inline-block'
+                  }}
+                >
+                  <span
+                    style={{
+                      display: 'block',
+                      position: 'absolute',
+                      top: mobile ? '75%' : '80%',
+                      zIndex: mobile ? 10 : 8,
+                      height: '100%',
+                      fontSize: '12px',
+                      justifyContent: 'center',
+                      marginLeft: '9%',
+                      color: 'black',
+                      flexDirection: 'column',
+                      alignItems: 'flex-start',
+                      overflow: 'hidden'
+                    }}
+                  >
+                    Chia Sẻ:
+                  </span>
+                </div>
+                <div
+                  style={{
+                    display: 'block',
+                    position: 'absolute',
+                    bottom: mobile ? '20%' : '15.5%',
+                    justifyContent: 'center',
+                    zIndex: mobile ? 10 : 8,
+                    marginLeft: mobile ? '20%' : '12%',
+                    alignItems: 'flex-start',
+                    overflow: 'hidden'
+                  }}
+                >
+                  {' '}
+                  <IconButton sx={{ color: '#000' }}>
+                    <FacebookShareButton url={`${window.location.href}`} quote={undefined}>
+                      <FacebookIcon />
+                    </FacebookShareButton>
+                  </IconButton>
+                  <IconButton sx={{ color: '#000' }}>
+                    <TwitterShareButton url={`${window.location.href}`}>
+                      <TwitterIcon />
+                    </TwitterShareButton>
+                  </IconButton>
+                </div>
+              </div>{' '}
+              <KeyboardDoubleArrowDownIcon
+                className={classes.animatedItem}
+                fontSize="large"
+                sx={{
+                  position: 'absolute',
+                  zIndex: mobile ? 10 : 8,
+                  bottom: '3%',
+                  justifyContent: 'center',
+                  left: mobile ? '47%' : fullScreen ? '48%' : '50%',
+                  fontSize: 100
+                }}
+              />
+              <div ref={myRef}>
+                {' '}
+                <Link
+                  color="black"
+                  variant="h5"
+                  onClick={executeScroll}
+                  sx={{
+                    position: 'absolute',
+                    zIndex: mobile ? 10 : 8,
+                    bottom: '3%',
+                    justifyContent: 'center',
+                    left: mobile ? '40%' : fullScreen ? '45%' : '48%'
+                  }}
+                >
+                  Xem Ảnh
+                </Link>
+              </div>
+            </div>
+          </div>
+        </Head>
         <SimpleReactLightbox>
           <Root>
-            <Stack spacing={1} sx={{ paddingTop: { xs: '220px', sm: '300px' } }}>
+            <Stack spacing={1} sx={{ paddingTop: { xs: '450px', sm: '700px' } }}>
               {loadingButton ? (
                 ''
               ) : listEmpty ? (
@@ -271,7 +484,8 @@ export default function PageGallery() {
                     display: 'flex',
                     justifyContent: 'flex-end',
                     marginRight: '10px',
-                    marginBottom: '10px'
+                    marginBottom: '10px',
+                    marginTop: mobile ? '50px' : ''
                   }}
                 >
                   <MuiButton
@@ -308,7 +522,7 @@ export default function PageGallery() {
                         className={classes.wrap}
                         key={item.id}
                       >
-                        <div>
+                        <div ref={myRef}>
                           {loading ? (
                             <Skeleton
                               animation="wave"
