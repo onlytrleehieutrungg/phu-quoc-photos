@@ -175,7 +175,7 @@ export default function PageGallery() {
     // convert filters to page=1&size=10
     const paramsString = queryString.stringify(filters);
     axios
-      .get(`https://api-sale.reso.vn/api/v1/order-medias?order-code=${orderId}&${paramsString}`)
+      .get(`https://api.phuquocphoto.com/api/v1/order-medias?order-code=${orderId}&${paramsString}`)
       .then((res) => {
         console.log(res);
         const { data, metadata } = res.data;
