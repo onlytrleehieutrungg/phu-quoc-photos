@@ -1,4 +1,4 @@
-FROM node:14.17.3-alpine as builder
+FROM node:16.13.1-alpine as builder
 
 WORKDIR /usr/src/app
 
@@ -19,7 +19,7 @@ RUN yarn install && \
     yarn global add env-cmd && \
     env-cmd -f .env.production yarn build
 
-FROM node:14.17.3-alpine
+FROM node:16.13.1-alpine
 
 # Create app directory
 WORKDIR /usr/src/app
