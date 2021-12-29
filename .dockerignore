@@ -1,0 +1,7 @@
+node_modules
+.next
+.vscode
+.commitlintrc.js
+.eslintrc
+.husky
+.prettierrc
