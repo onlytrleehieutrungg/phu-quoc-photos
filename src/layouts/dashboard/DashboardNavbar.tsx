@@ -1,12 +1,16 @@
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, AppBar, Toolbar, Container } from '@mui/material';
+import { Box, AppBar, Toolbar, Container, IconButton } from '@mui/material';
 // hooks
 import useOffSetTop from '../../hooks/useOffSetTop';
 // components
 import Logo from '../../components/Logo';
 import Label from '../../components/Label';
+// import FacebookIcon from '@mui/icons-material/Facebook';
+// import TwitterIcon from '@mui/icons-material/Twitter';
+import MenuIcon from '@mui/icons-material/Menu';
+// import { FacebookShareButton, TwitterShareButton } from 'react-share';
 // ----------------------------------------------------------------------
 
 const APP_BAR_MOBILE = 64;
@@ -64,7 +68,7 @@ export default function MainNavbar() {
   const isHome = pathname === '/';
 
   return (
-    <AppBar sx={{ boxShadow: 0, bgcolor: 'background.default' }}>
+    <AppBar sx={{ boxShadow: 0, bgcolor: 'transparent' }}>
       <ToolbarStyle
         disableGutters
         sx={{
@@ -88,10 +92,25 @@ export default function MainNavbar() {
           <Label color="info" sx={{ ml: 1 }}>
             PhuQuoc Photos
           </Label>
-          <Box sx={{ flexGrow: 1 }} />
-          <RouterLink style={{ color: 'black', textDecoration: 'none' }} to="/">
-            Home
-          </RouterLink>
+          <Box sx={{ flexGrow: 2 }} />
+          <div style={{ marginRight: '6px', fontSize: '20px' }}>
+            {' '}
+            <RouterLink style={{ color: 'black', textDecoration: 'none' }} to="/">
+              Home
+            </RouterLink>
+          </div>
+
+          <div style={{ marginLeft: '10px', fontSize: '12px' }}>
+            {' '}
+            <IconButton
+              edge="start"
+              color="inherit"
+              sx={{ color: 'black', mr: 4 }}
+              aria-label="menu"
+            >
+              <MenuIcon />
+            </IconButton>
+          </div>
         </Container>
       </ToolbarStyle>
       {isOffset && <ToolbarShadowStyle />}
