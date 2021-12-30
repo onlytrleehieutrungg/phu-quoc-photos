@@ -9,6 +9,8 @@ import RtlLayout from './components/RtlLayout';
 import ScrollToTop from './components/ScrollToTop';
 import { ProgressBarStyle } from './components/LoadingScreen';
 import ThemePrimaryColor from './components/ThemePrimaryColor';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 // ----------------------------------------------------------------------
 const test = 'a';

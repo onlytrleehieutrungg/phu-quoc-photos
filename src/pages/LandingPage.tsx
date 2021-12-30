@@ -1,11 +1,12 @@
 // material
 import { styled } from '@mui/material/styles';
+import LandingCTA from 'components/_external-pages/landing/LandingCTA';
 // components
 import Page from '../components/Page';
 import {
-  LandingHome,
   // LandingMinimal,
-  LandingGuideLine
+  LandingGuideLine,
+  LandingHome
 } from '../components/_external-pages/landing';
 
 // ----------------------------------------------------------------------
@@ -28,7 +29,7 @@ export default function LandingPage() {
       <LandingHome />
       <ContentStyle>
         <LandingGuideLine />
-        {/* <LandingMinimal /> */}
+        <LandingCTA />
       </ContentStyle>
     </RootStyle>
   );
