@@ -1,7 +1,7 @@
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, AppBar, Toolbar, Container, Link } from '@mui/material';
+import { Box, AppBar, Toolbar, Container, Link, Typography } from '@mui/material';
 // hooks
 import useOffSetTop from '../../hooks/useOffSetTop';
 // components
@@ -92,14 +92,19 @@ export default function MainNavbar() {
           </RouterLink>
           <Box sx={{ flexGrow: 1 }} />
 
-          {/* <MHidden width="mdDown">
-            <MenuDesktop isOffset={isOffset} isHome={isHome} navConfig={navConfig} />
-          </MHidden>
-          <MHidden width="mdUp">
-            <MenuMobile isOffset={isOffset} isHome={isHome} navConfig={navConfig} />
-          </MHidden> */}
-          <Link color="black" variant="h5" href="#GuideLine" style={{ textDecoration: 'none' }}>
-            Hướng Dẫn
+          <Link href="#guideline" style={{ textDecoration: 'none' }}>
+            <Typography
+              variant="h6"
+              sx={{
+                transition: 'all 300ms ease-in-out',
+                color: isOffset ? 'black' : '#fff',
+                '&:hover': {
+                  borderBottom: '1px solid #fff'
+                }
+              }}
+            >
+              Hướng dẫn
+            </Typography>
           </Link>
         </Container>
       </ToolbarStyle>

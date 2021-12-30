@@ -69,7 +69,7 @@ export default function Router() {
     {
       path: '/',
       element: <MainLayout />,
-      children: [{ element: <LandingPage /> }]
+      children: [{ element: <LandingPage />, path: '' }]
     },
     { path: '*', element: <Navigate to="/404" replace /> }
   ]);
