@@ -126,7 +126,21 @@ export default function LandingHome() {
               filter: 'blur(2px)',
               height: '100%',
               objectFit: 'cover'
-            }
+            },
+            '& .slick-slider': {
+              height: '100%'
+            },
+            '& .slick-list': {
+              height: '100%'
+            },
+            '& .slick-track': {
+              display: 'flex !important',
+              height: '100%'
+            },
+            '& .slick-slide': {
+              height: 'inherit !important'
+            },
+            '& .slick-slide div': { height: '100%' }
           }}
         >
           <Slider
@@ -160,7 +174,7 @@ export default function LandingHome() {
           }}
         >
           <ContentStyle>
-            <Box sx={{ mb: 6, mt: -4 }}>
+            <Box sx={{ mb: { xs: 4, md: 6 }, mt: -4 }}>
               <motion.div variants={varFadeInRight}>
                 <Typography
                   sx={{

@@ -61,7 +61,7 @@ function PlanCard({ guide, index }: PlanCardProps) {
             })
           }}
         />
-        <Typography variant="h5" paragraph>
+        <Typography variant="h4" paragraph>
           {guide.title}
         </Typography>
         <Typography sx={{ color: isLight ? 'text.secondary' : 'common.white' }}>

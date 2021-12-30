@@ -1,7 +1,7 @@
 import { Link as ScrollLink } from 'react-scroll';
 import { useLocation, Outlet } from 'react-router-dom';
 // material
-import { Box, Link, Container, Typography } from '@mui/material';
+import { Box, Link, Container, Typography, styled } from '@mui/material';
 // components
 import Logo from '../../components/Logo';
 //
@@ -9,13 +9,17 @@ import MainFooter from './MainFooter';
 import MainNavbar from './MainNavbar';
 
 // ----------------------------------------------------------------------
+const RootStyle = styled('div')({
+  minHeight: '100%',
+  overflow: 'hidden'
+});
 
 export default function MainLayout() {
   const { pathname } = useLocation();
   const isHome = pathname === '/';
 
   return (
-    <>
+    <RootStyle>
       <MainNavbar />
       <div>
         <Outlet />
@@ -45,6 +49,6 @@ export default function MainLayout() {
           </Container>
         </Box>
       )}
-    </>
+    </RootStyle>
   );
 }
