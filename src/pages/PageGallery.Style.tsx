@@ -50,29 +50,6 @@ const Head = styled(Box)(({ theme }) => ({
   }
 }));
 
-const BackgroundImage = styled('div')(({ theme }) => ({
-  backgroundColor: '#cccccc',
-  transform: 'translate3d(0px, 0px, 0px)',
-  backgroundPosition: 'center',
-  backgroundRepeat: 'no-repeat',
-  backgroundSize: 'cover',
-  position: 'absolute',
-  // zIndex: mobile ? 0 : 8,
-  right: 0,
-  top: 0,
-  width: '75%',
-  height: '100%',
-  [theme.breakpoints.down('md')]: {
-    width: '75%',
-    padding: '30px 0'
-  },
-  [theme.breakpoints.down('sm')]: {
-    width: '100%',
-    zIndex: 97,
-    padding: '10px 0'
-  }
-}));
-
 const Item0 = styled(Box)(({ theme }) => ({
   fontWeight: 100,
   lineHeight: 1.2,
@@ -83,83 +60,11 @@ const Item0 = styled(Box)(({ theme }) => ({
   fontSize: '18px'
 }));
 
-const Item1 = styled('span')(({ theme }) => ({
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  fontFamily: FONT_PRIMARY,
-  position: 'absolute',
-  top: '29vh',
-  display: 'inline-block',
-  textRendering: 'optimizeLegibility',
-  textTransform: 'uppercase',
-  fontSize: '15px',
-  letterSpacing: '2px',
-  marginLeft: '17%',
-  textAlign: 'center',
-  zIndex: 99,
-  [theme.breakpoints.down('md')]: {
-    marginLeft: '19%'
-  },
-  [theme.breakpoints.down('sm')]: {
-    marginLeft: '24%'
-  }
-}));
-
 const Item2 = styled(Typography)(({ theme }) => ({
   ...theme.typography.h1,
   fontSize: '88px',
   [theme.breakpoints.down('sm')]: {
     fontSize: '50px'
-  }
-}));
-const Item3 = styled('span')(({ theme }) => ({
-  ...theme.typography.caption,
-  padding: theme.spacing(1),
-  position: 'absolute',
-  height: '100%',
-  top: '13%',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  boxSizing: 'inherit',
-  marginLeft: '9%',
-  fontSize: '16px',
-  textRendering: 'optimizeLegibility',
-  zIndex: 99
-}));
-
-const Item4 = styled('span')(({ theme }) => ({
-  ...theme.typography.caption,
-  fontFamily: FONT_PRIMARY,
-  display: 'block',
-  position: 'absolute',
-  top: '80%',
-  zIndex: 99,
-  height: '100%',
-  fontSize: '12px',
-  justifyContent: 'center',
-  marginLeft: '10%',
-  color: 'black',
-  alignItems: 'flex-start',
-  overflow: 'hidden'
-}));
-
-const ShareButton = styled('div')(({ theme }) => ({
-  display: 'block',
-  position: 'absolute',
-  bottom: '15.8%',
-  justifyContent: 'center',
-  zIndex: 99,
-  marginLeft: '13%',
-  alignItems: 'flex-start',
-  overflow: 'hidden',
-  [theme.breakpoints.down('xl')]: {
-    marginLeft: '14.5%',
-    bottom: '15vh'
-  },
-  [theme.breakpoints.down('sm')]: {
-    marginLeft: '20%',
-    bottom: '15%'
   }
 }));
 
