@@ -104,7 +104,7 @@ const useStyles = makeStyles({
   }
 });
 
-function download(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
+function download(e: any) {
   axios({
     method: 'GET',
     responseType: 'blob',

@@ -116,7 +116,7 @@ export default function LandingGuideLine() {
               </Typography>
             </MotionInView> */}
             <MotionInView variants={varFadeInDown}>
-              <Typography variant="h3">Liên Hệ Với Chúng Tôi</Typography>
+              <Typography variant="h3">LIÊN HỆ VỚI CHÚNG TÔI</Typography>
             </MotionInView>
           </Box>
         </MotionInView>
