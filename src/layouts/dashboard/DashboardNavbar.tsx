@@ -1,12 +1,12 @@
-import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { AppBar, Box, Container, Link, Toolbar, Typography } from '@mui/material';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, AppBar, Toolbar, Container } from '@mui/material';
-// hooks
-import useOffSetTop from '../../hooks/useOffSetTop';
+import { useLocation } from 'react-router-dom';
 // components
 import Logo from '../../components/Logo';
-import Label from '../../components/Label';
+// hooks
+import useOffSetTop from '../../hooks/useOffSetTop';
+
 // import FacebookIcon from '@mui/icons-material/Facebook';
 // import TwitterIcon from '@mui/icons-material/Twitter';
 
@@ -68,7 +68,7 @@ export default function MainNavbar() {
   const isHome = pathname === '/';
 
   return (
-    <AppBar sx={{ boxShadow: 0, bgcolor: 'transparent' }}>
+    <AppBar sx={{ boxShadow: 0, bgcolor: 'transparent', zIndex: 200 }}>
       <ToolbarStyle
         disableGutters
         sx={{
@@ -86,19 +86,25 @@ export default function MainNavbar() {
             justifyContent: 'space-between'
           }}
         >
-          <RouterLink to="/">
+          <Link href="/">
             <Logo />
-          </RouterLink>
-          <Label color="info" sx={{ ml: 1 }}>
-            PhuQuoc Photos
-          </Label>
+          </Link>
+
           <Box sx={{ flexGrow: 2 }} />
-          <div style={{ marginRight: '6px', fontSize: '20px' }}>
-            {' '}
-            <RouterLink style={{ color: 'black', textDecoration: 'none' }} to="/">
-              Home
-            </RouterLink>
-          </div>
+          <Link href="/" style={{ textDecoration: 'none' }}>
+            <Typography
+              variant="h6"
+              sx={{
+                transition: 'all 300ms ease-in-out',
+                color: isOffset ? 'black' : '#fff',
+                '&:hover': {
+                  borderBottom: '1px solid #fff'
+                }
+              }}
+            >
+              Hướng dẫn
+            </Typography>
+          </Link>
         </Container>
       </ToolbarStyle>
       {isOffset && <ToolbarShadowStyle />}

@@ -1,11 +1,13 @@
 import FacebookIcon from '@mui/icons-material/Facebook';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
 import TwitterIcon from '@mui/icons-material/Twitter';
-import { Box, Link, Stack, Typography, Container } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Box, Container, Link, Stack, Typography } from '@mui/material';
+import { styled, useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import { makeStyles } from '@mui/styles';
-import axios from 'axios';
-import React, { useEffect, useRef, useState } from 'react';
+import { MotionInView, varFadeInRight } from 'components/animate';
+import React, { useRef } from 'react';
+import { Img } from 'react-image';
 import { FacebookShareButton, TwitterShareButton } from 'react-share';
 
 const Root = styled('div')(({ theme }) => ({
@@ -86,32 +88,16 @@ const WhiteBackround = styled('div')(({ theme }) => ({
     zIndex: 4
   }
 }));
-export default function Header() {
+export default function Header({ order }: { order: any }) {
   const classes = useStyles();
-  const [username, setUsername] = useState('');
   const scrollToRef = (ref: any) => window.scrollTo(0, 750);
   const myRef = useRef(null);
   const executeScroll = () => scrollToRef(myRef);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  useEffect(() => {
-    axios
-      .get(`https://api.phuquocphoto.com/api/v1/orders/${orderId}`)
-      .then((res) => {
-        const { data } = res.data;
-
-        var splitted = res.data.customer_name?.split(' ', 2);
-        setUsername(splitted && splitted[1]);
-      })
-      .catch((err) => {
-        console.log('error' + err);
-      });
-  }, []);
-
-  const url = new URL(window.location.href);
-
-  let params = new URLSearchParams(url.search);
-
-  let orderId = params.get('ma-don-hang');
+  var username =
+    order.customer_name?.split(' ', 2) && (order.customer_name?.split(/[ ]+/) as []).at(-1);
   return (
     <Head sx={{ justifyContent: 'left', alignItems: 'center', display: 'flex' }}>
       <WhiteBackround />
@@ -173,7 +159,7 @@ export default function Header() {
           >
             Chào {username}
           </Item2>
-          <Typography variant="caption">Đây là hình ảnh từ chuyến đi của bạn</Typography>
+          <Typography variant="caption">Cùng xem hình ảnh từ chuyến đi của bạn nhé</Typography>
         </Box>
         <Stack direction="row" spacing={1} alignItems="center">
           <Typography>Chia Sẻ: </Typography>
@@ -187,23 +173,26 @@ export default function Header() {
           </Box>
         </Stack>
       </Container>
-
-      <Box
-        sx={{
-          width: { xs: '100%', sm: '75%' },
-          height: '100%',
-          position: 'absolute',
-          right: 0,
-          top: 0
-        }}
-      >
+      <MotionInView variants={varFadeInRight}>
         <Box
-          component="img"
-          src="https://livefromearth.media/assets/img/inspiration-in.jpg"
-          alt=""
-          sx={{ width: '100%', height: '100%', objectFit: 'cover' }}
-        />
-      </Box>
+          sx={{
+            width: { xs: '100%', sm: '75%' },
+            height: '100%',
+            position: 'absolute',
+            right: 0,
+            top: 0
+          }}
+        >
+          <Img
+            src={
+              `${order.google_photo_album?.cover_photo_base_url}=w${isMobile ? 450 : 1960}` ??
+              'https://livefromearth.media/assets/img/inspiration-in.jpg'
+            }
+            alt=""
+            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
+          />
+        </Box>
+      </MotionInView>
     </Head>
   );
 }
