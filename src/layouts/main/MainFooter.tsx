@@ -53,7 +53,7 @@ export default function MainFooter() {
         >
           <Grid item xs={12} sx={{ mb: 3 }}>
             <ScrollLink to="move_top" spy smooth>
-              <Logo sx={{ mx: { xs: 'auto', md: 'inherit' } }} />
+              <Logo sx={{ mx: { xs: 'auto', md: 'inherit' }, width: 128, height: 'auto' }} />
             </ScrollLink>
           </Grid>
           <Grid item xs={8} md={3}>

@@ -12,6 +12,10 @@ import Router from './routes';
 // theme
 import ThemeConfig from './theme';
 import GlobalStyles from './theme/globalStyles';
+// import styles
+import 'lightgallery/css/lightgallery.css';
+import 'lightgallery/css/lg-zoom.css';
+import 'lightgallery/css/lg-thumbnail.css';
 
 // ----------------------------------------------------------------------
 const queryClient = new QueryClient();

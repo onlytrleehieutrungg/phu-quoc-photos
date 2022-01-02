@@ -1,6 +1,14 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-// import DownloadIcon from '@mui/icons-material/Download';
-import { CircularProgress, IconButton, ImageListItemBar, Stack, Typography } from '@mui/material';
+import {
+  CircularProgress,
+  Container,
+  IconButton,
+  ImageListItemBar,
+  Skeleton,
+  Stack,
+  Typography
+} from '@mui/material';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import ImageList from '@mui/material/ImageList';
@@ -9,21 +17,25 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { makeStyles } from '@mui/styles';
 import axios from 'axios';
+import lgThumbnail from 'lightgallery/plugins/thumbnail';
+import lgZoom from 'lightgallery/plugins/zoom';
+import LightGallery from 'lightgallery/react';
 import { isNull } from 'lodash';
-import React from 'react';
-import { useInfiniteQuery } from 'react-query';
-import SimpleReactLightbox, { SRLWrapper } from 'simple-react-lightbox';
+import React, { useCallback, useRef } from 'react';
+import { Img } from 'react-image';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { useInfiniteQuery, useQuery } from 'react-query';
 import Page from '../components/Page';
 import Header, { Root } from '../pages/PageGallery.Style';
 
 const useStyles = makeStyles({
   wrap: {
     overflow: 'hidden',
-    borderRadius: '12px',
+    borderRadius: '2px',
     margin: '10px 10px',
     position: 'relative',
     '&:hover': {
-      boxShadow: '0 25px 40px rgba(0, 0, 0, 0.7)'
+      boxShadow: '0 0px 14px #ccc'
     }
   },
   imgThumb: {
@@ -37,33 +49,17 @@ const useStyles = makeStyles({
     }
   },
   item: {
-    transition: '0.3s',
+    transition: 'all 0.3s ease-in-out',
     position: 'relative',
-    borderRadius: '12px',
+    borderRadius: '2px',
     backgroundColor: '#ccc',
     cursor: 'zoom-in',
     '&:hover': {
       zIndex: 1,
-      transform: 'scale(1.2)'
+      transform: 'scale(1.1)'
     }
   }
 });
-
-function download(e: any) {
-  axios({
-    method: 'GET',
-    responseType: 'blob',
-    url: `${e}`
-  }).then((response) => {
-    const url = window.URL.createObjectURL(new Blob([response.data]));
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', 'image.jpg');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  });
-}
 
 export default function PageGallery() {
   const classes = useStyles();
@@ -75,31 +71,152 @@ export default function PageGallery() {
   let params = new URLSearchParams(url.search);
   let orderId = params.get('ma-don-hang');
 
-  const { data, error, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-    useInfiniteQuery(
-      'projects',
-      async ({ pageParam: nextToken }) => {
-        const res = await axios.get(
-          `https://api.phuquocphoto.com/api/v1/orders/${orderId}/google-photo-medias`,
-          {
-            params: {
-              'page-token': nextToken
-            }
+  const { isLoading: loadingOrder, data: order } = useQuery(['album', orderId], async () => {
+    const res = await axios.get(`https://api.phuquocphoto.com/api/v1/orders/${orderId}`);
+    return res.data;
+  });
+  const lightGallery = useRef<any>(null);
+  const { data, error, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery(
+    'projects',
+    async ({ pageParam: nextToken }) => {
+      const res = await axios.get(
+        `https://api.phuquocphoto.com/api/v1/orders/${orderId}/google-photo-medias`,
+        {
+          params: {
+            'page-token': nextToken,
+            'page-size': 10
           }
-        );
-        return res.data;
-      },
-      {
-        getNextPageParam: (lastPage, pages) => lastPage.next_page_token ?? false
-      }
-    );
+        }
+      );
+      return res.data;
+    },
+    {
+      getNextPageParam: (lastPage, pages) => lastPage.next_page_token ?? false,
+      onSuccess: () => lightGallery.current?.refresh()
+    }
+  );
 
-  console.log(`data`, data);
+  const onInit = useCallback((detail) => {
+    if (detail) {
+      lightGallery.current = detail.instance;
+    }
+  }, []);
+
+  const getItems = useCallback(() => {
+    return data?.pages ? (
+      data?.pages?.map(({ media_items: items }: any, index) => (
+        <React.Fragment key={`group-${index}`}>
+          {items.map((item: any) => (
+            <ImageListItem key={item.id} className={[classes.wrap, 'img-responsive'].join(' ')}>
+              <div>
+                <div className={classes.imgThumb}>
+                  <div>
+                    <a
+                      // data-lg-size={`${item.media_metadata.width}-${item.media_metadata.height}`}
+                      className="gallery-selector"
+                      data-download-url={`${item.base_url}=w${1960}-d`}
+                      data-src={`${item.base_url}=w${1960}-d`}
+                      data-external-thumb-image={item.base_url}
+                      data-responsive={`${item.base_url}=w${1960} 780, ${
+                        item.base_url
+                      }=w${1960} 1024`}
+                      data-sub-html={`<h4>${item.filename} - ${
+                        item.media_metadata.creationTime
+                      }</h4> <p><a href="${
+                        item.base_url
+                      }=w${1960}-d" target="_blank" rel="noreferrer">
+          Tải ảnh
+        </a></p>`}
+                    >
+                      <Img
+                        src={item.base_url}
+                        loader={<Skeleton />}
+                        alt={`${isNull(item.title) ? '' : item.title} ${
+                          isNull(item.timestamp) ? '' : item.timestamp
+                        }`}
+                        loading="lazy"
+                        style={{
+                          maxWidth: '100%',
+                          height: 'auto',
+                          borderRadius: 'inherit',
+                          backgroundColor: 'black'
+                        }}
+                        onClick={() => {}}
+                        className={classes.item}
+                      />
+                    </a>
+                  </div>
+                  <span>
+                    <ImageListItemBar
+                      title={
+                        <>
+                          <Stack direction="row" spacing={1}>
+                            {item.tags?.split(',').map((tag: string) => (
+                              <Chip
+                                key={tag}
+                                label={tag}
+                                variant="outlined"
+                                clickable
+                                size="small"
+                                sx={{
+                                  color: 'rgb(255, 255, 255)',
+                                  marginRight: '2px',
+                                  '& .MuiChip-label': {
+                                    overflow: 'visible'
+                                  }
+                                }}
+                              />
+                            ))}
+                          </Stack>
+                        </>
+                      }
+                      style={{ zIndex: 2 }}
+                      actionIcon={
+                        <a href={`${item.base_url}=w${1960}-d`} target="_blank" rel="noreferrer">
+                          <IconButton
+                            sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                            aria-label={`info about ${item.title}`}
+                          >
+                            <CloudDownloadIcon />
+                          </IconButton>
+                        </a>
+                      }
+                      sx={{
+                        borderRadius: 'inherit',
+                        background: 'linear-gradient(0, #000, transparent);'
+                      }}
+                    />
+                  </span>
+                </div>
+              </div>
+            </ImageListItem>
+          ))}
+        </React.Fragment>
+      ))
+    ) : (
+      <Typography>Không tìm thấy hình ảnh của bạn</Typography>
+    );
+  }, [classes.imgThumb, classes.item, classes.wrap, data?.pages]);
+
+  if (loadingOrder) {
+    return (
+      <Container
+        sx={{ height: '60vh', justifyContent: 'center', alignItems: 'center', display: 'flex' }}
+      >
+        <CircularProgress />
+      </Container>
+    );
+  }
+
+  const mediaLength = data?.pages.reduce(
+    (acc, { media_items }) => [...acc, ...media_items],
+    []
+  ).length;
 
   return (
     <Page title="Kho Ảnh">
       <div>
-        <Header />
+        <Header order={order} />
 
         <Box>
           {isLoading ? (
@@ -108,109 +225,52 @@ export default function PageGallery() {
             <Typography>Không tìm thấy dữ liệu {(error as any).message}</Typography>
           ) : (
             <Stack spacing={1}>
-              <SimpleReactLightbox>
-                <Root>
-                  <Stack spacing={1}>
-                    <Box>
-                      <SRLWrapper>
-                        {data?.pages ? (
-                          // TODO: CHECK THIS IMAGE LIST (NOT RERENDERs)
-                          <ImageList
-                            variant="masonry"
-                            cols={mobile ? 2 : fullScreen ? 3 : 4}
-                            gap={1}
-                            sx={{ overflow: 'visible' }}
-                          >
-                            {data?.pages.map(({ media_items: medias }, i) => (
-                              <React.Fragment key={`group-${i}`}>
-                                {medias?.map((item: any) => (
-                                  <ImageListItem className={classes.wrap} key={item.id}>
-                                    <div>
-                                      <div className={classes.imgThumb}>
-                                        <img
-                                          src={item.base_url}
-                                          alt={`${isNull(item.title) ? '' : item.title} ${
-                                            isNull(item.timestamp) ? '' : item.timestamp
-                                          }`}
-                                          loading="lazy"
-                                          style={{
-                                            maxWidth: '100%',
-                                            height: 'auto',
-                                            borderRadius: '12px',
-                                            backgroundColor: 'black'
-                                          }}
-                                          onClick={() => {}}
-                                          className={classes.item}
-                                        />
-                                        <span>
-                                          <ImageListItemBar
-                                            title={
-                                              <>
-                                                <Stack direction="row" spacing={1}>
-                                                  {item.tags?.split(',').map((tag: string) => (
-                                                    <Chip
-                                                      key={tag}
-                                                      label={tag}
-                                                      variant="outlined"
-                                                      clickable
-                                                      size="small"
-                                                      sx={{
-                                                        color: 'rgb(255, 255, 255)',
-                                                        marginRight: '2px',
-                                                        '& .MuiChip-label': {
-                                                          overflow: 'visible'
-                                                        }
-                                                      }}
-                                                    />
-                                                  ))}
-                                                </Stack>
-                                              </>
-                                            }
-                                            style={{ zIndex: 2 }}
-                                            actionIcon={
-                                              <IconButton
-                                                sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                                                aria-label={`info about ${item.title}`}
-                                                href={item.base_url}
-                                                download
-                                                target="_blank"
-                                                onClick={() => download(item.base_url)}
-                                              >
-                                                <CloudDownloadIcon />
-                                              </IconButton>
-                                            }
-                                            sx={{
-                                              borderRadius: '12px',
-                                              background: 'linear-gradient(0, #000, transparent);'
-                                            }}
-                                          />
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </ImageListItem>
-                                ))}
-                              </React.Fragment>
-                            ))}
-                          </ImageList>
-                        ) : (
-                          <Typography>Không tìm thấy hình ảnh của bạn</Typography>
-                        )}
-                      </SRLWrapper>
-                    </Box>
-                    <button
-                      type="button"
-                      onClick={() => fetchNextPage()}
-                      disabled={!hasNextPage || isFetchingNextPage}
+              <Root>
+                <Stack spacing={1}>
+                  <Box
+                    sx={{
+                      overflow: 'hidden',
+                      '& .infinite-scroll-component': {
+                        overflow: 'hidden !important'
+                      }
+                    }}
+                  >
+                    <LightGallery
+                      speed={500}
+                      plugins={[lgThumbnail, lgZoom]}
+                      mode="lg-fade"
+                      exThumbImage="data-external-thumb-image"
+                      onInit={onInit}
+                      selector=".gallery-selector"
                     >
-                      {isFetchingNextPage
-                        ? 'Loading more...'
-                        : hasNextPage
-                        ? 'Load More'
-                        : 'Nothing more to load'}
-                    </button>
-                  </Stack>
-                </Root>
-              </SimpleReactLightbox>
+                      <InfiniteScroll
+                        dataLength={mediaLength}
+                        next={fetchNextPage}
+                        hasMore={Boolean(hasNextPage)}
+                        loader={
+                          <Container sx={{ textAlign: 'center', py: 2 }}>
+                            <CircularProgress />
+                          </Container>
+                        }
+                        endMessage={
+                          <p style={{ textAlign: 'center' }}>
+                            <i>Bạn đã xem hết hình ảnh</i>
+                          </p>
+                        }
+                      >
+                        <ImageList
+                          variant="masonry"
+                          cols={mobile ? 2 : fullScreen ? 3 : 4}
+                          gap={0}
+                          sx={{ overflow: 'visible' }}
+                        >
+                          {getItems()}
+                        </ImageList>
+                      </InfiniteScroll>
+                    </LightGallery>
+                  </Box>
+                </Stack>
+              </Root>
             </Stack>
           )}
         </Box>
