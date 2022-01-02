@@ -1,79 +1,74 @@
 // material
-import { useTheme, styled, alpha } from '@mui/material/styles';
-import { Box, Grid, Card, Stack, Container, Typography } from '@mui/material';
-//
-import { varFadeIn, varFadeInUp, MotionInView, varFadeInDown } from '../../animate';
-
-import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
+import { Box, Container, Grid, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+//
+import { MotionInView, varFadeInDown, varFadeInUp } from '../../animate';
+import { CardIconStyle, CardStyle, SectionWrapper, shadowIcon } from './Landing.styles';
 
 // ----------------------------------------------------------------------
-const STEP = [1, 2, 3];
-const TITLE = ['Nhập Mã', 'Xem Ảnh ', 'Tải Ảnh'];
-const DESCRIPTION = [
-  'Khi bạn vào trang chủ, sẽ có hiển thị ô nhập mã, bạn nhập mã code bạn có được vào ô và nhấn nút gửi .',
-  'Sau khi nhập mã, toàn bộ  ảnh của bạn sẽ hiển thị, bản có thể nhấn vào từng bức ảnh để xem ảnh với tỷ lệ đầy đủ',
-  'Bạn có thể lựa chọn tải từng tấm ảnh hoặc tải toàn bộ ảnh, ảnh của bạn sẽ đươc lưu vào máy của bạn.'
-];
-const PLANS = [...Array(3)].map((_, index) => ({
-  step: STEP[index],
-  title: TITLE[index],
-  description: DESCRIPTION[index]
-}));
 
-const RootStyle = styled('div')(({ theme }) => ({
-  paddingTop: theme.spacing(10),
-  [theme.breakpoints.up('md')]: {
-    paddingBottom: theme.spacing(5)
+const PLANS = [
+  {
+    icon: '/static/icons/ic_code.svg',
+    title: <>Nhập Mã</>,
+    description:
+      'Khi bạn vào trang chủ, sẽ có hiển thị ô nhập mã, bạn nhập mã code bạn có được vào ô và nhấn nút gửi.'
+  },
+  {
+    icon: '/static/icons/ic_image.svg',
+    title: <>Xem Ảnh</>,
+    description:
+      'Sau khi nhập mã, toàn bộ  ảnh của bạn sẽ hiển thị, bản có thể nhấn vào từng bức ảnh để xem ảnh với tỷ lệ đầy đủ.'
+  },
+  {
+    icon: '/static/icons/ic_download.svg',
+    title: <>Tải Ảnh</>,
+    description:
+      'Bạn có thể lựa chọn tải từng tấm ảnh hoặc tải toàn bộ ảnh, ảnh của bạn sẽ đươc lưu vào máy của bạn.'
   }
-}));
+];
 
 // ----------------------------------------------------------------------
 
 type PlanCardProps = {
-  plan: {
-    step: number;
-    title: string;
+  guide: {
+    icon: string;
+    title: any;
     description: string;
   };
-  cardIndex: number;
+  index: number;
 };
 
-function PlanCard({ plan, cardIndex }: PlanCardProps) {
+function PlanCard({ guide, index }: PlanCardProps) {
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
-  const { step, title, description } = plan;
 
   return (
-    <Card
-      sx={{
-        p: 5,
-        boxShadow: (theme) =>
-          `0px 48px 80px ${alpha(
-            isLight ? theme.palette.grey[500] : theme.palette.common.black,
-            0.12
-          )}`,
-        ...(cardIndex === 1 && {
-          boxShadow: (theme) =>
-            `0px 48px 80px ${alpha(
-              isLight ? theme.palette.grey[500] : theme.palette.common.black,
-              0.48
-            )}`
-        })
-      }}
-    >
-      <Stack spacing={5}>
-        <div>
-          <Typography variant="h6" sx={{ mb: 2, display: 'block' }}>
-            Bước {step}
-          </Typography>
-          <Typography variant="h3">{title}</Typography>
-          <Typography variant="body1" sx={{ mb: 2, display: 'block' }}>
-            {description}
-          </Typography>
-        </div>
-      </Stack>
-    </Card>
+    <CardStyle variant="outlined">
+      <Box textAlign="center">
+        <CardIconStyle
+          src={guide.icon}
+          sx={{
+            ...(index % 3 === 0 && {
+              filter: (theme) => shadowIcon(theme.palette.warning.main)
+            }),
+            ...(index % 3 === 1 && {
+              filter: (theme) => shadowIcon(theme.palette.error.main)
+            }),
+            ...(index % 3 === 2 && {
+              filter: (theme) => shadowIcon(theme.palette.info.main)
+            })
+          }}
+        />
+        <Typography variant="h4" paragraph>
+          {guide.title}
+        </Typography>
+        <Typography sx={{ color: isLight ? 'text.secondary' : 'common.white' }}>
+          {guide.description}
+        </Typography>
+      </Box>
+    </CardStyle>
   );
 }
 
@@ -83,44 +78,24 @@ export default function LandingGuideLine() {
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   return (
-    <RootStyle id="GuideLine">
+    <SectionWrapper id="guideline">
       <Container maxWidth="lg">
-        <Box sx={{ mb: { xs: 1, md: 10 }, textAlign: 'center' }}>
+        <Box sx={{ mb: { xs: 10, md: 15 }, textAlign: 'center' }}>
           <MotionInView variants={varFadeInDown}>
-            <Typography variant="h3" sx={{ mb: 3, mt: -8 }}>
-              {/* Khám phá thêm */}
-              <a href="#GuideLine" style={{ color: 'black' }}>
-                <KeyboardDoubleArrowDownIcon sx={{ fontSize: 40, left: 4, right: 4 }} />
-              </a>
-            </Typography>
-            <Typography variant="h3" sx={{ mb: 1 }}>
-              Tải ảnh đã chụp dễ dàng trong 3 bước
-            </Typography>
+            <Typography variant="h3">Tải ảnh đã chụp dễ dàng trong 3 bước</Typography>
           </MotionInView>
         </Box>
 
         <Grid container spacing={mobile ? 2 : 5}>
           {PLANS.map((plan, index) => (
-            <Grid key={plan.step} item xs={12} md={4}>
+            <Grid key={`guide-${index}`} item xs={12} md={4} sx={{ textAlign: 'center' }}>
               <MotionInView variants={index === 1 ? varFadeInDown : varFadeInUp}>
-                <PlanCard plan={plan} cardIndex={index} />
+                <PlanCard guide={plan} index={index} />
               </MotionInView>
             </Grid>
           ))}
         </Grid>
-        <MotionInView variants={varFadeIn}>
-          <Box sx={{ pt: 5, mt: 10, textAlign: 'center' }}>
-            {/* <MotionInView variants={varFadeInDown}>
-              <Typography paddingBottom="50px" variant="h4">
-                Bạn vẫn còn câu hỏi ?
-              </Typography>
-            </MotionInView> */}
-            <MotionInView variants={varFadeInDown}>
-              <Typography variant="h3">LIÊN HỆ VỚI CHÚNG TÔI</Typography>
-            </MotionInView>
-          </Box>
-        </MotionInView>
       </Container>
-    </RootStyle>
+    </SectionWrapper>
   );
 }

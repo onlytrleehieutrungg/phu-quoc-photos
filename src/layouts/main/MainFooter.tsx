@@ -1,13 +1,12 @@
-import { Icon } from '@iconify/react';
-import googleFill from '@iconify/icons-eva/google-fill';
-import twitterFill from '@iconify/icons-eva/twitter-fill';
 import facebookFill from '@iconify/icons-eva/facebook-fill';
+import googleFill from '@iconify/icons-eva/google-fill';
 import linkedinFill from '@iconify/icons-eva/linkedin-fill';
-import { Link as ScrollLink } from 'react-scroll';
-import { Link as RouterLink } from 'react-router-dom';
+import twitterFill from '@iconify/icons-eva/twitter-fill';
+import { Icon } from '@iconify/react';
+import { Container, Divider, Grid, IconButton, Stack, Typography } from '@mui/material';
 // material
 import { styled } from '@mui/material/styles';
-import { Grid, Link, Divider, Container, Typography, IconButton, Stack } from '@mui/material';
+import { Link as ScrollLink } from 'react-scroll';
 //
 import Logo from '../../components/Logo';
 
@@ -22,26 +21,16 @@ const SOCIALS = [
 
 const LINKS = [
   {
-    headline: 'Minimal',
+    headline: 'Thông tin',
     children: [
-      { name: 'About us', href: '#' },
-      { name: 'Contact us', href: '#' },
-      { name: 'FAQs', href: '#' }
-    ]
-  },
-  {
-    headline: 'Legal',
-    children: [
-      { name: 'Terms and Condition', href: '#' },
-      { name: 'Privacy Policy', href: '#' }
+      { name: 'Về chúng tôi', href: '#' },
+      { name: 'Liên hệ', href: '#' },
+      { name: 'FAQs', href: '#guideline' }
     ]
   },
   {
     headline: 'Contact',
-    children: [
-      { name: 'support@minimals.cc', href: '#' },
-      { name: 'Los Angeles, 359  Hidden Valley Road', href: '#' }
-    ]
+    children: [{ name: 'info@phuquocbase.com', href: 'mailto:info@phuquocbase.com' }]
   }
 ];
 
@@ -69,8 +58,7 @@ export default function MainFooter() {
           </Grid>
           <Grid item xs={8} md={3}>
             <Typography variant="body2" sx={{ pr: { md: 5 } }}>
-              The starting point for your next project with Minimal UI Kit, built on the newest
-              version of Material-UI ©, ready to be customized to your style.
+              Nơi lưu trữ những khoảnh khắc đáng nhớ tại phú quốc của bạn
             </Typography>
 
             <Stack
@@ -101,16 +89,19 @@ export default function MainFooter() {
                       {headline}
                     </Typography>
                     {children.map((link) => (
-                      <Link
-                        to={link.href}
-                        key={link.name}
-                        color="inherit"
-                        variant="body2"
-                        component={RouterLink}
-                        sx={{ display: 'block' }}
-                      >
-                        {link.name}
-                      </Link>
+                      <a href={link.href} key={link.name} style={{ textDecoration: 'none' }}>
+                        <Typography
+                          color="inherit"
+                          variant="body2"
+                          sx={{
+                            display: 'block',
+                            color: 'black',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          {link.name}
+                        </Typography>
+                      </a>
                     ))}
                   </Stack>
                 );
