@@ -5,7 +5,7 @@ import { Box, Container, Link, Stack, Typography } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { makeStyles } from '@mui/styles';
-import { varFadeInRight } from 'components/animate';
+import { varFadeInLeft, varFadeInUp, varFadeInDown } from 'components/animate';
 import React, { useRef } from 'react';
 import { Img } from 'react-image';
 import { FacebookShareButton, TwitterShareButton } from 'react-share';
@@ -143,48 +143,52 @@ export default function Header({ order }: { order: any }) {
         </Link>
       </Box>
       <Container maxWidth="lg" sx={{ zIndex: 9 }}>
-        <MotionInView variants={varFadeInRight}>
-          <Box mb={12}>
-            <Stack direction="row" spacing={2} alignItems="center" mb={4}>
+        <Box mb={12}>
+          <Stack direction="row" spacing={2} alignItems="center" mb={4}>
+            <MotionInView variants={varFadeInDown}>
               <Item0 />
-              <Typography
-                variant="h6"
-                sx={{
-                  letterSpacing: '2px',
-                  textTransform: 'uppercase',
-                  fontWeight: 200
-                }}
-              >
-                PhuQuoc Photos
-              </Typography>
-            </Stack>
-            <Item2
-              variant="h1"
-              mb={5}
-              mt={3}
+            </MotionInView>
+            <Typography
+              variant="h6"
               sx={{
-                fontSize: '88px'
+                letterSpacing: '2px',
+                textTransform: 'uppercase',
+                fontWeight: 200
               }}
             >
-              Chào {username}
-            </Item2>
-            <Typography variant="caption">
-              Chúng tôi đã lưu lại hơn <span style={{ fontWeight: 'bold' }}>{quantity}</span> khoảnh
-              khắc của bạn, hãy cùng xem lại nhé!
+              <MotionInView variants={varFadeInDown}>PhuQuoc Photos</MotionInView>
             </Typography>
-          </Box>
+          </Stack>
+          <Item2
+            variant="h1"
+            mb={5}
+            mt={3}
+            sx={{
+              fontSize: '88px'
+            }}
+          >
+            <MotionInView variants={varFadeInLeft}>Chào {username}</MotionInView>
+          </Item2>
+          <Typography variant="caption">
+            <MotionInView variants={varFadeInUp}>
+              Chúng tôi đã lưu lại hơn <span style={{ fontWeight: 'bold' }}>{quantity}</span> khoảnh
+              khắc của bạn <p>Hãy cùng xem lại nhé!</p>
+            </MotionInView>
+          </Typography>
+        </Box>
+        <MotionInView variants={varFadeInUp}>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Typography variant="caption">Chia Sẻ: </Typography>
+            <Box>
+              <FacebookShareButton url={`${window.location.href}`} quote={undefined}>
+                <FacebookIcon />
+              </FacebookShareButton>
+              <TwitterShareButton url={`${window.location.href}`}>
+                <TwitterIcon />
+              </TwitterShareButton>
+            </Box>
+          </Stack>
         </MotionInView>
-        <Stack direction="row" spacing={1} alignItems="center">
-          <Typography>Chia Sẻ: </Typography>
-          <Box>
-            <FacebookShareButton url={`${window.location.href}`} quote={undefined}>
-              <FacebookIcon />
-            </FacebookShareButton>
-            <TwitterShareButton url={`${window.location.href}`}>
-              <TwitterIcon />
-            </TwitterShareButton>
-          </Box>
-        </Stack>
       </Container>
       <Box
         sx={{
