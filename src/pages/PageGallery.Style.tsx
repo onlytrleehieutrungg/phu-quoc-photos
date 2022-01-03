@@ -168,16 +168,7 @@ export default function Header({ order }: { order: any }) {
             >
               Chào {username}
             </Item2>
-
-            <Typography
-              variant="caption"
-              style={{
-                clear: 'both',
-                display: 'inlineBlock',
-                overflow: 'hidden',
-                whiteSpace: 'nowrap'
-              }}
-            >
+            <Typography variant="caption">
               Chúng tôi đã lưu lại hơn <span style={{ fontWeight: 'bold' }}>{quantity}</span> khoảnh
               khắc của bạn, hãy cùng xem lại nhé!
             </Typography>
