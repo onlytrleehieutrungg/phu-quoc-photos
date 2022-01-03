@@ -79,6 +79,7 @@ export default function PageGallery() {
     const res = await axios.get(`https://api.phuquocphoto.com/api/v1/orders/${orderId}`);
     return res.data;
   });
+
   const lightGallery = useRef<any>(null);
   const { data, error, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery(
     'projects',

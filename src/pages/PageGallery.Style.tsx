@@ -5,9 +5,11 @@ import { Box, Container, Link, Stack, Typography } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { makeStyles } from '@mui/styles';
+import { varFadeInRight } from 'components/animate';
 import React, { useRef } from 'react';
 import { Img } from 'react-image';
 import { FacebookShareButton, TwitterShareButton } from 'react-share';
+import MotionInView from '../components/animate/MotionInView';
 
 const Root = styled('div')(({ theme }) => ({
   margin: '200px 24px 10px',
@@ -101,7 +103,7 @@ export default function Header({ order }: { order: any }) {
   const executeScroll = () => scrollToRef(myRef);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
+  const quantity = order.google_photo_album.media_items_count;
   var username = getLastName(order.customer_name);
 
   return (
@@ -141,32 +143,46 @@ export default function Header({ order }: { order: any }) {
         </Link>
       </Box>
       <Container maxWidth="lg" sx={{ zIndex: 9 }}>
-        <Box mb={12}>
-          <Stack direction="row" spacing={2} alignItems="center" mb={4}>
-            <Item0 />
-            <Typography
-              variant="h6"
+        <MotionInView variants={varFadeInRight}>
+          <Box mb={12}>
+            <Stack direction="row" spacing={2} alignItems="center" mb={4}>
+              <Item0 />
+              <Typography
+                variant="h6"
+                sx={{
+                  letterSpacing: '2px',
+                  textTransform: 'uppercase',
+                  fontWeight: 200
+                }}
+              >
+                PhuQuoc Photos
+              </Typography>
+            </Stack>
+            <Item2
+              variant="h1"
+              mb={5}
+              mt={3}
               sx={{
-                letterSpacing: '2px',
-                textTransform: 'uppercase',
-                fontWeight: 200
+                fontSize: '88px'
               }}
             >
-              PhuQuoc Photos
+              Chào {username}
+            </Item2>
+
+            <Typography
+              variant="caption"
+              style={{
+                clear: 'both',
+                display: 'inlineBlock',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              Chúng tôi đã lưu lại hơn <span style={{ fontWeight: 'bold' }}>{quantity}</span> khoảnh
+              khắc của bạn, hãy cùng xem lại nhé!
             </Typography>
-          </Stack>
-          <Item2
-            variant="h1"
-            mb={5}
-            mt={3}
-            sx={{
-              fontSize: '88px'
-            }}
-          >
-            Chào {username}
-          </Item2>
-          <Typography variant="caption">Cùng xem hình ảnh từ chuyến đi của bạn nhé</Typography>
-        </Box>
+          </Box>
+        </MotionInView>
         <Stack direction="row" spacing={1} alignItems="center">
           <Typography>Chia Sẻ: </Typography>
           <Box>
