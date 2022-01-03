@@ -28,7 +28,7 @@ import { useInfiniteQuery, useQuery } from 'react-query';
 import Page from '../components/Page';
 import Header, { Root } from '../pages/PageGallery.Style';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: any) => ({
   wrap: {
     overflow: 'hidden',
     borderRadius: '2px',
@@ -40,7 +40,9 @@ const useStyles = makeStyles({
   },
   imgThumb: {
     '& span': {
-      display: 'none'
+      [theme.breakpoints.up('sm')]: {
+        display: 'none'
+      }
     },
     '&:hover': {
       '& span': {
@@ -55,11 +57,13 @@ const useStyles = makeStyles({
     backgroundColor: '#ccc',
     cursor: 'zoom-in',
     '&:hover': {
-      zIndex: 1,
-      transform: 'scale(1.1)'
+      [theme.breakpoints.up('sm')]: {
+        zIndex: 1,
+        transform: 'scale(1.1)'
+      }
     }
   }
-});
+}));
 
 export default function PageGallery() {
   const classes = useStyles();
