@@ -87,6 +87,13 @@ const WhiteBackround = styled('div')(({ theme }) => ({
     zIndex: 4
   }
 }));
+
+const getLastName = (fullName?: string | null) => {
+  if (!fullName) return 'Bạn';
+  const lastName = fullName.split(/[ ]+/).slice(-1).join(' ');
+  return lastName;
+};
+
 export default function Header({ order }: { order: any }) {
   const classes = useStyles();
   const scrollToRef = (ref: any) => window.scrollTo(0, 750);
@@ -95,8 +102,8 @@ export default function Header({ order }: { order: any }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
-  var username =
-    order.customer_name?.split(' ', 2) && (order.customer_name?.split(/[ ]+/) as []).at(-1);
+  var username = getLastName(order.customer_name);
+
   return (
     <Head sx={{ justifyContent: 'left', alignItems: 'center', display: 'flex' }}>
       <WhiteBackround />
