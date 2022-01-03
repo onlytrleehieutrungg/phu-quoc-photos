@@ -5,7 +5,6 @@ import { Box, Container, Link, Stack, Typography } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { makeStyles } from '@mui/styles';
-import { MotionInView, varFadeInRight } from 'components/animate';
 import React, { useRef } from 'react';
 import { Img } from 'react-image';
 import { FacebookShareButton, TwitterShareButton } from 'react-share';
@@ -173,26 +172,24 @@ export default function Header({ order }: { order: any }) {
           </Box>
         </Stack>
       </Container>
-      <MotionInView variants={varFadeInRight}>
-        <Box
-          sx={{
-            width: { xs: '100%', sm: '75%' },
-            height: '100%',
-            position: 'absolute',
-            right: 0,
-            top: 0
-          }}
-        >
-          <Img
-            src={
-              `${order.google_photo_album?.cover_photo_base_url}=w${isMobile ? 450 : 1960}` ??
-              'https://livefromearth.media/assets/img/inspiration-in.jpg'
-            }
-            alt=""
-            style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
-          />
-        </Box>
-      </MotionInView>
+      <Box
+        sx={{
+          width: { xs: '100%', sm: '75%' },
+          height: '100%',
+          position: 'absolute',
+          right: 0,
+          top: 0
+        }}
+      >
+        <Img
+          src={
+            `${order.google_photo_album?.cover_photo_base_url}=w${isMobile ? 450 : 1960}` ??
+            'https://livefromearth.media/assets/img/inspiration-in.jpg'
+          }
+          alt=""
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
+        />
+      </Box>
     </Head>
   );
 }
