@@ -5,9 +5,11 @@ import { Box, Container, Link, Stack, Typography } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { makeStyles } from '@mui/styles';
+import { varFadeInLeft, varFadeInUp, varFadeInDown } from 'components/animate';
 import React, { useRef } from 'react';
 import { Img } from 'react-image';
 import { FacebookShareButton, TwitterShareButton } from 'react-share';
+import MotionInView from '../components/animate/MotionInView';
 
 const Root = styled('div')(({ theme }) => ({
   margin: '200px 24px 10px',
@@ -101,7 +103,7 @@ export default function Header({ order }: { order: any }) {
   const executeScroll = () => scrollToRef(myRef);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
+  const quantity = order.google_photo_album.media_items_count;
   var username = getLastName(order.customer_name);
 
   return (
@@ -143,7 +145,9 @@ export default function Header({ order }: { order: any }) {
       <Container maxWidth="lg" sx={{ zIndex: 9 }}>
         <Box mb={12}>
           <Stack direction="row" spacing={2} alignItems="center" mb={4}>
-            <Item0 />
+            <MotionInView variants={varFadeInDown}>
+              <Item0 />
+            </MotionInView>
             <Typography
               variant="h6"
               sx={{
@@ -152,7 +156,7 @@ export default function Header({ order }: { order: any }) {
                 fontWeight: 200
               }}
             >
-              PhuQuoc Photos
+              <MotionInView variants={varFadeInDown}>PhuQuoc Photos</MotionInView>
             </Typography>
           </Stack>
           <Item2
@@ -163,21 +167,28 @@ export default function Header({ order }: { order: any }) {
               fontSize: '88px'
             }}
           >
-            Chào {username}
+            <MotionInView variants={varFadeInLeft}>Chào {username}</MotionInView>
           </Item2>
-          <Typography variant="caption">Cùng xem hình ảnh từ chuyến đi của bạn nhé</Typography>
+          <Typography variant="caption">
+            <MotionInView variants={varFadeInUp}>
+              Chúng tôi đã lưu lại hơn <strong>{quantity}</strong> khoảnh khắc của bạn{' '}
+              <p>Hãy cùng xem lại nhé!</p>
+            </MotionInView>
+          </Typography>
         </Box>
-        <Stack direction="row" spacing={1} alignItems="center">
-          <Typography>Chia Sẻ: </Typography>
-          <Box>
-            <FacebookShareButton url={`${window.location.href}`} quote={undefined}>
-              <FacebookIcon />
-            </FacebookShareButton>
-            <TwitterShareButton url={`${window.location.href}`}>
-              <TwitterIcon />
-            </TwitterShareButton>
-          </Box>
-        </Stack>
+        <MotionInView variants={varFadeInUp}>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Typography variant="caption">Chia Sẻ: </Typography>
+            <Box>
+              <FacebookShareButton url={`${window.location.href}`} quote={undefined}>
+                <FacebookIcon />
+              </FacebookShareButton>
+              <TwitterShareButton url={`${window.location.href}`}>
+                <TwitterIcon />
+              </TwitterShareButton>
+            </Box>
+          </Stack>
+        </MotionInView>
       </Container>
       <Box
         sx={{
