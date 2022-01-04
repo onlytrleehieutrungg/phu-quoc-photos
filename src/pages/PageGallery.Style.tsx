@@ -171,8 +171,8 @@ export default function Header({ order }: { order: any }) {
           </Item2>
           <Typography variant="caption">
             <MotionInView variants={varFadeInUp}>
-              Chúng tôi đã lưu lại hơn <span style={{ fontWeight: 'bold' }}>{quantity}</span> khoảnh
-              khắc của bạn <p>Hãy cùng xem lại nhé!</p>
+              Chúng tôi đã lưu lại hơn <strong>{quantity}</strong> khoảnh khắc của bạn{' '}
+              <p>Hãy cùng xem lại nhé!</p>
             </MotionInView>
           </Typography>
         </Box>

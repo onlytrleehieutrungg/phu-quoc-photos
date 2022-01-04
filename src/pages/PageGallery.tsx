@@ -4,10 +4,12 @@ import {
   CircularProgress,
   Container,
   IconButton,
+  Button,
   ImageListItemBar,
   Skeleton,
   Stack,
-  Typography
+  Typography,
+  Link
 } from '@mui/material';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
@@ -27,6 +29,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { useInfiniteQuery, useQuery } from 'react-query';
 import Page from '../components/Page';
 import Header, { Root } from '../pages/PageGallery.Style';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 const useStyles = makeStyles((theme: any) => ({
   wrap: {
@@ -223,13 +226,35 @@ export default function PageGallery() {
       <div>
         <Header order={order} />
 
-        <Box>
+        <Box mt={10}>
           {isLoading ? (
             <CircularProgress />
           ) : error ? (
             <Typography>Không tìm thấy dữ liệu {(error as any).message}</Typography>
           ) : (
             <Stack spacing={1}>
+              <Stack
+                direction="row"
+                alignItems="center"
+                spacing={1}
+                justifyContent="flex-end"
+                sx={{ marginRight: { xs: '10px', lg: '30px' } }}
+              >
+                <Link
+                  href={order.google_photo_album.share_info.shareable_url}
+                  underline="none"
+                  color="black"
+                  target="_blank"
+                >
+                  <Button
+                    variant="outlined"
+                    color="inherit"
+                    startIcon={<FileDownloadIcon fontSize="medium" />}
+                  >
+                    Tải về album
+                  </Button>
+                </Link>
+              </Stack>
               <Root>
                 <Stack spacing={1}>
                   <Box
