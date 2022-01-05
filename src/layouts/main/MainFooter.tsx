@@ -58,7 +58,7 @@ export default function MainFooter() {
           </Grid>
           <Grid item xs={8} md={3}>
             <Typography variant="body2" sx={{ pr: { md: 5 } }}>
-              Nơi lưu trữ những khoảnh khắc đáng nhớ tại phú quốc của bạn
+              Nơi lưu trữ những khoảnh khắc đáng nhớ tại Phú Quốc của bạn
             </Typography>
 
             <Stack
