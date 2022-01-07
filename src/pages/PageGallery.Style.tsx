@@ -103,7 +103,7 @@ export default function Header({ order }: { order: any }) {
   const executeScroll = () => scrollToRef(myRef);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const quantity = order.google_photo_album.media_items_count;
+  const quantity = 120;
   var username = getLastName(order.customer_name);
 
   return (
@@ -200,10 +200,7 @@ export default function Header({ order }: { order: any }) {
         }}
       >
         <Img
-          src={
-            `${order.google_photo_album?.cover_photo_base_url}=w${isMobile ? 450 : 1960}` ??
-            'https://livefromearth.media/assets/img/inspiration-in.jpg'
-          }
+          src={'https://livefromearth.media/assets/img/inspiration-in.jpg'}
           alt=""
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
         />
