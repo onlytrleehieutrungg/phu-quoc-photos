@@ -1,7 +1,19 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 
-import { CircularProgress, Container, Stack } from '@mui/material';
-import Box from '@mui/material/Box';
+import {
+  CircularProgress,
+  Container,
+  Grid,
+  Card,
+  CardMedia,
+  CardContent,
+  Typography,
+  CardActions,
+  Button,
+  Box,
+  Link
+} from '@mui/material';
+// import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { makeStyles } from '@mui/styles';
@@ -9,14 +21,16 @@ import axios from 'axios';
 import { useCallback, useState } from 'react';
 import { useQuery } from 'react-query';
 import Page from '../components/Page';
-import Header, { Root } from '../pages/PageGallery.Style';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
-import ListSubheader from '@mui/material/ListSubheader';
-import IconButton from '@mui/material/IconButton';
-import InfoIcon from '@mui/icons-material/Info';
+// import Header from '../pages/PageGallery.Style';
+// import ImageList from '@mui/material/ImageList';
+// import ImageListItem from '@mui/material/ImageListItem';
+// import ImageListItemBar from '@mui/material/ImageListItemBar';
+// import ListSubheader from '@mui/material/ListSubheader';
+// import IconButton from '@mui/material/IconButton';
+// import InfoIcon from '@mui/icons-material/Info';
 import React from 'react';
+import DownloadIcon from '@mui/icons-material/Download';
+import { fDate } from '../utils/formatTime';
 
 const useStyles = makeStyles((theme: any) => ({
   wrap: {
@@ -80,33 +94,78 @@ export default function PageGallery() {
   const getItems = useCallback(() => {
     return (
       <React.Fragment>
-        <ImageList>
-          <ImageListItem key="Subheader" cols={2}>
-            <ListSubheader component="div">Album</ListSubheader>
-          </ImageListItem>
+        <Typography
+          gutterBottom
+          variant="h3"
+          component="div"
+          mt={15}
+          sx={{
+            justifyContent: 'center',
+            textAlign: 'center',
+            display: 'flex',
+            paddingLeft: 2,
+            paddingRight: 2
+          }}
+        >
+          Bộ sưu tập từ chuyến đi của bạn
+        </Typography>
+        <Typography
+          gutterBottom
+          variant="caption"
+          component="div"
+          sx={{ justifyContent: 'center', textAlign: 'center', display: 'flex' }}
+        >
+          Bắt đầu vào: {fDate(data.booking_date)}
+        </Typography>
+        <Grid
+          container
+          spacing={2}
+          pt={14}
+          pb={5}
+          sx={{
+            width: '100vw',
+            paddingLeft: { xs: 2, md: 5, lg: 9 },
+            paddingRight: { md: 3, lg: 8 }
+          }}
+        >
           {data.order_detail.map((item: any) => (
-            <ImageListItem key={item.order_detail_id}>
-              <img
-                src={item.google_photo_album.cover_photo_base_url}
-                srcSet={item.google_photo_album.cover_photo_base_url}
-                alt={item.google_photo_album.title}
-                loading="lazy"
-              />
-              <ImageListItemBar
-                title={item.google_photo_album.title}
-                subtitle={`${item.google_photo_album.media_items_count} hình ảnh`}
-                actionIcon={
-                  <IconButton
-                    sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                    aria-label={`info about ${item.google_photo_album.title}`}
+            <Grid key={item.order_detail_id} item xs={12} sm={6} md={3}>
+              <Card sx={{ padding: 0 }}>
+                <CardMedia
+                  component="img"
+                  height="260"
+                  width="100%"
+                  image={item.google_photo_album.cover_photo_base_url}
+                  alt="green iguana"
+                  sx={{ objectFit: 'cover', objectPosition: 'top' }}
+                />
+                <CardContent sx={{ paddingBottom: 0 }}>
+                  <Typography noWrap gutterBottom variant="body1" component="div">
+                    {item.product_name}
+                  </Typography>
+                  <Typography noWrap gutterBottom variant="caption" component="div">
+                    {item.google_photo_album.media_items_count} Hình ảnh
+                  </Typography>
+                </CardContent>
+                <CardActions sx={{ paddingLeft: 3, paddingBottom: 2 }}>
+                  <Button variant="contained" color="primary" sx={{ marginRight: 1 }}>
+                    Xem
+                  </Button>
+                  <Link
+                    href={item.google_photo_album.share_info.shareable_url}
+                    underline="none"
+                    color="black"
+                    target="_blank"
                   >
-                    <InfoIcon />
-                  </IconButton>
-                }
-              />
-            </ImageListItem>
+                    <Button variant="outlined" startIcon={<DownloadIcon fontSize="small" />}>
+                      Tải Về
+                    </Button>
+                  </Link>
+                </CardActions>
+              </Card>
+            </Grid>
           ))}
-        </ImageList>
+        </Grid>
       </React.Fragment>
     );
   }, [classes.imgThumb, classes.item, classes.wrap, data]);
@@ -123,31 +182,8 @@ export default function PageGallery() {
   return (
     <Page title="Kho Ảnh">
       <div>
-        <Header order={data} />
-        <Box mt={10}>
-          {/* {loading ? (
-            <CircularProgress />
-          ) : orderError ? (
-            <Typography>Không tìm thấy dữ liệu {(orderError as any).message}</Typography>
-          ) : ( */}
-          <Stack spacing={1}>
-            <Root>
-              <Stack spacing={1}>
-                <Box
-                  sx={{
-                    overflow: 'hidden',
-                    '& .infinite-scroll-component': {
-                      overflow: 'hidden !important'
-                    }
-                  }}
-                >
-                  {getItems()}
-                </Box>
-              </Stack>
-            </Root>
-          </Stack>
-          {/* )} */}
-        </Box>
+        {/* <Header order={data} /> */}
+        <Box sx={{ flexGrow: 1 }}>{getItems()}</Box>
       </div>
     </Page>
   );
