@@ -90,7 +90,6 @@ export default function PageGallery() {
     const res = await axios.get(`https://api.phuquocphoto.com/api/v1/orders/${orderId}`);
     return res.data;
   });
-
   const getItems = useCallback(() => {
     return (
       <React.Fragment>
@@ -113,55 +112,74 @@ export default function PageGallery() {
           gutterBottom
           variant="caption"
           component="div"
-          sx={{ justifyContent: 'center', textAlign: 'center', display: 'flex' }}
+          sx={{ justifyContent: 'center', textAlign: 'center', display: 'flex', flexWrap: 'wrap' }}
         >
           Bắt đầu vào: {fDate(data.booking_date)}
         </Typography>
         <Grid
           container
-          spacing={2}
+          spacing={4}
           pt={14}
           pb={5}
           sx={{
-            width: '100vw',
+            width: '104vw',
             paddingLeft: { xs: 2, md: 5, lg: 9 },
-            paddingRight: { md: 3, lg: 8 }
+            paddingRight: { sm: 2, md: 6, lg: 14 }
           }}
         >
           {data.order_detail.map((item: any) => (
-            <Grid key={item.order_detail_id} item xs={12} sm={6} md={3}>
-              <Card sx={{ padding: 0 }}>
+            <Grid key={item.order_detail_id} item xs={12} sm={6} md={4} lg={3}>
+              <Card sx={{ padding: 0, height: '100%', display: { xs: 'flex', sm: 'block' } }}>
                 <CardMedia
                   component="img"
-                  height="260"
-                  width="100%"
-                  image={item.google_photo_album.cover_photo_base_url}
+                  image={`${
+                    item.google_photo_album?.cover_photo_base_url ||
+                    'https://lh3.googleusercontent.com/lr/AFBm1_Y2Q87GDxCIs6f4ObWcdSvIt69Ql-BZ13hCBaeTUUWS8Aw_Qqsguf2lNCLtskNcAC86tdNvUkU6Kah3geB26rHbxsqeOMSzW0s3a3Dtxifw8UmOHJrj9OAxG1n6CM3Ruk75qY_5hZ8OewejXUceAchv26Zuxn01YOQ9aPCzfOGnZIVmOoRCPffS2h5o-7hgtQuD1N2R-zsOuhlc2Y4t9Z2HjltPvit-La6ApH3FTnLxrh-cCBCDeTySJImkO3uxQXX0dPRqcoWZ7mJaPHPQPUWLq-_DWBEK-eaCBjjD6tINQbvqhuFl0WjSBdO5--mee9_rTvO4AYoA_W_9wnK9s9rkVtjOpBjIB_Rbr9Zj7HSnQQqjVct5EJBiPAmdu2JwRoSfcTmcQG4NMEe531JZ52GwyhM5NBekhTARti8bqCsSDD5xtstMrC5T93m8ld2VUn8E-wTRH8I3sUxuv-cTJ2pRZfDtisiWu4e3kxZN3OTgaqvO4W3yzk-wGwxTMIhmddZ9FUMdh05Eb6dhw-NxxaQAktX_4mkEvA6R1JNtFRL5N5wcn2Rqep6WriEs2Bq0NcsmVVZCjgizwCkpn2ti_moerkY3Ym7cBAc4jd4JJMr-Y-rmAKNlCmV3WsScQjeUpHeZ_ChkC6wEVRdYTqyZRAxwwkJIg5P-N-sn3nPEpSghDaPACs9dCaVNJ_G3Q5adjmXwJ9ZQHD_ppuPO2ZyU4t1TCGmHPPnJbrva-NQAmcb2NckidDrVxPajB3qIOFu0A_Y8ZYYgajTgcpQzrqRLoVr_RyhFamJAcKWbxNZPYygqyeZfWku8CH4Wy6UxebVGUythTILgC_mpqhVGEb-_QmoCYvRa'
+                  }`}
                   alt="green iguana"
-                  sx={{ objectFit: 'cover', objectPosition: 'top' }}
+                  sx={{
+                    objectFit: 'cover',
+                    objectPosition: 'top',
+                    width: { xs: 100, sm: '100%' },
+                    height: { xs: 180, sm: 260 }
+                  }}
                 />
                 <CardContent sx={{ paddingBottom: 0 }}>
-                  <Typography noWrap gutterBottom variant="body1" component="div">
+                  <Typography gutterBottom variant="body1" component="div">
                     {item.product_name}
                   </Typography>
-                  <Typography noWrap gutterBottom variant="caption" component="div">
-                    {item.google_photo_album.media_items_count} Hình ảnh
+                  <Typography gutterBottom variant="caption" component="div">
+                    {item.google_photo_album?.media_items_count || 'Chưa cập nhật'} Hình ảnh
                   </Typography>
+                  {item.google_photo_album?.media_items_count ? (
+                    <CardActions sx={{ paddingLeft: 0, paddingBottom: 0 }}>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="small"
+                        sx={{ marginRight: 1 }}
+                      >
+                        Xem
+                      </Button>
+                      <Link
+                        href={item.google_photo_album?.share_info?.shareable_url}
+                        underline="none"
+                        color="black"
+                        target="_blank"
+                      >
+                        <Button
+                          variant="outlined"
+                          size="small"
+                          startIcon={<DownloadIcon fontSize="small" />}
+                        >
+                          Tải Về
+                        </Button>
+                      </Link>
+                    </CardActions>
+                  ) : (
+                    ''
+                  )}
                 </CardContent>
-                <CardActions sx={{ paddingLeft: 3, paddingBottom: 2 }}>
-                  <Button variant="contained" color="primary" sx={{ marginRight: 1 }}>
-                    Xem
-                  </Button>
-                  <Link
-                    href={item.google_photo_album.share_info.shareable_url}
-                    underline="none"
-                    color="black"
-                    target="_blank"
-                  >
-                    <Button variant="outlined" startIcon={<DownloadIcon fontSize="small" />}>
-                      Tải Về
-                    </Button>
-                  </Link>
-                </CardActions>
               </Card>
             </Grid>
           ))}
@@ -175,6 +193,17 @@ export default function PageGallery() {
         sx={{ height: '60vh', justifyContent: 'center', alignItems: 'center', display: 'flex' }}
       >
         <CircularProgress />
+      </Container>
+    );
+  }
+  if (orderError) {
+    return (
+      <Container
+        sx={{ height: '60vh', justifyContent: 'center', alignItems: 'center', display: 'flex' }}
+      >
+        <Typography noWrap gutterBottom variant="h3" component="div">
+          Không tìm thấy đơn hàng
+        </Typography>
       </Container>
     );
   }
