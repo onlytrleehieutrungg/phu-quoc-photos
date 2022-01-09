@@ -145,10 +145,20 @@ export default function PageGallery() {
                   }}
                 />
                 <CardContent sx={{ paddingBottom: 0 }}>
-                  <Typography gutterBottom variant="body1" component="div">
+                  <Typography
+                    gutterBottom
+                    variant="body1"
+                    component="div"
+                    sx={{ justifyContent: 'space-between' }}
+                  >
                     {item.product_name}
                   </Typography>
-                  <Typography gutterBottom variant="caption" component="div">
+                  <Typography
+                    gutterBottom
+                    variant="caption"
+                    component="div"
+                    sx={{ justifyContent: 'space-between' }}
+                  >
                     {item.google_photo_album?.media_items_count || 'Chưa cập nhật'} Hình ảnh
                   </Typography>
                   {item.google_photo_album?.media_items_count ? (
