@@ -43,12 +43,11 @@ export default function Router() {
       children: [
         {
           path: ':orderId',
-          element: <DashboardLayout />,
-          children: [{ path: ':photoAlbumId', element: <DashboardAlbum /> }]
+          element: <DashboardLayout />
         },
         {
-          path: 'album',
-          children: [{ path: ':photoAlbumId', element: <DashboardAlbum /> }]
+          path: ':orderId/album/:photoAlbumId',
+          element: <DashboardAlbum />
         }
       ]
     },

@@ -30,7 +30,7 @@ import { useInfiniteQuery, useQuery } from 'react-query';
 import Page from '../components/Page';
 import Header, { Root } from '../pages/PageGallery.Style';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: any) => ({
   wrap: {
@@ -78,11 +78,12 @@ export default function PageGallery() {
   const url = new URL(window.location.href);
   let params = new URLSearchParams(url.search);
   let orderID = params.get('ma-don-hang');
-  let location = useLocation();
-  console.log(location.state.orderId);
+  const { orderId, photoAlbumId } = useParams();
+  console.log(orderId);
+  console.log(photoAlbumId);
 
-  const { isLoading: loadingOrder, data: order } = useQuery(['album', orderID], async () => {
-    const res = await axios.get(`https://api.phuquocphoto.com/api/v1/orders/${orderID}`);
+  const { isLoading: loadingOrder, data: order } = useQuery(['album', orderId], async () => {
+    const res = await axios.get(`https://api.phuquocphoto.com/api/v1/orders/${orderId}`);
     return res.data;
   });
 
@@ -91,7 +92,7 @@ export default function PageGallery() {
     'projects',
     async ({ pageParam: nextToken }) => {
       const res = await axios.get(
-        `https://api.phuquocphoto.com/api/v1/admin/albums/${orderID}/medias`,
+        `https://api.phuquocphoto.com/api/v1/admin/albums/${photoAlbumId}/medias`,
         {
           params: {
             'page-token': nextToken,
@@ -126,6 +127,8 @@ export default function PageGallery() {
   //     onSuccess: () => lightGallery.current?.refresh()
   //   }
   // );
+  console.log(order);
+  console.log(data);
 
   const onInit = useCallback((detail) => {
     if (detail) {
@@ -263,7 +266,7 @@ export default function PageGallery() {
                 sx={{ marginRight: { xs: '10px', lg: '30px' } }}
               >
                 <Link
-                  href={order.google_photo_album.share_info.shareable_url}
+                  href={order.google_photo_album?.share_info.shareable_url}
                   underline="none"
                   color="black"
                   target="_blank"
