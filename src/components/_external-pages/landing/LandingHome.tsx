@@ -8,7 +8,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { motion } from 'framer-motion';
 //
 import { useState } from 'react';
-import { createSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { NavHashLink } from 'react-router-hash-link';
 import Slider from 'react-slick';
 // routes
@@ -66,12 +66,13 @@ export default function LandingHome() {
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    navigate({
-      pathname: PATH_DASHBOARD.root,
-      search: `?${createSearchParams({
-        'ma-don-hang': orderId
-      })}`
-    });
+    // navigate({
+    //   pathname: PATH_DASHBOARD.root,
+    //   search: `?${createSearchParams({
+    //     'ma-don-hang': orderId
+    //   })}`
+    // });
+    navigate(`${PATH_DASHBOARD.root}/${orderId}`);
   }
   return (
     <>

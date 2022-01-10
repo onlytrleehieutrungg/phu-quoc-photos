@@ -2,7 +2,7 @@ import { Suspense, lazy } from 'react';
 import { Navigate, useRoutes, useLocation } from 'react-router-dom';
 // layouts
 import MainLayout from '../layouts/main';
-import DashboardLayout from '../layouts/dashboard';
+import { DashboardLayout, DashboardAlbum } from '../layouts/dashboard';
 import LogoOnlyLayout from '../layouts/LogoOnlyLayout';
 // components
 import LoadingScreen from '../components/LoadingScreen';
@@ -11,7 +11,7 @@ import LoadingScreen from '../components/LoadingScreen';
 const Loadable = (Component: any) => (props: any) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const { pathname } = useLocation();
-  const isDashboard = pathname.includes('/kho-anh');
+  const isDashboard = pathname.includes('/order');
 
   return (
     <Suspense
@@ -38,21 +38,17 @@ export default function Router() {
   return useRoutes([
     // Dashboard Routes
     {
-      path: 'kho-anh',
-      element: <DashboardLayout />,
+      path: 'order',
+      // element: <DashboardLayout />,
       children: [
-        { element: <Navigate to="/kho-anh" replace /> },
-        { path: 'one', element: <PageGallery /> },
-        { path: 'two', element: <PageTwo /> },
-        { path: 'three', element: <PageThree /> },
         {
-          path: 'app',
-          children: [
-            { element: <Navigate to="/dashboard/app/four" replace /> },
-            { path: 'four', element: <PageFour /> },
-            { path: 'five', element: <PageFive /> },
-            { path: 'six', element: <PageSix /> }
-          ]
+          path: ':orderId',
+          element: <DashboardLayout />,
+          children: [{ path: ':photoAlbumId', element: <DashboardAlbum /> }]
+        },
+        {
+          path: 'album',
+          children: [{ path: ':photoAlbumId', element: <DashboardAlbum /> }]
         }
       ]
     },
@@ -78,7 +74,8 @@ export default function Router() {
 // IMPORT COMPONENTS
 
 // Dashboard
-const PageGallery = Loadable(lazy(() => import('../pages/PageGallery')));
+const PageOrder = Loadable(lazy(() => import('../pages/PageOrder')));
+const PageAlbum = Loadable(lazy(() => import('../pages/PageAlbum')));
 const PageTwo = Loadable(lazy(() => import('../pages/PageTwo')));
 const PageThree = Loadable(lazy(() => import('../pages/PageThree')));
 const PageFour = Loadable(lazy(() => import('../pages/PageFour')));

@@ -31,6 +31,9 @@ import Page from '../components/Page';
 import React from 'react';
 import DownloadIcon from '@mui/icons-material/Download';
 import { fDate } from '../utils/formatTime';
+import { useNavigate } from 'react-router-dom';
+import { PATH_DASHBOARD } from 'routes/paths';
+import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: any) => ({
   wrap: {
@@ -69,15 +72,17 @@ const useStyles = makeStyles((theme: any) => ({
   }
 }));
 
-export default function PageGallery() {
+export default function PageOrder() {
   const classes = useStyles();
   const theme = useTheme();
+  const navigate = useNavigate();
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [errorCode, setErrorCode] = useState(false);
   const url = new URL(window.location.href);
-  let params = new URLSearchParams(url.search);
-  let orderId = params.get('ma-don-hang');
+  // let params = new URLSearchParams(url.search);
+  // let orderId = params.get('ma-don-hang');
+  const { orderId } = useParams();
   const imgUrl =
     'https://scontent.fsgn2-1.fna.fbcdn.net/v/t39.30808-6/252022468_1673007489699911_3605193315752506281_n.jpg?_nc_cat=105&ccb=1-5&_nc_sid=174925&_nc_ohc=VMBK4fJzURIAX-ahy2-&_nc_ht=scontent.fsgn2-1.fna&oh=00_AT9q81yUBNSX6C2QlRWyeGAmCJK1MmmVQKh_MQBzHu6xjw&oe=61DDA2FC';
 
@@ -168,6 +173,14 @@ export default function PageGallery() {
                         color="primary"
                         size="small"
                         sx={{ marginRight: 1 }}
+                        onClick={() => {
+                          navigate(`${PATH_DASHBOARD.album.listAlbum}/${item.order_id}`, {
+                            state: {
+                              orderId: orderId,
+                              photoAlbumId: item.photo_album_id
+                            }
+                          });
+                        }}
                       >
                         Xem
                       </Button>
