@@ -36,10 +36,8 @@ const Loadable = (Component: any) => (props: any) => {
 
 export default function Router() {
   return useRoutes([
-    // Dashboard Routes
     {
       path: 'order',
-      // element: <DashboardLayout />,
       children: [
         {
           path: ':orderId',

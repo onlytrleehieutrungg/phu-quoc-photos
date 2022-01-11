@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-
 import {
   CircularProgress,
   Container,
@@ -13,21 +11,12 @@ import {
   Box,
   Link
 } from '@mui/material';
-// import Box from '@mui/material/Box';
 import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { makeStyles } from '@mui/styles';
 import axios from 'axios';
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useQuery } from 'react-query';
 import Page from '../components/Page';
-// import Header from '../pages/PageGallery.Style';
-// import ImageList from '@mui/material/ImageList';
-// import ImageListItem from '@mui/material/ImageListItem';
-// import ImageListItemBar from '@mui/material/ImageListItemBar';
-// import ListSubheader from '@mui/material/ListSubheader';
-// import IconButton from '@mui/material/IconButton';
-// import InfoIcon from '@mui/icons-material/Info';
 import React from 'react';
 import DownloadIcon from '@mui/icons-material/Download';
 import { fDate } from '../utils/formatTime';
@@ -76,15 +65,7 @@ export default function PageOrder() {
   const classes = useStyles();
   const theme = useTheme();
   const navigate = useNavigate();
-  const mobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const [errorCode, setErrorCode] = useState(false);
-  const url = new URL(window.location.href);
-  // let params = new URLSearchParams(url.search);
-  // let orderId = params.get('ma-don-hang');
   const { orderId } = useParams();
-  const imgUrl =
-    'https://scontent.fsgn2-1.fna.fbcdn.net/v/t39.30808-6/252022468_1673007489699911_3605193315752506281_n.jpg?_nc_cat=105&ccb=1-5&_nc_sid=174925&_nc_ohc=VMBK4fJzURIAX-ahy2-&_nc_ht=scontent.fsgn2-1.fna&oh=00_AT9q81yUBNSX6C2QlRWyeGAmCJK1MmmVQKh_MQBzHu6xjw&oe=61DDA2FC';
 
   const {
     isLoading: loadingOrder,
@@ -154,11 +135,12 @@ export default function PageOrder() {
                     paddingBottom: 0,
                     justifyContent: 'space-between',
                     display: 'flex',
-                    flexDirection: 'column'
+                    flexDirection: 'column',
+                    height: 180
                   }}
                 >
                   <Box>
-                    <Typography gutterBottom variant="body1" component="div">
+                    <Typography gutterBottom variant="h6" component="div" sx={{ color: '#696969' }}>
                       {item.product_name}
                     </Typography>
                     <Typography gutterBottom variant="caption" component="div">
@@ -215,7 +197,8 @@ export default function PageOrder() {
       </Container>
     );
   }
-  if (orderError) {
+
+  if (orderError != null) {
     return (
       <Container
         sx={{ height: '60vh', justifyContent: 'center', alignItems: 'center', display: 'flex' }}
@@ -226,11 +209,10 @@ export default function PageOrder() {
       </Container>
     );
   }
-  console.log(data);
+
   return (
     <Page title="Kho Ảnh">
       <div>
-        {/* <Header order={data} /> */}
         <Box sx={{ flexGrow: 1 }}>{getItems()}</Box>
       </div>
     </Page>

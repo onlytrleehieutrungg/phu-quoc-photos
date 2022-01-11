@@ -42,7 +42,6 @@ const useStyles = makeStyles({
   }
 });
 
-const FONT_PRIMARY = 'Be Vietnam Pro'; // Google Font
 const Head = styled(Box)(({ theme }) => ({
   height: '100vh',
   [theme.breakpoints.down('md')]: {
@@ -103,7 +102,7 @@ export default function Header({ order, index }: { order: any; index: number }) 
   const executeScroll = () => scrollToRef(myRef);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const quantity = 120;
+  const quantity = order.order_detail[index]?.google_photo_album.media_items_count;
   var username = getLastName(order.customer_name);
 
   return (
@@ -201,8 +200,9 @@ export default function Header({ order, index }: { order: any; index: number }) 
       >
         <Img
           src={
-            `${order.order_detail[index]?.google_photo_album?.cover_photo_base_url}` ??
-            'https://livefromearth.media/assets/img/inspiration-in.jpg'
+            `${order.order_detail[index]?.google_photo_album?.cover_photo_base_url}=w${
+              isMobile ? 450 : 1960
+            }` ?? 'https://livefromearth.media/assets/img/inspiration-in.jpg'
           }
           alt=""
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}

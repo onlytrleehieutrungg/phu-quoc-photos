@@ -79,10 +79,7 @@ export default function PageGallery() {
   let params = new URLSearchParams(url.search);
   let orderID = params.get('ma-don-hang');
   const { orderId, photoAlbumId, index } = useParams();
-  const num = Number(index);
-  console.log(orderId);
-  console.log(photoAlbumId);
-  console.log(typeof num);
+  let num = Number(index);
 
   const {
     isLoading: loadingOrder,
@@ -113,28 +110,6 @@ export default function PageGallery() {
       onSuccess: () => lightGallery.current?.refresh()
     }
   );
-
-  // const { data, error, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery(
-  //   'projects',
-  //   async ({ pageParam: nextToken }) => {
-  //     const res = await axios.get(
-  //       `https://api.phuquocphoto.com/api/v1/admin/albums/1/medias`,
-  //       {
-  //         params: {
-  //           'page-token': nextToken,
-  //           'page-size': 10
-  //         }
-  //       }
-  //     );
-  //     return res.data;
-  //   },
-  //   {
-  //     getNextPageParam: (lastPage, pages) => lastPage.next_page_token ?? false,
-  //     onSuccess: () => lightGallery.current?.refresh()
-  //   }
-  // );
-  console.log(order);
-  console.log(data);
 
   const onInit = useCallback((detail) => {
     if (detail) {
@@ -252,6 +227,19 @@ export default function PageGallery() {
     (acc, { media_items }) => [...acc, ...media_items],
     []
   ).length;
+
+  if (error != null) {
+    return (
+      <Container
+        sx={{ height: '60vh', justifyContent: 'center', alignItems: 'center', display: 'flex' }}
+      >
+        <Typography noWrap gutterBottom variant="h3" component="div">
+          Không tìm thấy album của bạn
+        </Typography>
+      </Container>
+    );
+  }
+
   return (
     <Page title="Kho Ảnh">
       <div>
