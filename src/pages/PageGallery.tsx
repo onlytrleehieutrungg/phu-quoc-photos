@@ -1,22 +1,36 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-
-import { CircularProgress, Container, Stack } from '@mui/material';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import {
+  CircularProgress,
+  Container,
+  IconButton,
+  Button,
+  ImageListItemBar,
+  Skeleton,
+  Stack,
+  Typography,
+  Link
+} from '@mui/material';
 import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { makeStyles } from '@mui/styles';
 import axios from 'axios';
-import { useCallback, useState } from 'react';
-import { useQuery } from 'react-query';
+import lgThumbnail from 'lightgallery/plugins/thumbnail';
+import lgZoom from 'lightgallery/plugins/zoom';
+import LightGallery from 'lightgallery/react';
+import { isNull } from 'lodash';
+import React, { useCallback, useRef } from 'react';
+import { Img } from 'react-image';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { useInfiniteQuery, useQuery } from 'react-query';
 import Page from '../components/Page';
-import Header, { Root } from '../pages/PageGallery.Style';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import ImageListItemBar from '@mui/material/ImageListItemBar';
-import ListSubheader from '@mui/material/ListSubheader';
-import IconButton from '@mui/material/IconButton';
-import InfoIcon from '@mui/icons-material/Info';
-import React from 'react';
+import Header, { Root } from './PageGallery.Style';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: any) => ({
   wrap: {
@@ -60,56 +74,145 @@ export default function PageGallery() {
   const theme = useTheme();
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const [errorCode, setErrorCode] = useState(false);
-  const url = new URL(window.location.href);
-  let params = new URLSearchParams(url.search);
-  let orderId = params.get('ma-don-hang');
-  const imgUrl =
-    'https://scontent.fsgn2-1.fna.fbcdn.net/v/t39.30808-6/252022468_1673007489699911_3605193315752506281_n.jpg?_nc_cat=105&ccb=1-5&_nc_sid=174925&_nc_ohc=VMBK4fJzURIAX-ahy2-&_nc_ht=scontent.fsgn2-1.fna&oh=00_AT9q81yUBNSX6C2QlRWyeGAmCJK1MmmVQKh_MQBzHu6xjw&oe=61DDA2FC';
+
+  const { orderId, photoAlbumId } = useParams();
 
   const {
     isLoading: loadingOrder,
-    data: data,
-    isLoading: loading,
-    error: orderError
+    data: order,
+    error: errors
   } = useQuery(['album', orderId], async () => {
     const res = await axios.get(`https://api.phuquocphoto.com/api/v1/orders/${orderId}`);
     return res.data;
   });
 
+  const { data: dataGallery } = useQuery(['album', photoAlbumId], async () => {
+    const res = await axios.get(`https://api.phuquocphoto.com/api/v1/admin/albums/${photoAlbumId}`);
+    return res.data;
+  });
+
+  const lightGallery = useRef<any>(null);
+  const { data, error, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery(
+    'projects',
+    async ({ pageParam: nextToken }) => {
+      const res = await axios.get(
+        `https://api.phuquocphoto.com/api/v1/admin/albums/${photoAlbumId}/medias`,
+        {
+          params: {
+            'page-token': nextToken,
+            'page-size': 10
+          }
+        }
+      );
+      return res.data;
+    },
+    {
+      getNextPageParam: (lastPage, pages) => lastPage.next_page_token ?? false,
+      onSuccess: () => lightGallery.current?.refresh()
+    }
+  );
+
+  const onInit = useCallback((detail) => {
+    if (detail) {
+      lightGallery.current = detail.instance;
+    }
+  }, []);
+
   const getItems = useCallback(() => {
-    return (
-      <React.Fragment>
-        <ImageList>
-          <ImageListItem key="Subheader" cols={2}>
-            <ListSubheader component="div">Album</ListSubheader>
-          </ImageListItem>
-          {data.order_detail.map((item: any) => (
-            <ImageListItem key={item.order_detail_id}>
-              <img
-                src={item.google_photo_album.cover_photo_base_url}
-                srcSet={item.google_photo_album.cover_photo_base_url}
-                alt={item.google_photo_album.title}
-                loading="lazy"
-              />
-              <ImageListItemBar
-                title={item.google_photo_album.title}
-                subtitle={`${item.google_photo_album.media_items_count} hình ảnh`}
-                actionIcon={
-                  <IconButton
-                    sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                    aria-label={`info about ${item.google_photo_album.title}`}
-                  >
-                    <InfoIcon />
-                  </IconButton>
-                }
-              />
+    return data?.pages ? (
+      data?.pages?.map(({ media_items: items }: any, index) => (
+        <React.Fragment key={`group-${index}`}>
+          {items.map((item: any) => (
+            <ImageListItem key={item.id} className={[classes.wrap, 'img-responsive'].join(' ')}>
+              <div>
+                <div className={classes.imgThumb}>
+                  <div>
+                    <a
+                      className="gallery-selector"
+                      data-download-url={`${item.base_url}=w${1960}-d`}
+                      data-src={`${item.base_url}=w${1960}-d`}
+                      data-external-thumb-image={item.base_url}
+                      data-responsive={`${item.base_url}=w${1960} 780, ${
+                        item.base_url
+                      }=w${1960} 1024`}
+                      data-sub-html={`<h4>${item.filename} - ${
+                        item.media_metadata.creationTime
+                      }</h4> <p><a href="${
+                        item.base_url
+                      }=w${1960}-d" target="_blank" rel="noreferrer">
+          Tải ảnh
+        </a></p>`}
+                    >
+                      <Img
+                        src={item.base_url}
+                        loader={<Skeleton />}
+                        alt={`${isNull(item.title) ? '' : item.title} ${
+                          isNull(item.timestamp) ? '' : item.timestamp
+                        }`}
+                        loading="lazy"
+                        style={{
+                          maxWidth: '100%',
+                          height: 'auto',
+                          borderRadius: 'inherit',
+                          backgroundColor: 'black'
+                        }}
+                        onClick={() => {}}
+                        className={classes.item}
+                      />
+                    </a>
+                  </div>
+                  <span>
+                    <ImageListItemBar
+                      title={
+                        <>
+                          <Stack direction="row" spacing={1}>
+                            {item.tags?.split(',').map((tag: string) => (
+                              <Chip
+                                key={tag}
+                                label={tag}
+                                variant="outlined"
+                                clickable
+                                size="small"
+                                sx={{
+                                  color: 'rgb(255, 255, 255)',
+                                  marginRight: '2px',
+                                  '& .MuiChip-label': {
+                                    overflow: 'visible'
+                                  }
+                                }}
+                              />
+                            ))}
+                          </Stack>
+                        </>
+                      }
+                      style={{ zIndex: 2 }}
+                      actionIcon={
+                        <a href={`${item.base_url}=w${1960}-d`} target="_blank" rel="noreferrer">
+                          <IconButton
+                            sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+                            aria-label={`info about ${item.title}`}
+                          >
+                            <CloudDownloadIcon />
+                          </IconButton>
+                        </a>
+                      }
+                      sx={{
+                        borderRadius: 'inherit',
+                        background: 'linear-gradient(0, #000, transparent);'
+                      }}
+                    />
+                  </span>
+                </div>
+              </div>
             </ImageListItem>
           ))}
-        </ImageList>
-      </React.Fragment>
+        </React.Fragment>
+      ))
+    ) : (
+      <Typography>Không tìm thấy hình ảnh của bạn</Typography>
     );
-  }, [classes.imgThumb, classes.item, classes.wrap, data]);
+  }, [classes.imgThumb, classes.item, classes.wrap, data?.pages]);
+
   if (loadingOrder) {
     return (
       <Container
@@ -119,34 +222,106 @@ export default function PageGallery() {
       </Container>
     );
   }
-  console.log(data);
+
+  const mediaLength = data?.pages.reduce(
+    (acc, { media_items }) => [...acc, ...media_items],
+    []
+  ).length;
+
+  if (error != null) {
+    return (
+      <Container
+        sx={{ height: '60vh', justifyContent: 'center', alignItems: 'center', display: 'flex' }}
+      >
+        <Typography noWrap gutterBottom variant="h3" component="div">
+          Không tìm thấy album của bạn
+        </Typography>
+      </Container>
+    );
+  }
+
   return (
     <Page title="Kho Ảnh">
       <div>
-        <Header order={data} />
+        <Header order={order} gallery={dataGallery} />
+
         <Box mt={10}>
-          {/* {loading ? (
+          {isLoading ? (
             <CircularProgress />
-          ) : orderError ? (
-            <Typography>Không tìm thấy dữ liệu {(orderError as any).message}</Typography>
-          ) : ( */}
-          <Stack spacing={1}>
-            <Root>
-              <Stack spacing={1}>
-                <Box
-                  sx={{
-                    overflow: 'hidden',
-                    '& .infinite-scroll-component': {
-                      overflow: 'hidden !important'
-                    }
-                  }}
+          ) : error ? (
+            <Typography>Không tìm thấy dữ liệu {(error as any).message}</Typography>
+          ) : (
+            <Stack spacing={1}>
+              <Stack
+                direction="row"
+                alignItems="center"
+                spacing={1}
+                justifyContent="flex-end"
+                sx={{ marginRight: { xs: '10px', lg: '30px' } }}
+              >
+                <Link
+                  href={dataGallery?.share_info?.shareable_url}
+                  underline="none"
+                  color="black"
+                  target="_blank"
                 >
-                  {getItems()}
-                </Box>
+                  <Button
+                    variant="outlined"
+                    color="inherit"
+                    startIcon={<FileDownloadIcon fontSize="medium" />}
+                  >
+                    Tải về album
+                  </Button>
+                </Link>
               </Stack>
-            </Root>
-          </Stack>
-          {/* )} */}
+              <Root>
+                <Stack spacing={1}>
+                  <Box
+                    sx={{
+                      overflow: 'hidden',
+                      '& .infinite-scroll-component': {
+                        overflow: 'hidden !important'
+                      }
+                    }}
+                  >
+                    <LightGallery
+                      speed={500}
+                      plugins={[lgThumbnail, lgZoom]}
+                      mode="lg-fade"
+                      exThumbImage="data-external-thumb-image"
+                      onInit={onInit}
+                      selector=".gallery-selector"
+                    >
+                      <InfiniteScroll
+                        dataLength={mediaLength}
+                        next={fetchNextPage}
+                        hasMore={Boolean(hasNextPage)}
+                        loader={
+                          <Container sx={{ textAlign: 'center', py: 2 }}>
+                            <CircularProgress />
+                          </Container>
+                        }
+                        endMessage={
+                          <p style={{ textAlign: 'center' }}>
+                            <i>Bạn đã xem hết hình ảnh</i>
+                          </p>
+                        }
+                      >
+                        <ImageList
+                          variant="masonry"
+                          cols={mobile ? 2 : fullScreen ? 3 : 4}
+                          gap={0}
+                          sx={{ overflow: 'visible' }}
+                        >
+                          {getItems()}
+                        </ImageList>
+                      </InfiniteScroll>
+                    </LightGallery>
+                  </Box>
+                </Stack>
+              </Root>
+            </Stack>
+          )}
         </Box>
       </div>
     </Page>

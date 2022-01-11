@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 // hooks
 import useCollapseDrawer from '../../hooks/useCollapseDrawer';
+import PageOrder from '../../pages/PageOrder';
 import PageGallery from '../../pages/PageGallery';
 //
 import DashboardNavbar from './DashboardNavbar';
@@ -35,7 +36,19 @@ const MainStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-export default function DashboardLayout() {
+export function DashboardLayout() {
+  const theme = useTheme();
+  const { collapseClick } = useCollapseDrawer();
+  const [open, setOpen] = useState(false);
+
+  return (
+    <RootStyle>
+      <DashboardNavbar />
+      <PageOrder />
+    </RootStyle>
+  );
+}
+export function DashboardAlbum() {
   const theme = useTheme();
   const { collapseClick } = useCollapseDrawer();
   const [open, setOpen] = useState(false);

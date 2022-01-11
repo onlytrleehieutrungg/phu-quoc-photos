@@ -1,6 +1,5 @@
 import ArrowRightAlt from '@mui/icons-material/ArrowRightAlt';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
-// import { Link as RouterLink } from 'react-router-dom';
 // material
 import { Box, Button, Container, Input, Stack, styled, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
@@ -8,7 +7,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { motion } from 'framer-motion';
 //
 import { useState } from 'react';
-import { createSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { NavHashLink } from 'react-router-hash-link';
 import Slider from 'react-slick';
 // routes
@@ -66,12 +65,7 @@ export default function LandingHome() {
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    navigate({
-      pathname: PATH_DASHBOARD.root,
-      search: `?${createSearchParams({
-        'ma-don-hang': orderId
-      })}`
-    });
+    navigate(`${PATH_DASHBOARD.root}/${orderId}`);
   }
   return (
     <>

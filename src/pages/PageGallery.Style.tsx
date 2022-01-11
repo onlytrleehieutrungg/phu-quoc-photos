@@ -42,7 +42,6 @@ const useStyles = makeStyles({
   }
 });
 
-const FONT_PRIMARY = 'Be Vietnam Pro'; // Google Font
 const Head = styled(Box)(({ theme }) => ({
   height: '100vh',
   [theme.breakpoints.down('md')]: {
@@ -96,14 +95,14 @@ const getLastName = (fullName?: string | null) => {
   return lastName;
 };
 
-export default function Header({ order }: { order: any }) {
+export default function Header({ order, gallery }: { order: any; gallery: any }) {
   const classes = useStyles();
   const scrollToRef = (ref: any) => window.scrollTo(0, 750);
   const myRef = useRef(null);
   const executeScroll = () => scrollToRef(myRef);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const quantity = 120;
+  const quantity = gallery?.media_items_count;
   var username = getLastName(order.customer_name);
 
   return (
@@ -171,8 +170,8 @@ export default function Header({ order }: { order: any }) {
           </Item2>
           <Typography variant="caption">
             <MotionInView variants={varFadeInUp}>
-              Chúng tôi đã lưu lại hơn <strong>{quantity}</strong> khoảnh khắc của bạn{' '}
-              <p>Hãy cùng xem lại nhé!</p>
+              Chúng tôi đã lưu lại hơn <strong>{quantity ? quantity : 0}</strong> khoảnh khắc của
+              bạn <p>Hãy cùng xem lại nhé!</p>
             </MotionInView>
           </Typography>
         </Box>
@@ -200,7 +199,11 @@ export default function Header({ order }: { order: any }) {
         }}
       >
         <Img
-          src={'https://livefromearth.media/assets/img/inspiration-in.jpg'}
+          src={
+            gallery
+              ? `${gallery?.cover_photo_base_url}=w${isMobile ? 450 : 1960}`
+              : 'https://livefromearth.media/assets/img/inspiration-in.jpg'
+          }
           alt=""
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
         />
