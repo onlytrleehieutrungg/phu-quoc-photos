@@ -96,7 +96,7 @@ const getLastName = (fullName?: string | null) => {
   return lastName;
 };
 
-export default function Header({ order }: { order: any }) {
+export default function Header({ order, index }: { order: any; index: number }) {
   const classes = useStyles();
   const scrollToRef = (ref: any) => window.scrollTo(0, 750);
   const myRef = useRef(null);
@@ -200,7 +200,10 @@ export default function Header({ order }: { order: any }) {
         }}
       >
         <Img
-          src={'https://livefromearth.media/assets/img/inspiration-in.jpg'}
+          src={
+            `${order.order_detail[index]?.google_photo_album?.cover_photo_base_url}` ??
+            'https://livefromearth.media/assets/img/inspiration-in.jpg'
+          }
           alt=""
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
         />

@@ -28,7 +28,7 @@ import { Img } from 'react-image';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useInfiniteQuery, useQuery } from 'react-query';
 import Page from '../components/Page';
-import Header, { Root } from '../pages/PageGallery.Style';
+import Header, { Root } from './PageGallery.Style';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { useParams } from 'react-router-dom';
 
@@ -78,11 +78,17 @@ export default function PageGallery() {
   const url = new URL(window.location.href);
   let params = new URLSearchParams(url.search);
   let orderID = params.get('ma-don-hang');
-  const { orderId, photoAlbumId } = useParams();
+  const { orderId, photoAlbumId, index } = useParams();
+  const num = Number(index);
   console.log(orderId);
   console.log(photoAlbumId);
+  console.log(typeof num);
 
-  const { isLoading: loadingOrder, data: order } = useQuery(['album', orderId], async () => {
+  const {
+    isLoading: loadingOrder,
+    data: order,
+    error: errors
+  } = useQuery(['album', orderId], async () => {
     const res = await axios.get(`https://api.phuquocphoto.com/api/v1/orders/${orderId}`);
     return res.data;
   });
@@ -249,7 +255,7 @@ export default function PageGallery() {
   return (
     <Page title="Kho Ảnh">
       <div>
-        <Header order={order} />
+        <Header order={order} index={num} />
 
         <Box mt={10}>
           {isLoading ? (
@@ -266,7 +272,7 @@ export default function PageGallery() {
                 sx={{ marginRight: { xs: '10px', lg: '30px' } }}
               >
                 <Link
-                  href={order.google_photo_album?.share_info.shareable_url}
+                  href={order.order_detail[num].google_photo_album?.share_info.shareable_url}
                   underline="none"
                   color="black"
                   target="_blank"

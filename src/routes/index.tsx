@@ -46,7 +46,7 @@ export default function Router() {
           element: <DashboardLayout />
         },
         {
-          path: ':orderId/album/:photoAlbumId',
+          path: ':orderId/album/:index/:photoAlbumId',
           element: <DashboardAlbum />
         }
       ]
@@ -74,7 +74,7 @@ export default function Router() {
 
 // Dashboard
 const PageOrder = Loadable(lazy(() => import('../pages/PageOrder')));
-const PageAlbum = Loadable(lazy(() => import('../pages/PageAlbum')));
+const PageGallery = Loadable(lazy(() => import('../pages/PageGallery')));
 const PageTwo = Loadable(lazy(() => import('../pages/PageTwo')));
 const PageThree = Loadable(lazy(() => import('../pages/PageThree')));
 const PageFour = Loadable(lazy(() => import('../pages/PageFour')));

@@ -132,7 +132,7 @@ export default function PageOrder() {
             paddingRight: { sm: 2, md: 6, lg: 14 }
           }}
         >
-          {data.order_detail.map((item: any) => (
+          {data.order_detail.map((item: any, index: number) => (
             <Grid key={item.order_detail_id} item xs={12} sm={6} md={4} lg={3}>
               <Card sx={{ padding: 0, height: '100%', display: { xs: 'flex', sm: 'block' } }}>
                 <CardMedia
@@ -173,7 +173,9 @@ export default function PageOrder() {
                         size="small"
                         sx={{ marginRight: 1 }}
                         onClick={() => {
-                          navigate(PATH_DASHBOARD.album.albumDetail(orderId, item.photo_album_id));
+                          navigate(
+                            PATH_DASHBOARD.album.albumDetail(orderId, index, item.photo_album_id)
+                          );
                         }}
                       >
                         Xem

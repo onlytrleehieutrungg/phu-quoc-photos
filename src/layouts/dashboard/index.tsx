@@ -5,7 +5,7 @@ import { styled, useTheme } from '@mui/material/styles';
 // hooks
 import useCollapseDrawer from '../../hooks/useCollapseDrawer';
 import PageOrder from '../../pages/PageOrder';
-import PageAlbum from '../../pages/PageAlbum';
+import PageGallery from '../../pages/PageGallery';
 //
 import DashboardNavbar from './DashboardNavbar';
 // import DashboardSidebar from './DashboardSidebar';
@@ -56,7 +56,7 @@ export function DashboardAlbum() {
   return (
     <RootStyle>
       <DashboardNavbar />
-      <PageAlbum />
+      <PageGallery />
     </RootStyle>
   );
 }
