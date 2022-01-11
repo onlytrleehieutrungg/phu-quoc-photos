@@ -1,6 +1,5 @@
 import ArrowRightAlt from '@mui/icons-material/ArrowRightAlt';
 import KeyboardDoubleArrowDownIcon from '@mui/icons-material/KeyboardDoubleArrowDown';
-// import { Link as RouterLink } from 'react-router-dom';
 // material
 import { Box, Button, Container, Input, Stack, styled, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
@@ -66,12 +65,6 @@ export default function LandingHome() {
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    // navigate({
-    //   pathname: PATH_DASHBOARD.root,
-    //   search: `?${createSearchParams({
-    //     'ma-don-hang': orderId
-    //   })}`
-    // });
     navigate(`${PATH_DASHBOARD.root}/${orderId}`);
   }
   return (

@@ -95,14 +95,14 @@ const getLastName = (fullName?: string | null) => {
   return lastName;
 };
 
-export default function Header({ order, index }: { order: any; index: number }) {
+export default function Header({ order, gallery }: { order: any; gallery: any }) {
   const classes = useStyles();
   const scrollToRef = (ref: any) => window.scrollTo(0, 750);
   const myRef = useRef(null);
   const executeScroll = () => scrollToRef(myRef);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const quantity = order.order_detail[index]?.google_photo_album.media_items_count;
+  const quantity = gallery?.media_items_count;
   var username = getLastName(order.customer_name);
 
   return (
@@ -170,8 +170,8 @@ export default function Header({ order, index }: { order: any; index: number }) 
           </Item2>
           <Typography variant="caption">
             <MotionInView variants={varFadeInUp}>
-              Chúng tôi đã lưu lại hơn <strong>{quantity}</strong> khoảnh khắc của bạn{' '}
-              <p>Hãy cùng xem lại nhé!</p>
+              Chúng tôi đã lưu lại hơn <strong>{quantity ? quantity : 0}</strong> khoảnh khắc của
+              bạn <p>Hãy cùng xem lại nhé!</p>
             </MotionInView>
           </Typography>
         </Box>
@@ -200,9 +200,9 @@ export default function Header({ order, index }: { order: any; index: number }) 
       >
         <Img
           src={
-            `${order.order_detail[index]?.google_photo_album?.cover_photo_base_url}=w${
-              isMobile ? 450 : 1960
-            }` ?? 'https://livefromearth.media/assets/img/inspiration-in.jpg'
+            gallery
+              ? `${gallery?.cover_photo_base_url}=w${isMobile ? 450 : 1960}`
+              : 'https://livefromearth.media/assets/img/inspiration-in.jpg'
           }
           alt=""
           style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}

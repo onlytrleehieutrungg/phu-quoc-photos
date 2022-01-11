@@ -12,8 +12,7 @@ export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
   album: {
     listAlbum: path(ROOTS_DASHBOARD, `/album`),
-    albumDetail: (orderId: any, index: number, albumId: any) =>
-      `/order/${orderId}/album/${index}/${albumId}`
+    albumDetail: (orderId: any, albumId: any) => `/order/${orderId}/album/${albumId}`
   },
   general: {
     pageOne: path(ROOTS_DASHBOARD, '/one'),

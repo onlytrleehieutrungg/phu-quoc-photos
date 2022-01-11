@@ -69,8 +69,7 @@ export default function PageOrder() {
 
   const {
     isLoading: loadingOrder,
-    data: data,
-    isLoading: loading,
+    data,
     error: orderError
   } = useQuery(['album', orderId], async () => {
     const res = await axios.get(`https://api.phuquocphoto.com/api/v1/orders/${orderId}`);
@@ -155,9 +154,7 @@ export default function PageOrder() {
                         size="small"
                         sx={{ marginRight: 1 }}
                         onClick={() => {
-                          navigate(
-                            PATH_DASHBOARD.album.albumDetail(orderId, index, item.photo_album_id)
-                          );
+                          navigate(PATH_DASHBOARD.album.albumDetail(orderId, item.photo_album_id));
                         }}
                       >
                         Xem

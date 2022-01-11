@@ -75,11 +75,7 @@ export default function PageGallery() {
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
-  const url = new URL(window.location.href);
-  let params = new URLSearchParams(url.search);
-  let orderID = params.get('ma-don-hang');
-  const { orderId, photoAlbumId, index } = useParams();
-  let num = Number(index);
+  const { orderId, photoAlbumId } = useParams();
 
   const {
     isLoading: loadingOrder,
@@ -87,6 +83,11 @@ export default function PageGallery() {
     error: errors
   } = useQuery(['album', orderId], async () => {
     const res = await axios.get(`https://api.phuquocphoto.com/api/v1/orders/${orderId}`);
+    return res.data;
+  });
+
+  const { data: dataGallery } = useQuery(['album', photoAlbumId], async () => {
+    const res = await axios.get(`https://api.phuquocphoto.com/api/v1/admin/albums/${photoAlbumId}`);
     return res.data;
   });
 
@@ -127,7 +128,6 @@ export default function PageGallery() {
                 <div className={classes.imgThumb}>
                   <div>
                     <a
-                      // data-lg-size={`${item.media_metadata.width}-${item.media_metadata.height}`}
                       className="gallery-selector"
                       data-download-url={`${item.base_url}=w${1960}-d`}
                       data-src={`${item.base_url}=w${1960}-d`}
@@ -243,7 +243,7 @@ export default function PageGallery() {
   return (
     <Page title="Kho Ảnh">
       <div>
-        <Header order={order} index={num} />
+        <Header order={order} gallery={dataGallery} />
 
         <Box mt={10}>
           {isLoading ? (
@@ -260,7 +260,7 @@ export default function PageGallery() {
                 sx={{ marginRight: { xs: '10px', lg: '30px' } }}
               >
                 <Link
-                  href={order.order_detail[num].google_photo_album?.share_info.shareable_url}
+                  href={dataGallery?.share_info?.shareable_url}
                   underline="none"
                   color="black"
                   target="_blank"
