@@ -1,29 +1,10 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-import {
-  CircularProgress,
-  Container,
-  IconButton,
-  Button,
-  ImageListItemBar,
-  Skeleton,
-  Stack,
-  Typography,
-  Link
-} from '@mui/material';
+import { CircularProgress, Container, Button, Stack, Typography, Link } from '@mui/material';
 import Box from '@mui/material/Box';
-import Chip from '@mui/material/Chip';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { makeStyles } from '@mui/styles';
 import lgThumbnail from 'lightgallery/plugins/thumbnail';
 import lgZoom from 'lightgallery/plugins/zoom';
 import LightGallery from 'lightgallery/react';
-import { isNull } from 'lodash';
 import React, { useCallback, useRef } from 'react';
-import { Img } from 'react-image';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useInfiniteQuery, useQuery } from 'react-query';
 import Page from '../components/Page';
@@ -32,6 +13,7 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { useParams } from 'react-router-dom';
 import orderApi from 'api/order';
 import albumApi from 'api/album';
+import ResoMasonry from './ResoMasonry';
 
 const useStyles = makeStyles((theme: any) => ({
   wrap: {
@@ -72,9 +54,7 @@ const useStyles = makeStyles((theme: any) => ({
 
 export default function PageGallery() {
   const classes = useStyles();
-  const theme = useTheme();
-  const mobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+
   const { orderId, photoAlbumId } = useParams();
 
   const {
@@ -96,7 +76,7 @@ export default function PageGallery() {
 
   const lightGallery = useRef<any>(null);
   const { data, error, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery(
-    'projects',
+    ['images', photoAlbumId, 'medias'],
     async ({ pageParam: nextToken }) => {
       const res = await albumApi.getPhotoAlbum(photoAlbumId, {
         'page-token': nextToken ?? null,
@@ -106,7 +86,10 @@ export default function PageGallery() {
     },
     {
       getNextPageParam: (lastPage, pages) => lastPage.next_page_token ?? false,
-      onSuccess: () => lightGallery.current?.refresh()
+      onSuccess: (response) => {
+        lightGallery.current?.refresh();
+        console.log('Refresh', response);
+      }
     }
   );
 
@@ -117,98 +100,7 @@ export default function PageGallery() {
   }, []);
 
   const getItems = useCallback(() => {
-    return data?.pages ? (
-      data?.pages?.map(({ media_items: items }: any, index) => (
-        <React.Fragment key={`group-${index}`}>
-          {items.map((item: any) => (
-            <ImageListItem key={item.id} className={[classes.wrap, 'img-responsive'].join(' ')}>
-              <div>
-                <div className={classes.imgThumb}>
-                  <div>
-                    <a
-                      className="gallery-selector"
-                      data-download-url={`${item.base_url}=w${1960}-d`}
-                      data-src={`${item.base_url}=w${1960}-d`}
-                      data-external-thumb-image={item.base_url}
-                      data-responsive={`${item.base_url}=w${1960} 780, ${
-                        item.base_url
-                      }=w${1960} 1024`}
-                      data-sub-html={`<h4>${item.filename} - ${
-                        item.media_metadata.creationTime
-                      }</h4> <p><a href="${
-                        item.base_url
-                      }=w${1960}-d" target="_blank" rel="noreferrer">
-          Tải ảnh
-        </a></p>`}
-                    >
-                      <Img
-                        src={item.base_url}
-                        loader={<Skeleton />}
-                        alt={`${isNull(item.title) ? '' : item.title} ${
-                          isNull(item.timestamp) ? '' : item.timestamp
-                        }`}
-                        loading="lazy"
-                        style={{
-                          maxWidth: '100%',
-                          height: 'auto',
-                          borderRadius: 'inherit',
-                          backgroundColor: 'black'
-                        }}
-                        onClick={() => {}}
-                        className={classes.item}
-                      />
-                    </a>
-                  </div>
-                  <span>
-                    <ImageListItemBar
-                      title={
-                        <>
-                          <Stack direction="row" spacing={1}>
-                            {item.tags?.split(',').map((tag: string) => (
-                              <Chip
-                                key={tag}
-                                label={tag}
-                                variant="outlined"
-                                clickable
-                                size="small"
-                                sx={{
-                                  color: 'rgb(255, 255, 255)',
-                                  marginRight: '2px',
-                                  '& .MuiChip-label': {
-                                    overflow: 'visible'
-                                  }
-                                }}
-                              />
-                            ))}
-                          </Stack>
-                        </>
-                      }
-                      style={{ zIndex: 2 }}
-                      actionIcon={
-                        <a href={`${item.base_url}=w${1960}-d`} target="_blank" rel="noreferrer">
-                          <IconButton
-                            sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                            aria-label={`info about ${item.title}`}
-                          >
-                            <CloudDownloadIcon />
-                          </IconButton>
-                        </a>
-                      }
-                      sx={{
-                        borderRadius: 'inherit',
-                        background: 'linear-gradient(0, #000, transparent);'
-                      }}
-                    />
-                  </span>
-                </div>
-              </div>
-            </ImageListItem>
-          ))}
-        </React.Fragment>
-      ))
-    ) : (
-      <Typography>Không tìm thấy hình ảnh của bạn</Typography>
-    );
+    return <ResoMasonry data={data} />;
   }, [classes.imgThumb, classes.item, classes.wrap, data?.pages]);
 
   if (loadingOrder) {
@@ -305,14 +197,7 @@ export default function PageGallery() {
                           </p>
                         }
                       >
-                        <ImageList
-                          variant="masonry"
-                          cols={mobile ? 2 : fullScreen ? 3 : 4}
-                          gap={0}
-                          sx={{ overflow: 'visible' }}
-                        >
-                          {getItems()}
-                        </ImageList>
+                        {getItems()}
                       </InfiniteScroll>
                     </LightGallery>
                   </Box>

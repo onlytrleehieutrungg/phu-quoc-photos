@@ -11,7 +11,6 @@ import {
   Box,
   Link
 } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import { useCallback } from 'react';
 import { useQuery } from 'react-query';
@@ -62,7 +61,6 @@ const useStyles = makeStyles((theme: any) => ({
 
 export default function PageOrder() {
   const classes = useStyles();
-  const theme = useTheme();
   const navigate = useNavigate();
   const { orderId } = useParams();
 

@@ -4,12 +4,12 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import { Box, Container, Link, Stack, Typography } from '@mui/material';
 import { styled, useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { makeStyles } from '@mui/styles';
 import { varFadeInLeft, varFadeInUp, varFadeInDown } from 'components/animate';
 import React, { useRef } from 'react';
 import { Img } from 'react-image';
 import { FacebookShareButton, TwitterShareButton } from 'react-share';
 import MotionInView from '../components/animate/MotionInView';
+import { motion } from 'framer-motion';
 
 const Root = styled('div')(({ theme }) => ({
   margin: '200px 24px 10px',
@@ -23,24 +23,6 @@ const Root = styled('div')(({ theme }) => ({
 }));
 
 export { Root };
-const useStyles = makeStyles({
-  animatedItem: {
-    animation: `$myEffect`,
-    animationDuration: '2s',
-    animationDelay: '1s',
-    animationFillMode: 'backwards',
-    animationIterationCount: 'infinite',
-    animationDirection: 'alternateReverse'
-  },
-  '@keyframes myEffect': {
-    from: {
-      top: '85%'
-    },
-    to: {
-      top: '90%'
-    }
-  }
-});
 
 const Head = styled(Box)(({ theme }) => ({
   height: '100vh',
@@ -96,8 +78,7 @@ const getLastName = (fullName?: string | null) => {
 };
 
 export default function Header({ order, gallery }: { order: any; gallery: any }) {
-  const classes = useStyles();
-  const scrollToRef = (ref: any) => window.scrollTo(0, 750);
+  const scrollToRef = (ref: any) => window.scrollTo({ top: 750, behavior: 'smooth' });
   const myRef = useRef(null);
   const executeScroll = () => scrollToRef(myRef);
   const theme = useTheme();
@@ -109,21 +90,26 @@ export default function Header({ order, gallery }: { order: any; gallery: any })
     <Head sx={{ justifyContent: 'left', alignItems: 'center', display: 'flex' }}>
       <WhiteBackround />
       <Box>
-        <KeyboardDoubleArrowDownIcon
-          className={classes.animatedItem}
-          fontSize="large"
-          sx={{
-            position: 'absolute',
-            zIndex: 99,
-            bottom: '3%',
-            justifyContent: 'center',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            right: 0,
-            left: 0,
-            fontSize: 100
-          }}
-        />
+        <Link color="black" variant="caption" onClick={executeScroll}>
+          <motion.div
+            animate={{ y: [-20, 0, -20] }}
+            transition={{ duration: 4, repeat: Infinity }}
+            style={{
+              position: 'absolute',
+              zIndex: 99,
+              bottom: '1rem',
+              justifyContent: 'center',
+              textAlign: 'center',
+              marginLeft: 'auto',
+              marginRight: 'auto',
+              right: 0,
+              left: 0,
+              fontSize: 100
+            }}
+          >
+            <KeyboardDoubleArrowDownIcon fontSize="large" />
+          </motion.div>
+        </Link>
         <Link
           color="black"
           variant="caption"
