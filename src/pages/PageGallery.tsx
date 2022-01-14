@@ -18,7 +18,7 @@ import ImageListItem from '@mui/material/ImageListItem';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { makeStyles } from '@mui/styles';
-import axios from 'axios';
+// import axios from 'axios';
 import lgThumbnail from 'lightgallery/plugins/thumbnail';
 import lgZoom from 'lightgallery/plugins/zoom';
 import LightGallery from 'lightgallery/react';
@@ -31,6 +31,8 @@ import Page from '../components/Page';
 import Header, { Root } from './PageGallery.Style';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import { useParams } from 'react-router-dom';
+import orderApi from 'api/order';
+import albumApi from 'api/album';
 
 const useStyles = makeStyles((theme: any) => ({
   wrap: {
@@ -81,29 +83,27 @@ export default function PageGallery() {
     isLoading: loadingOrder,
     data: order,
     error: errors
-  } = useQuery(['album', orderId], async () => {
-    const res = await axios.get(`https://api.phuquocphoto.com/api/v1/orders/${orderId}`);
-    return res.data;
+  } = useQuery(['album', orderId], () => orderApi.getOrderDetail(orderId).then((res) => res.data), {
+    enabled: Boolean(orderId)
   });
 
-  const { data: dataGallery } = useQuery(['album', photoAlbumId], async () => {
-    const res = await axios.get(`https://api.phuquocphoto.com/api/v1/admin/albums/${photoAlbumId}`);
-    return res.data;
-  });
+  const { data: dataGallery } = useQuery(
+    ['images', photoAlbumId],
+    () => albumApi.getAlbum(photoAlbumId).then((res) => res.data),
+    {
+      enabled: Boolean(photoAlbumId)
+    }
+  );
+  console.log(dataGallery);
 
   const lightGallery = useRef<any>(null);
   const { data, error, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery(
     'projects',
     async ({ pageParam: nextToken }) => {
-      const res = await axios.get(
-        `https://api.phuquocphoto.com/api/v1/admin/albums/${photoAlbumId}/medias`,
-        {
-          params: {
-            'page-token': nextToken,
-            'page-size': 10
-          }
-        }
-      );
+      const res = await albumApi.getPhotoAlbum(photoAlbumId, {
+        'page-token': nextToken ?? null,
+        'page-size': 20
+      });
       return res.data;
     },
     {
@@ -225,7 +225,7 @@ export default function PageGallery() {
 
   const mediaLength = data?.pages.reduce(
     (acc, { media_items }) => [...acc, ...media_items],
-    []
+    [] as any
   ).length;
 
   if (error != null) {

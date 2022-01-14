@@ -13,16 +13,17 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
-import axios from 'axios';
+// import axios from 'axios';
 import { useCallback } from 'react';
 import { useQuery } from 'react-query';
 import Page from '../components/Page';
 import React from 'react';
 import DownloadIcon from '@mui/icons-material/Download';
-import { fDate } from '../utils/formatTime';
+// import { fDate } from '../utils/formatTime';
 import { useNavigate } from 'react-router-dom';
 import { PATH_DASHBOARD } from 'routes/paths';
 import { useParams } from 'react-router-dom';
+import orderApi from 'api/order';
 
 const useStyles = makeStyles((theme: any) => ({
   wrap: {
@@ -71,10 +72,13 @@ export default function PageOrder() {
     isLoading: loadingOrder,
     data,
     error: orderError
-  } = useQuery(['album', orderId], async () => {
-    const res = await axios.get(`https://api.phuquocphoto.com/api/v1/orders/${orderId}`);
-    return res.data;
-  });
+  } = useQuery(
+    ['hieutrung', orderId],
+    async () => await orderApi.getOrder(orderId).then((res) => res.data),
+    {
+      enabled: Boolean(orderId)
+    }
+  );
   const getItems = useCallback(() => {
     return (
       <React.Fragment>
@@ -99,7 +103,7 @@ export default function PageOrder() {
           component="div"
           sx={{ justifyContent: 'center', textAlign: 'center', display: 'flex', flexWrap: 'wrap' }}
         >
-          Bắt đầu vào: {fDate(data.booking_date)}
+          Bắt đầu vào: {data?.booking_date}
         </Typography>
         <Grid
           container
@@ -112,7 +116,7 @@ export default function PageOrder() {
             paddingRight: { sm: 2, md: 6, lg: 14 }
           }}
         >
-          {data.order_detail.map((item: any, index: number) => (
+          {data?.order_detail.map((item: any, index: number) => (
             <Grid key={item.order_detail_id} item xs={12} sm={6} md={4} lg={3}>
               <Card sx={{ padding: 0, height: '100%', display: { xs: 'flex', sm: 'block' } }}>
                 <CardMedia
