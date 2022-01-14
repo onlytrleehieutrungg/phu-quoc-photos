@@ -72,7 +72,6 @@ export default function PageGallery() {
       enabled: Boolean(photoAlbumId)
     }
   );
-  console.log(dataGallery);
 
   const lightGallery = useRef<any>(null);
   const { data, error, fetchNextPage, hasNextPage, isLoading } = useInfiniteQuery(
@@ -86,10 +85,7 @@ export default function PageGallery() {
     },
     {
       getNextPageParam: (lastPage, pages) => lastPage.next_page_token ?? false,
-      onSuccess: (response) => {
-        lightGallery.current?.refresh();
-        console.log('Refresh', response);
-      }
+      onSuccess: () => lightGallery.current?.refresh()
     }
   );
 
