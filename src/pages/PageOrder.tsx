@@ -13,13 +13,11 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
-// import axios from 'axios';
 import { useCallback } from 'react';
 import { useQuery } from 'react-query';
 import Page from '../components/Page';
 import React from 'react';
 import DownloadIcon from '@mui/icons-material/Download';
-// import { fDate } from '../utils/formatTime';
 import { useNavigate } from 'react-router-dom';
 import { PATH_DASHBOARD } from 'routes/paths';
 import { useParams } from 'react-router-dom';
@@ -73,7 +71,7 @@ export default function PageOrder() {
     data,
     error: orderError
   } = useQuery(
-    ['hieutrung', orderId],
+    ['orderList', orderId],
     async () => await orderApi.getOrder(orderId).then((res) => res.data),
     {
       enabled: Boolean(orderId)
