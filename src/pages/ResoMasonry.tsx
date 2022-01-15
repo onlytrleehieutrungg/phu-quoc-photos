@@ -13,6 +13,8 @@ import { makeStyles } from '@mui/styles';
 import { Img } from 'react-image';
 import { isNull } from 'lodash';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 
 const useStyles = makeStyles((theme: any) => ({
   wrap: {
@@ -53,6 +55,8 @@ const useStyles = makeStyles((theme: any) => ({
 
 function ResoMasonry({ data }: { data: any }) {
   const classes = useStyles();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   return (
     <Stack
       sx={{
@@ -84,7 +88,7 @@ function ResoMasonry({ data }: { data: any }) {
                   padding: 0,
                   borderRadius: '16px',
                   gridRowEnd: `span ${Math.max(
-                    25,
+                    isMobile ? 30 : 25,
                     Math.min(
                       45,
                       Math.floor(28 / (item.media_metadata?.width / item.media_metadata?.height))
