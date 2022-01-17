@@ -83,6 +83,7 @@ export default function Header({ order, gallery }: { order: any; gallery: any })
   const executeScroll = () => scrollToRef(myRef);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isLaptop = useMediaQuery(theme.breakpoints.down('lg'));
   const quantity = gallery?.media_items_count;
   var username = getLastName(order.customer_name);
 
@@ -104,7 +105,7 @@ export default function Header({ order, gallery }: { order: any; gallery: any })
               marginRight: 'auto',
               right: 0,
               left: 0,
-              fontSize: 100
+              fontSize: 40
             }}
           >
             <KeyboardDoubleArrowDownIcon fontSize="large" />
@@ -187,7 +188,7 @@ export default function Header({ order, gallery }: { order: any; gallery: any })
         <Img
           src={
             gallery
-              ? `${gallery?.cover_photo_base_url}=w${isMobile ? 450 : 1960}`
+              ? `${gallery?.cover_photo_base_url}=w${isMobile ? 360 : isLaptop ? 720 : 1960}`
               : 'https://livefromearth.media/assets/img/inspiration-in.jpg'
           }
           alt=""

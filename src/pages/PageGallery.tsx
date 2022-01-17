@@ -4,7 +4,7 @@ import { makeStyles } from '@mui/styles';
 import lgThumbnail from 'lightgallery/plugins/thumbnail';
 import lgZoom from 'lightgallery/plugins/zoom';
 import LightGallery from 'lightgallery/react';
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useInfiniteQuery, useQuery } from 'react-query';
 import Page from '../components/Page';
@@ -84,14 +84,18 @@ export default function PageGallery() {
       return res.data;
     },
     {
-      getNextPageParam: (lastPage, pages) => lastPage.next_page_token ?? false,
-      onSuccess: () => lightGallery.current?.refresh()
+      getNextPageParam: (lastPage, pages) => lastPage.next_page_token ?? false
     }
   );
+
+  useEffect(() => {
+    lightGallery.current?.refresh();
+  }, [data?.pages]);
 
   const onInit = useCallback((detail) => {
     if (detail) {
       lightGallery.current = detail.instance;
+      lightGallery.current?.refresh();
     }
   }, []);
 
