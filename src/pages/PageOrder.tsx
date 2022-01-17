@@ -25,6 +25,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { UploadIllustration } from '../assets';
 import { motion } from 'framer-motion';
 import { varBounceIn } from '../components/animate';
+import { fDate } from '../utils/formatTime';
 
 const useStyles = makeStyles((theme: any) => ({
   wrap: {
@@ -103,7 +104,7 @@ export default function PageOrder() {
           component="div"
           sx={{ justifyContent: 'center', textAlign: 'center', display: 'flex', flexWrap: 'wrap' }}
         >
-          Bắt đầu vào: {data?.booking_date}
+          Bắt đầu vào: {fDate(data?.booking_date as any)}
         </Typography>
         <Grid
           container

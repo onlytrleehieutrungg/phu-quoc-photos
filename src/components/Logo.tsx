@@ -14,7 +14,7 @@ export default function Logo({ sx }: BoxProps) {
     <Box
       component="img"
       src={'/static/logo.png'}
-      sx={{ width: { xs: 40, md: 80 }, height: 'auto', p: 1, ...sx }}
+      sx={{ width: { xs: 64, md: 80 }, height: 'auto', p: 1, ...sx }}
     />
   );
 }

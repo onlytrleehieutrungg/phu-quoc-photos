@@ -74,7 +74,7 @@ export default function LandingHome() {
         initial="initial"
         animate="animate"
         variants={varWrapEnter}
-        sx={{ height: { xs: '65vh', sm: '70vh', md: '100vh' } }}
+        sx={{ height: { xs: '68vh', sm: '70vh', md: '100vh' }, minHeight: '65vh' }}
       >
         <Box
           sx={{
@@ -148,10 +148,11 @@ export default function LandingHome() {
             }}
           >
             {[
-              '/static/home/background.png',
-              '/static/home/background1.png',
-              '/static/home/background2.png',
-              '/static/home/background3.png'
+              '/static/home/background.jpg',
+              '/static/home/background1.jpg',
+              '/static/home/background2.jpg',
+              '/static/home/background3.jpg',
+              '/static/home/background4.jpg'
             ].map((src) => (
               <Box component="img" key={src} src={src} sx={{ width: '100%', height: '100%' }} />
             ))}
@@ -163,7 +164,7 @@ export default function LandingHome() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            height: '100%',
+            height: '110%',
             padding: '40px 24px'
           }}
         >
