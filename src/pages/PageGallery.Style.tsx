@@ -105,7 +105,7 @@ export default function Header({ order, gallery }: { order: any; gallery: any })
               marginRight: 'auto',
               right: 0,
               left: 0,
-              fontSize: 100
+              fontSize: 40
             }}
           >
             <KeyboardDoubleArrowDownIcon fontSize="large" />

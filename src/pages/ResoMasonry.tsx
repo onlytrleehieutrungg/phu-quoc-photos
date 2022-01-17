@@ -111,11 +111,11 @@ function ResoMasonry({ data }: { data: any }) {
                           }=w${1960} 1024`}
                           data-sub-html={`<h4>${item.filename} - ${
                             item.media_metadata.creationTime
-                          }</h4> <p><a href="${
+                          }</h4> <h3><a href="${
                             item.base_url
-                          }=w${1960}-d" target="_blank" rel="noreferrer">
+                          }=w${1960}-d" target="_blank" rel="noreferrer" style=" text-decoration: none; color: green; ">
           Tải ảnh
-        </a></p>`}
+        </a></h3>`}
                         >
                           <Img
                             src={item.base_url}

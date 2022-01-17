@@ -17,10 +17,14 @@ import { useQuery } from 'react-query';
 import Page from '../components/Page';
 import React from 'react';
 import DownloadIcon from '@mui/icons-material/Download';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import { PATH_DASHBOARD } from 'routes/paths';
 import { useParams } from 'react-router-dom';
 import orderApi from 'api/order';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { UploadIllustration } from '../assets';
+import { motion } from 'framer-motion';
+import { varBounceIn } from '../components/animate';
 
 const useStyles = makeStyles((theme: any) => ({
   wrap: {
@@ -197,12 +201,17 @@ export default function PageOrder() {
 
   if (orderError != null) {
     return (
-      <Container
-        sx={{ height: '60vh', justifyContent: 'center', alignItems: 'center', display: 'flex' }}
-      >
+      <Container sx={{ height: '60vh', textAlign: 'center', marginTop: '100px' }}>
         <Typography noWrap gutterBottom variant="h3" component="div">
           Không tìm thấy đơn hàng
         </Typography>
+        <motion.div variants={varBounceIn}>
+          <UploadIllustration sx={{ height: 260, my: { xs: 5, sm: 8 } }} />
+        </motion.div>
+        <Button to="/" size="large" variant="text" component={RouterLink}>
+          <ArrowBackIcon fontSize="small" />
+          Trở về trang chủ
+        </Button>
       </Container>
     );
   }
