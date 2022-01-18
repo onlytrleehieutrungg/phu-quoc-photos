@@ -22,7 +22,7 @@ import { PATH_DASHBOARD } from 'routes/paths';
 import { useParams } from 'react-router-dom';
 import orderApi from 'api/order';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { UploadIllustration } from '../assets';
+import { PageNotFoundIllustration } from '../assets';
 import { motion } from 'framer-motion';
 import { varBounceIn } from '../components/animate';
 import { fDate } from '../utils/formatTime';
@@ -207,7 +207,7 @@ export default function PageOrder() {
           Không tìm thấy đơn hàng
         </Typography>
         <motion.div variants={varBounceIn}>
-          <UploadIllustration sx={{ height: 260, my: { xs: 5, sm: 8 } }} />
+          <PageNotFoundIllustration sx={{ height: 260, my: { xs: 5, sm: 8 } }} />
         </motion.div>
         <Button to="/" size="large" variant="text" component={RouterLink}>
           <ArrowBackIcon fontSize="small" />

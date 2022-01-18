@@ -51,7 +51,7 @@ const ContentStyle = styled((props) => <Stack spacing={5} {...props} />)(({ them
 
 const scrollWithOffset = (el: HTMLElement) => {
   const yCoordinate = el.getBoundingClientRect().top + window.pageYOffset;
-  const yOffset = -80;
+  const yOffset = -70;
   window.scrollTo({ top: yCoordinate + yOffset, behavior: 'smooth' });
 };
 
@@ -151,8 +151,7 @@ export default function LandingHome() {
               '/static/home/background.jpg',
               '/static/home/background1.jpg',
               '/static/home/background2.jpg',
-              '/static/home/background3.jpg',
-              '/static/home/background4.jpg'
+              '/static/home/background3.jpg'
             ].map((src) => (
               <Box component="img" key={src} src={src} sx={{ width: '100%', height: '100%' }} />
             ))}
