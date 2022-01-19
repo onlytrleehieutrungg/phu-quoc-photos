@@ -51,7 +51,7 @@ const ContentStyle = styled((props) => <Stack spacing={5} {...props} />)(({ them
 
 const scrollWithOffset = (el: HTMLElement) => {
   const yCoordinate = el.getBoundingClientRect().top + window.pageYOffset;
-  const yOffset = -70;
+  const yOffset = -40;
   window.scrollTo({ top: yCoordinate + yOffset, behavior: 'smooth' });
 };
 
