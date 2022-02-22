@@ -14,6 +14,8 @@ import Slider from 'react-slick';
 import { PATH_DASHBOARD } from '../../../routes/paths';
 //
 import { varFadeInRight, varWrapEnter } from '../../animate';
+import { useQuery } from 'react-query';
+import orderApi from 'api/order';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(motion.div)(({ theme }) => ({
@@ -62,10 +64,24 @@ export default function LandingHome() {
 
   const [orderId, setOrderId] = useState('');
   const navigate = useNavigate();
+  const {
+    isLoading: loadingOrder,
+    data,
+    error: orderError
+  } = useQuery(
+    ['orderList', orderId],
+    async () => await orderApi.getOrder(orderId).then((res) => res.data),
+    {
+      enabled: Boolean(orderId)
+    }
+  );
+  const photo_album_id = data?.order_detail.map((item: any) => item.photo_album_id);
 
   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    navigate(`${PATH_DASHBOARD.root}/${orderId}`);
+    if (photo_album_id) {
+      navigate(PATH_DASHBOARD.album.albumDetail(orderId, photo_album_id[0]));
+    }
   }
   return (
     <>
