@@ -153,7 +153,7 @@ export default function Header({ order, gallery }: { order: any; gallery: any })
               fontSize: '88px'
             }}
           >
-            <MotionInView variants={varFadeInLeft}>Chào {username}</MotionInView>
+            <MotionInView variants={varFadeInLeft}>Chào Bạn</MotionInView>
           </Item2>
           <Typography variant="caption">
             <MotionInView variants={varFadeInUp}>
